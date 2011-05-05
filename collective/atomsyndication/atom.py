@@ -51,32 +51,52 @@ class AtomFeedView(grok.View):
         registry = getUtility(IRegistry)
         self.atom_settings = registry.forInterface(IAtomSettings)
         if IPloneSiteRoot.providedBy(self.context):
-            self.results = self.query_catalog({'review_state': 'published', 'portal_type': ('Collection', 'Folder')})
+            q_results = self.query_catalog({'review_state': 'published', 'portal_type': ('Topic', 'Folder',)})
+            self.results = self.filter_syndicatable(q_results)
         else:
             syn_tool = getToolByName(self.context, 'portal_syndication')
             self.results = syn_tool.getSyndicatableContent(self.context)
-            #            self.results = self.query_catalog({'path': {'query': '/'.join(this_path), 'depth': 1},})
+
+    def filter_syndicatable(self, results):
+        syn_tool = getToolByName(self.context, 'portal_syndication')
+        filtered = {}
+        intermed = []
+        for res in results:
+            obj = res.getObject()
+            if syn_tool.isSyndicationAllowed(obj):
+                obj_name = res['id']
+                obj_label = res['Title']
+                limit = syn_tool.getMaxItems(obj)
+                objlist = list(syn_tool.getSyndicatableContent(obj))[:limit]
+                for sobj in objlist:
+                    uid = sobj.UID()
+                    if filtered.has_key(uid):
+                        filtered[uid]['categories'].append((obj_name, obj_label))
+                    else:
+                        filtered[uid] = {'categories': [(obj_name, obj_label),], 'object': sobj}
+                    intermed.append(sobj)
+        self.filtered = filtered
+        return intermed
 
     def query_catalog(self, query):
         catalog = getToolByName(self.context, 'portal_catalog')
         return catalog(query)
 
+    def feed_elements(self):
+        feed = {}
+        feed['title'] = self.context.Title()
+        feed['subtitle'] = self.context.Description()
+
     def atom_id_tag(self, context):
-        url_tool = getToolByName(self.context, 'portal_url')
-        portal = url_tool.getPortalObject()
-        root_url = portal.absolute_url()
-        cre_date = context.CreationDate()
+        portal_state = getMultiAdapter((self.context, self.request), name=u'plone_portal_state')
+        root_url = portal_state.portal_url()
         mod_date = context.ModificationDate()
-        tag = u"tag:%s," % self.remove_proto(root_url)
+        url = self.url_parser(root_url)
+        tag = u"tag:%s,%s:%s" % (url[0], context.ModificationDate()[:10], context.UID())
         return tag
 
-    def remove_proto(self, data):
+    def url_parser(self, data):
         p = re.compile(r'https?://')
         p1 = p.sub('', data)
         p2 = p1.split('/')
-
-    def getNavTree(self, _marker=[]):
-        context = aq_inner(self.context)
-        queryBuilder = getMultiAdapter((context, self.data), INavigationQueryBuilder)
-        strategy = getMultiAdapter((context, self.data), INavtreeStrategy)
-        return buildFolderTree(context, obj=context, query=queryBuilder(), strategy=strategy)
+        return p2
