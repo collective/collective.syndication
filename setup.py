@@ -28,6 +28,8 @@ setup(name='collective.atomsyndication',
           'setuptools',
           # -*- Extra requirements: -*-
           'Plone',
+          'plone.app.z3cform',
+          'plone.app.registry',
           'five.grok',
       ],
       entry_points="""
