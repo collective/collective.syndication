@@ -48,14 +48,8 @@ class AtomFeedView(grok.View):
 
     def update(self):
         self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')
-        registry = getUtility(IRegistry)
-        self.atom_settings = registry.forInterface(IAtomSettings)
-        if IPloneSiteRoot.providedBy(self.context):
-            q_results = self.query_catalog({'portal_type': ('Topic', 'Folder',)})
-            self.results = self.filter_syndicatable(q_results)
-        else:
-            syn_tool = getToolByName(self.context, 'portal_syndication')
-            self.results = syn_tool.getSyndicatableContent(self.context)
+        syn_tool = getToolByName(self.context, 'portal_syndication')
+        self.results= syn_tool.getSyndicatableContent(self.context)
 
     def filter_syndicatable(self, results):
         syn_tool = getToolByName(self.context, 'portal_syndication')
@@ -82,11 +76,6 @@ class AtomFeedView(grok.View):
         catalog = getToolByName(self.context, 'portal_catalog')
         return catalog(query)
 
-    def feed_elements(self):
-        feed = {}
-        feed['title'] = self.context.Title()
-        feed['subtitle'] = self.context.Description()
-
     def atom_id_tag(self, context):
         portal_state = getMultiAdapter((self.context, self.request), name=u'plone_portal_state')
         root_url = portal_state.portal_url()
@@ -100,3 +89,11 @@ class AtomFeedView(grok.View):
         p1 = p.sub('', data)
         p2 = p1.split('/')
         return p2
+
+class RootAtomFeedView(AtomFeedView):
+    grok.context(IPloneSiteRoot)
+
+    def update(self):
+        self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')
+        q_results = self.query_catalog({'portal_type': ('Topic', 'Folder',)})
+        self.results = self.filter_syndicatable(q_results)
