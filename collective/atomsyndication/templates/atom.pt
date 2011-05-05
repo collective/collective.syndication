@@ -21,10 +21,9 @@
     <id tal:condition="not:context_state/is_portal_root" tal:content="python:view.atom_id_tag(context)">urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6</id>
     <updated tal:content="context/ModificationDate">2003-12-13T18:30:02Z</updated>
 
-    <tal:block condition="objects" repeat="brain python: objects">
-    <entry tal:define="obj_item brain/getObject|nocall:brain;
-                    has_text exists:obj_item/aq_explicit/getText;
-                    text python:has_text and obj_item.getText() or '';
+    <tal:block define="objects view/filtered">
+    <tal:block condition="objects" repeat="brain python: objects.values()">
+    <entry tal:define="obj_item nocall:brain/object;
                     has_effective exists:obj_item/aq_explicit/effective_date;
                     effective python:has_effective and obj_item.effective().HTML4() or '';
                     modified python:obj_item.modified().HTML4();
@@ -42,7 +41,9 @@
         </author>
         <updated tal:content="modified">2003-12-13T18:30:02Z</updated>
         <summary tal:content="obj_item/Description">Some text.</summary>
+        <tal:cat condition="python: len(brain['categories'])" repeat="cat brain/categories"><category term="" label="" tal:attributes="term python: cat[0]; label python: cat[1];" /></tal:cat>
     </entry>
+    </tal:block>
     </tal:block>
 
 </metal:block>

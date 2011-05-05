@@ -51,7 +51,7 @@ class AtomFeedView(grok.View):
         registry = getUtility(IRegistry)
         self.atom_settings = registry.forInterface(IAtomSettings)
         if IPloneSiteRoot.providedBy(self.context):
-            q_results = self.query_catalog({'review_state': 'published', 'portal_type': ('Topic', 'Folder',)})
+            q_results = self.query_catalog({'portal_type': ('Topic', 'Folder',)})
             self.results = self.filter_syndicatable(q_results)
         else:
             syn_tool = getToolByName(self.context, 'portal_syndication')
