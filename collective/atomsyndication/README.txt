@@ -11,6 +11,10 @@ README.txt
     >>> self.browser = Browser()
 
     >>> self.loginAsAdmin()
+
+Drop-in replacement for RSS syndication
+=======================================
+
     >>> self.browser.open(atomic.absolute_url()+'/atom.xml')
     >>> self.browser.url
     'http://nohost/plone/atomic/atom.xml'
@@ -19,4 +23,13 @@ README.txt
     >>> u'<title>Atomic Content</title>' in self.browser.contents
     True
 
-
+Site-wide syndication
+=====================
+    >>> self.portal.setTitle(u"Site Root")
+    >>> self.browser.open(self.portal.absolute_url()+'/atom.xml')
+    >>> self.browser.url
+    'http://nohost/plone/atom.xml'
+    >>> self.browser.headers["Content-type"]
+    'application/atom+xml;charset=utf-8'
+    >>> u'<title>Site Root</title>' in self.browser.contents
+    True
