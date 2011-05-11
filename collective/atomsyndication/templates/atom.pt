@@ -27,7 +27,7 @@
                     creator obj_item/Creator|nothing">
         <title tal:content="obj_item/pretty_title_or_id">Atom-Powered Robots Run Amok</title>
         <link href="http://example.org/2003/12/13/atom03" tal:attributes="href obj_item/Identifier" />
-        <link rel="alternate" type="text/html" href="http://example.org/2003/12/13/atom03.html" tal:attributes="href string:${obj_item/Identifier}/view" />
+        <link rel="alternate" type="text/html" href="http://example.org/2003/12/13/atom03.html" tal:attributes="href string:${obj_item/Identifier}" />
         <link rel="edit" href="http://example.org/2003/12/13/atom03/edit" tal:attributes="href string:${obj_item/Identifier}/edit" />
         <link tal:condition="obj_item/getImage" tal:define="img obj_item/getImage" rel="enclosure" tal:attributes="type img/content_type; length img/getSize; href img/absolute_url" type="image/jpeg" length="54079" href="http://warp.com.mx/sites%2Fall%2Ffiles%2Fthe-vaccines2_2_0.jpg"/>
         <id tal:content="python:view.atom_id_tag(obj_item)">urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6</id>
@@ -39,7 +39,7 @@
         </author>
         <updated tal:content="modified">2003-12-13T18:30:02Z</updated>
         <summary tal:content="obj_item/Description">Some text.</summary>
-        <content type="text/html" src="http://example.org/2003/12/13/atom03.html" tal:attributes="src string:${obj_item/Identifier}/view" />
+        <content type="text/html" src="http://example.org/2003/12/13/atom03.html" tal:attributes="src string:${obj_item/Identifier}" />
         <tal:cat condition="python: len(brain['categories'])" repeat="cat brain/categories"><category term="" label="" tal:attributes="term python: cat[0]; label python: cat[1];" /></tal:cat>
     </entry>
     </tal:block>
@@ -54,7 +54,7 @@
                     creator obj_item/Creator|nothing">
         <title tal:content="obj_item/pretty_title_or_id">Atom-Powered Robots Run Amok</title>
         <link href="http://example.org/2003/12/13/atom03" tal:attributes="href obj_item/Identifier" />
-        <link rel="alternate" type="text/html" href="http://example.org/2003/12/13/atom03.html" tal:attributes="href string:${obj_item/Identifier}/view" />
+        <link rel="alternate" type="text/html" href="http://example.org/2003/12/13/atom03.html" tal:attributes="href string:${obj_item/Identifier}" />
         <link rel="edit" href="http://example.org/2003/12/13/atom03/edit" tal:attributes="href string:${obj_item/Identifier}/edit" />
         <link tal:condition="obj_item/getImage" tal:define="img obj_item/getImage" rel="enclosure" tal:attributes="type img/content_type; length img/getSize; href img/absolute_url" type="image/jpeg" length="54079" href="http://warp.com.mx/sites%2Fall%2Ffiles%2Fthe-vaccines2_2_0.jpg"/>
         <id tal:content="python:view.atom_id_tag(obj_item)">urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6</id>
@@ -66,7 +66,7 @@
         </author>
         <updated tal:content="modified">2003-12-13T18:30:02Z</updated>
         <summary tal:content="obj_item/Description">Some text.</summary>
-        <content type="text/html" src="http://example.org/2003/12/13/atom03.html" tal:attributes="src string:${obj_item/Identifier}/view" />
+        <content type="text/html" src="http://example.org/2003/12/13/atom03.html" tal:attributes="src string:${obj_item/Identifier}" />
     </entry>
     </tal:block>
     </tal:block>
