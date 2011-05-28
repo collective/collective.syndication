@@ -15,7 +15,7 @@ setup(name='collective.atomsyndication',
         "Framework :: Plone",
         "Programming Language :: Python",
         ],
-      keywords='',
+      keywords='plone atom syndication',
       author='Joaquín Rosales',
       author_email='globojorro@gmail.com',
       url='http://github.com/collective/collective.atomsyndication',
@@ -26,18 +26,13 @@ setup(name='collective.atomsyndication',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          # -*- Extra requirements: -*-
           'Plone',
           'plone.app.z3cform',
           'plone.app.registry',
           'five.grok',
       ],
       entry_points="""
-      # -*- Entry points: -*-
-
       [z3c.autoinclude.plugin]
       target = plone
       """,
-      setup_requires=["PasteScript"],
-      paster_plugins=["ZopeSkel"],
       )
