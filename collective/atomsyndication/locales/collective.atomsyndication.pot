@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2011-05-28 02:28+0000\n"
+"PO-Revision-Date: 2011-05-27 18:38-0500\n"
+"Last-Translator: Héctor Velarde <hector.velarde@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.atomsyndication\n"
+
+#: collective.atomsyndication/collective/atomsyndication/profiles/default/controlpanel.xml
+msgid "Atom Syndication"
+msgstr ""
+
+#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:39
+msgid "Atom Syndication Settings"
+msgstr ""
+
+#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:25
+msgid "Checking this box will create an Atom feed at the root of the portal that will include all of the published content within this portal."
+msgstr ""
+
+#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:29
+msgid "Depth of the site-wide feed"
+msgstr ""
+
+#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:24
+msgid "Enable Atom 1.0 feeds"
+msgstr ""
+
+#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:40
+msgid "Here you can modify the settings for Atom syndication."
+msgstr ""
+
+#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:30
+msgid "The number of levels of folders below the portal root to be included in the site-wide Atom feed. 0 indicates no limits on depth. 1 indicates that only the root folder will be included."
+msgstr ""
+

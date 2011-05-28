@@ -20,9 +20,15 @@ from z3c.form.browser.checkbox import CheckBoxFieldWidget
 
 class IAtomSettings(Interface):
     """ Interface for the form on the control panel. """
-    atom_enabled = schema.Bool(title=_(u"Enable Atom 1.0 feeds"), description=_(u"Checking this box will create an atom feed at the root of the portal that will include all of the published content within this portal."), required=True, default=True)
+    atom_enabled = schema.Bool(
+        title=_(u"Enable Atom 1.0 feeds"),
+        description=_(u"Checking this box will create an Atom feed at the root of the portal that will include all of the published content within this portal."),
+        required=True, default=True)
 #    max_entries = schema.Int(title=_(u"Maximum number of entries on feed"), description=_(u"The maximum number of entries that will be seen on the atom feed."), min=0, required=False, default=None)
-    feed_depth = schema.Int(title=_(u"Depth of the site-wide feed"), description=_(u"The number of levels of folders below the portal root to be included in the site-wide atom feed. 0 indicates no limits on depth. 1 indicates that only the root folder will be included."), min=0, required=True, default=0)
+    feed_depth = schema.Int(
+        title=_(u"Depth of the site-wide feed"),
+        description=_(u"The number of levels of folders below the portal root to be included in the site-wide Atom feed. 0 indicates no limits on depth. 1 indicates that only the root folder will be included."),
+        min=0, required=True, default=0)
 
 class AtomSettingsEditForm(controlpanel.RegistryEditForm):
     grok.context(IPloneSiteRoot)
