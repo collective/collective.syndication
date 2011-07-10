@@ -1,34 +1,13 @@
 import unittest
 import doctest
 
-
-#from zope.testing import doctestunit
-#from zope.component import testing
+from zope.testing import doctestunit
 from Testing import ZopeTestCase as ztc
 
-from Products.Five import fiveconfigure
-from Products.PloneTestCase import PloneTestCase as ptc
-from Products.PloneTestCase.layer import PloneSite
-ptc.setupPloneSite()
-
-import collective.atomsyndication
+from collective.atomsyndication.tests import base
 
 
-class TestCase(ptc.PloneTestCase):
-
-    class layer(PloneSite):
-
-        @classmethod
-        def setUp(cls):
-            fiveconfigure.debug_mode = True
-            ztc.installPackage(collective.atomsyndication)
-            fiveconfigure.debug_mode = False
-
-        @classmethod
-        def tearDown(cls):
-            pass
-
-class FunctionalTestCase(ptc.FunctionalTestCase):
+class FunctionalTestCase(base.FunctionalTestCase):
 
     def loginAsAdmin(self):
         from Products.PloneTestCase.setup import portal_owner, default_password
@@ -67,7 +46,6 @@ def test_suite():
             'README.txt', package='collective.atomsyndication',
             test_class=FunctionalTestCase,
             optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
-
         ])
 
 if __name__ == '__main__':
