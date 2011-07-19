@@ -24,12 +24,16 @@ setup(name='collective.atomsyndication',
       namespace_packages=['collective'],
       include_package_data=True,
       zip_safe=False,
+      extras_require=dict(
+        test=[
+            'Products.PloneTestCase',
+        ]
+      ),
       install_requires=[
           'setuptools',
-          'Plone',
+          'five.grok',
           'plone.app.z3cform',
           'plone.app.registry',
-          'five.grok',
       ],
       entry_points="""
       [z3c.autoinclude.plugin]
