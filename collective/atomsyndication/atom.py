@@ -94,6 +94,8 @@ class AtomFeedView(grok.View):
 class RootAtomFeedView(AtomFeedView):
     grok.context(IPloneSiteRoot)
 
+    query = dict(portal_type=('Topic', 'Folder',))
+
     def update(self):
         if getattr(self.request, 'RESPONSE', None):
             self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')

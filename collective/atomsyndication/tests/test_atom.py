@@ -66,6 +66,9 @@ class TestSetup(base.IntegrationTestCase):
         view = atom.RootAtomFeedView(self.portal, None)
         #view = self.portal.restrictedTraverse("atom.xml")
         view.update()
+
+        logger.debug(u"\nQuery: %s" % view.query)
+        logger.debug(u"\nCatalog search: %s" % view.query_catalog(view.query))
         logger.debug(u"\nResults: %s" % view.results)
         rendered = view.render()
         logger.debug(u"\nView: %s" % view.render())
