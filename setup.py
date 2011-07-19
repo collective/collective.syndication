@@ -1,4 +1,5 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
+
 from setuptools import setup, find_packages
 import os
 
@@ -24,12 +25,16 @@ setup(name='collective.atomsyndication',
       namespace_packages=['collective'],
       include_package_data=True,
       zip_safe=False,
+      extras_require=dict(
+        test=[
+            'plone.app.testing',
+        ]
+      ),
       install_requires=[
           'setuptools',
-          'Plone',
-          'plone.app.z3cform',
-          'plone.app.registry',
           'five.grok',
+          'plone.app.registry',
+          'plone.app.z3cform',
       ],
       entry_points="""
       [z3c.autoinclude.plugin]
