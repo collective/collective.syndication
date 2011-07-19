@@ -47,7 +47,8 @@ class AtomFeedView(grok.View):
     grok.layer(IAtomSyndicationLayer)
 
     def update(self):
-        self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')
+        if getattr(self.request, 'RESPONSE', None):
+            self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')
         syn_tool = getToolByName(self.context, 'portal_syndication')
         self.results= syn_tool.getSyndicatableContent(self.context)
 
@@ -63,11 +64,11 @@ class AtomFeedView(grok.View):
                 limit = syn_tool.getMaxItems(obj)
                 objlist = list(syn_tool.getSyndicatableContent(obj))[:limit]
                 for sobj in objlist:
-                    uid = sobj.UID()
+                    uid = sobj.UID
                     if filtered.has_key(uid):
                         filtered[uid]['categories'].append((obj_name, obj_label))
                     else:
-                        filtered[uid] = {'categories': [(obj_name, obj_label),], 'object': sobj}
+                        filtered[uid] = {'categories': [(obj_name, obj_label),], 'object': obj}
                     intermed.append(sobj)
         self.filtered = filtered
         return intermed
@@ -79,9 +80,9 @@ class AtomFeedView(grok.View):
     def atom_id_tag(self, context):
         portal_state = getMultiAdapter((self.context, self.request), name=u'plone_portal_state')
         root_url = portal_state.portal_url()
-        mod_date = context.ModificationDate()
+        mod_date = context.ModificationDate
         url = self.url_parser(root_url)
-        tag = u"tag:%s,%s:%s" % (url[0], context.ModificationDate()[:10], context.UID())
+        tag = u"tag:%s,%s:%s" % (url[0], context.ModificationDate[:10], context.UID)
         return tag
 
     def url_parser(self, data):
@@ -93,7 +94,10 @@ class AtomFeedView(grok.View):
 class RootAtomFeedView(AtomFeedView):
     grok.context(IPloneSiteRoot)
 
+    query = dict(portal_type=('Topic', 'Folder',))
+
     def update(self):
-        self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')
+        if getattr(self.request, 'RESPONSE', None):
+            self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')
         q_results = self.query_catalog({'portal_type': ('Topic', 'Folder',)})
         self.results = self.filter_syndicatable(q_results)
