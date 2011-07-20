@@ -54,13 +54,15 @@
                     has_effective exists:obj_item/aq_explicit/effective_date;
                     effective python:has_effective and obj_item.effective().HTML4() or '';
                     modified python:obj_item.modified().HTML4();
-                    creator obj_item/Creator|nothing;
-                    image python: obj_item.getImage()|nothing;">
+                    creator obj_item/Creator|nothing;">
         <title tal:content="obj_item/pretty_title_or_id">Atom-Powered Robots Run Amok</title>
         <link href="http://example.org/2003/12/13/atom03" tal:attributes="href obj_item/Identifier" />
         <link rel="alternate" type="text/html" href="http://example.org/2003/12/13/atom03.html" tal:attributes="href string:${obj_item/Identifier}" />
         <link rel="edit" href="http://example.org/2003/12/13/atom03/edit" tal:attributes="href string:${obj_item/Identifier}/edit" />
-        <link tal:condition="image" tal:define="img image" rel="enclosure" tal:attributes="type img/content_type; length img/getSize; href img/absolute_url" type="image/jpeg" length="54079" href="http://warp.com.mx/sites%2Fall%2Ffiles%2Fthe-vaccines2_2_0.jpg"/>
+        <tal:news tal:condition="python: obj_item.Type == 'News Item'"
+            tal:define="img python:getattr(obj_item.getObject(), 'getImage', None);">
+            <link rel="enclosure" tal:condition="img" tal:attributes="type python:img().content_type; length python:img().getSize(); href python:img().absolute_url()" type="image/jpeg" length="54079" href="http://warp.com.mx/sites%2Fall%2Ffiles%2Fthe-vaccines2_2_0.jpg"/>
+        </tal:news>
         <id tal:content="python:view.atom_id_tag(obj_item)">urn:uuid:60a76c80-d399-11d9-b91C-0003939e0af6</id>
         <author tal:define="creator obj_item/Creator|nothing;
                             getMemberInfo nocall:context/portal_membership/getMemberInfo;
