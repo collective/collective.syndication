@@ -1,0 +1,19 @@
+controlpanel.txt
+================
+
+    >>> app = layer['app']
+    >>> portal = layer['portal']
+    >>> request = layer['request']
+    >>> portal.portal_quickinstaller.isProductInstalled('collective.atomsyndication')
+    True
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(app)
+    >>> from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+    >>> from plone.app.testing import SITE_OWNER_NAME, SITE_OWNER_PASSWORD
+    >>> browser.addHeader('Authorization', 'Basic %s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD,))
+    >>> portalURL = portal.absolute_url()
+    >>> browser.open(portalURL+'/atom_settings')
+
+    # FIXME: TEMPORARY LINES TO BE REMOVED AFTER DEV
+    >>> f = open('/tmp/atom_settings.html', 'w')
+    >>> f.write(browser.contents)

@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
-import unittest
+import unittest2 as unittest
 import doctest
 
-from Testing import ZopeTestCase as ztc
-from collective.atomsyndication.tests.test_browser import FunctionalTestCase
+from plone.testing import layered
+
+from collective.atomsyndication.testing import FUNCTIONAL_TESTING
 
 
 def test_suite():
-    return unittest.TestSuite([
-        ztc.ZopeDocFileSuite('tests/atom.txt',
-            package='collective.atomsyndication',
-            test_class=FunctionalTestCase,
+    suite = unittest.TestSuite()
+    suite.addTests([
+        layered(doctest.DocFileSuite('controlpanel.txt',
             optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
-        #ztc.ZopeDocFileSuite('tests/controlpanel.txt',
-        #    package='collective.atomsyndication',
-        #    test_class=base.FunctionalTestCase,
-        #    optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
-        ])
+            layer=FUNCTIONAL_TESTING),
+        layered(doctest.DocFileSuite('atom.txt',
+            optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
+            layer=FUNCTIONAL_TESTING),
+    ])
+    return suite
