@@ -1,14 +1,18 @@
 
 import sys
-import unittest
+import unittest2 as unittest
 import logging
 
 from zope.component import getMultiAdapter
 from zope.publisher.browser import TestRequest
 from Products.CMFCore.utils import getToolByName
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import login
+from plone.app.testing import setRoles
 
 from collective.atomsyndication import atom
-from collective.atomsyndication.tests import base
+from collective.atomsyndication.testing import INTEGRATION_TESTING
 
 logging.basicConfig()
 logger = logging.getLogger('collective.atomsyndication')
@@ -35,35 +39,38 @@ CONTENT_STRUCTURE = (dict(type='Topic',
                                   artcile, explaining things\
                                   about stuff."),
                     )
-class TestSetup(base.IntegrationTestCase):
+class TestSetup(unittest.TestCase):
     """ Checks instalation of this product """
 
-    def afterSetup(self):
-        self.catalog = getToolByName(self.portal, 'portal_catalog')
+    layer = INTEGRATION_TESTING
 
-    def populateSite(self):
+    def populateSite(self, container):
+        setRoles(container, TEST_USER_ID, ['Manager'])
+        login(container, TEST_USER_NAME)
         for item in CONTENT_STRUCTURE:
-            self.folder.invokeFactory(item["type"],
+            container.invokeFactory(item["type"],
                                     id=item["id"],
                                     title=item["title"],
                                     description=item["description"],
                                     )
-            self.folder[item["id"]].reindexObject()
+            container[item["id"]].reindexObject()
+
+        setRoles(container, TEST_USER_ID, ['Member'])
 
     def test_atom_installed(self):
-        self.addProfile('collective.atomsyndication:default')
-        portal_quickinstaller = self.portal.portal_quickinstaller
+        portal = self.layer['portal']
+        portal_quickinstaller = portal.portal_quickinstaller
         self.failUnless(portal_quickinstaller.isProductInstalled(PROJECTNAME),
                                             '%s not installed' % PROJECTNAME)
 
 
     def test_root_atom_enabled(self):
-        self.loginAsPortalOwner()
-        self.addProfile('collective.atomsyndication:default')
-        self.populateSite()
+        portal = self.layer['portal']
+        #self.loginAsPortalOwner()
+        self.populateSite(portal)
         req = TestRequest()
         #view = getMultiAdapter((self.portal, TestRequest()), name=u"atom.xml")
-        view = atom.RootAtomFeedView(self.portal, None)
+        view = atom.RootAtomFeedView(portal, None)
         #view = self.portal.restrictedTraverse("atom.xml")
         view.update()
 
