@@ -68,7 +68,7 @@ class AtomFeedView(grok.View):
                     if filtered.has_key(uid):
                         filtered[uid]['categories'].append((obj_name, obj_label))
                     else:
-                        filtered[uid] = {'categories': [(obj_name, obj_label),], 'object': obj}
+                        filtered[uid] = {'categories': [(obj_name, obj_label),], 'object': sobj}
                     intermed.append(sobj)
         self.filtered = filtered
         return intermed
@@ -82,7 +82,7 @@ class AtomFeedView(grok.View):
         root_url = portal_state.portal_url()
         mod_date = context.ModificationDate
         url = self.url_parser(root_url)
-        tag = u"tag:%s,%s:%s" % (url[0], context.ModificationDate[:10], context.UID)
+        tag = u"tag:%s,%s:%s" % (url[0], context.ModificationDate()[:10], context.UID())
         return tag
 
     def url_parser(self, data):

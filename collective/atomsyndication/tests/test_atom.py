@@ -24,17 +24,29 @@ logger.addHandler(handler)
 logger.debug(u'\nBegin collective.syndication LOG')
 
 PROJECTNAME = 'collective.atomsyndication'
-CONTENT_STRUCTURE = (dict(type='Topic',
+CONTENT_STRUCTURE = (dict(type='News Item',
                           id='news-1',
                           title=u"News Article Number One",
                           description=u"A brief description about the\
                                   artcile, explaining things\
                                   about stuff."
                                   ),
-                                  
-                     dict(type='Topic',
+                     dict(type='News Item',
                           id='news-2',
                           title=u"News Article Number Two",
+                          description=u"A brief description about the\
+                                  artcile, explaining things\
+                                  about stuff."),
+                     dict(type='News Item',
+                          id='news-3',
+                          title=u"News Article Number One",
+                          description=u"A brief description about the\
+                                  artcile, explaining things\
+                                  about stuff."
+                                  ),
+                     dict(type='Topic',
+                          id='topic-1',
+                          title=u"A Collection of Articles",
                           description=u"A brief description about the\
                                   artcile, explaining things\
                                   about stuff."),
@@ -44,16 +56,24 @@ class TestSetup(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
-    def populateSite(self, container):
+    def populateSite(self, container, contents=CONTENT_STRUCTURE):
+        portal = self.layer['portal']
+        syndication_tool = getToolByName(portal, 'portal_syndication')
         setRoles(container, TEST_USER_ID, ['Manager'])
         login(container, TEST_USER_NAME)
-        for item in CONTENT_STRUCTURE:
+        for item in contents:
             container.invokeFactory(item["type"],
                                     id=item["id"],
                                     title=item["title"],
                                     description=item["description"],
                                     )
             container[item["id"]].reindexObject()
+            if item["type"] == "Topic":
+                colec_obj = container[item["id"]]
+                type_crit = colec_obj.addCriterion('Type', 'ATPortalTypeCriterion')
+                type_crit.setValue('News Item')
+                if not syndication_tool.isSyndicationAllowed(colec_obj):
+                    syndication_tool.enableSyndication(colec_obj)
 
         setRoles(container, TEST_USER_ID, ['Member'])
 
@@ -66,10 +86,11 @@ class TestSetup(unittest.TestCase):
 
     def test_root_atom_enabled(self):
         portal = self.layer['portal']
+        request = self.layer['request']
         #self.loginAsPortalOwner()
         self.populateSite(portal)
         req = TestRequest()
-        #view = getMultiAdapter((self.portal, TestRequest()), name=u"atom.xml")
+        #view = getMultiAdapter((portal, request), name=u"atom.xml")
         view = atom.RootAtomFeedView(portal, None)
         #view = self.portal.restrictedTraverse("atom.xml")
         view.update()
@@ -77,8 +98,9 @@ class TestSetup(unittest.TestCase):
         logger.debug(u"\nQuery: %s" % view.query)
         logger.debug(u"\nCatalog search: %s" % view.query_catalog(view.query))
         logger.debug(u"\nResults: %s" % view.results)
+        logger.debug(u"\nFiltered: %s" % view.filtered)
         rendered = view.render()
-        logger.debug(u"\nView: %s" % view.render())
+        logger.debug(u"\nView: %s" % rendered)
 
 
 
