@@ -8,7 +8,7 @@ version = '0.1'
 setup(name='collective.atomsyndication',
       version=version,
       description="",
-      long_description=open(os.path.join("collective", "atomsyndication", "README.txt")).read() + "\n" +
+      long_description=open(os.path.join("README.txt")).read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
       # http://pypi.python.org/pypi?:action=list_classifiers
