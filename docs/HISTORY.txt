@@ -4,13 +4,4 @@ Changelog
 1.0dev (unreleased)
 -------------------
 
-* Moved the GenericSetup Profile into profiles.zcml file
-  [macagua (Leonardo J. Caballero G.)]
-
-- Updated Spanish translation for collective.atomsyndication domain
-  [macagua (Leonardo J. Caballero G.)]
-
-- Added more support for i18n to .pt template.
-  [macagua (Leonardo J. Caballero G.)]
-
 - Initial release
