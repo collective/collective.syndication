@@ -21,21 +21,18 @@ setup(name='collective.atomsyndication',
       author_email='globojorro@gmail.com',
       url='http://github.com/collective/collective.atomsyndication',
       license='GPL',
-      packages=find_packages(exclude=['ez_setup']),
+      packages=find_packages('src'),
+      package_dir={'': 'src'},
       namespace_packages=['collective'],
       include_package_data=True,
       zip_safe=False,
-      extras_require=dict(
-        test=[
-            'plone.app.testing',
-        ]
-      ),
       install_requires=[
-          'setuptools',
-          'five.grok',
-          'plone.app.registry',
-          'plone.app.z3cform',
-      ],
+        'setuptools',
+        'five.grok>=1.2.0',
+        ],
+      extras_require={
+        'test': ['plone.app.testing'],
+        },
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone
