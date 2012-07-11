@@ -1,7 +1,10 @@
 Changelog
-=========
+---------
 
-1.0dev (unreleased)
--------------------
+Because you have to know where your towel is.
 
-- Initial release
+1.0a1 (unreleased)
+^^^^^^^^^^^^^^^^^^
+
+- Initial release.
+

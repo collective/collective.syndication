@@ -1,7 +1,11 @@
-collective.atomsyndication contributors
-=======================================
+Share and Enjoy
+---------------
 
-- Joaquín Rosales (globojorro@gmail.com)
+collective.atomsyndication would not have been possible without the
+contribution of the following people:
 
-- Héctor Velarde (hector.velarde@gmail.com)
+- Joaquín Rosales
+- Héctor Velarde
+
+Development sponsored by Open Multimedia.
 
