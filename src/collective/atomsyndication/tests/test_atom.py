@@ -1,11 +1,14 @@
+# -*- coding: utf-8 -*-
 
-import sys
 import unittest2 as unittest
-import logging
 
-from zope.component import getMultiAdapter
+import logging
+import sys
+
 from zope.publisher.browser import TestRequest
+
 from Products.CMFCore.utils import getToolByName
+
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import login
@@ -51,6 +54,8 @@ CONTENT_STRUCTURE = (dict(type='News Item',
                                   artcile, explaining things\
                                   about stuff."),
                     )
+
+
 class TestSetup(unittest.TestCase):
     """ Checks instalation of this product """
 
@@ -83,7 +88,6 @@ class TestSetup(unittest.TestCase):
         self.failUnless(portal_quickinstaller.isProductInstalled(PROJECTNAME),
                                             '%s not installed' % PROJECTNAME)
 
-
     def test_root_atom_enabled(self):
         portal = self.layer['portal']
         request = self.layer['request']
@@ -101,10 +105,3 @@ class TestSetup(unittest.TestCase):
         logger.debug(u"\nFiltered: %s" % view.filtered)
         rendered = view.render()
         logger.debug(u"\nView: %s" % rendered)
-
-
-
-def test_suite():
-    suite= unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestSetup))
-    return suite

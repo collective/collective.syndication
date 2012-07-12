@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-$Id: testing.py 242547 2011-07-19 01:05:39Z hvelarde $
-"""
-
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import IntegrationTesting

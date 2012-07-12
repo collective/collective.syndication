@@ -1,22 +1,16 @@
+# -*- coding: utf-8 -*-
+
 from five import grok
 
-from zope.interface import Interface
 from zope import schema
-from zope.component import getMultiAdapter
-from Products.CMFCore.utils import getToolByName
+from zope.interface import Interface
 
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+
 from plone.app.registry.browser import controlpanel
 
 from collective.atomsyndication import _
 
-try:
-    # only in z3c.form 2.0
-    from z3c.form.browser.textlines import TextLinesFieldWidget
-except ImportError:
-    from plone.z3cform.textlines import TextLinesFieldWidget
-
-from z3c.form.browser.checkbox import CheckBoxFieldWidget
 
 class IAtomSettings(Interface):
     """ Interface for the form on the control panel. """
@@ -30,13 +24,14 @@ class IAtomSettings(Interface):
         description=_(u"The number of levels of folders below the portal root to be included in the site-wide Atom feed. 0 indicates no limits on depth. 1 indicates that only the root folder will be included."),
         min=0, required=True, default=0)
 
+
 class AtomSettingsEditForm(controlpanel.RegistryEditForm):
     grok.context(IPloneSiteRoot)
     grok.name("atom_settings")
     grok.require("cmf.ManagePortal")
 
     schema = IAtomSettings
-    label = _(u"Atom Syndication Settings") 
+    label = _(u"Atom Syndication Settings")
     description = _(u"Here you can modify the settings for Atom syndication.")
 
     def updateFields(self):
@@ -51,6 +46,7 @@ class AtomSettingsEditForm(controlpanel.RegistryEditForm):
 #        self.widgets['unique_categories'].style = u'width: 30%;'
 #        self.widgets['required_categories'].rows = 8
 #        self.widgets['required_categories'].style = u'width: 30%;'
+
 
 class AtomSettingsControlPanel(controlpanel.ControlPanelFormWrapper):
     form = AtomSettingsEditForm
