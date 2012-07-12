@@ -3,8 +3,6 @@
 import unittest2 as unittest
 
 from plone.app.testing import TEST_USER_ID
-from plone.app.testing import TEST_USER_NAME
-from plone.app.testing import login
 from plone.app.testing import setRoles
 
 from plone.browserlayer.utils import registered_layers
@@ -13,7 +11,7 @@ from collective.atomsyndication.config import PROJECTNAME
 from collective.atomsyndication.testing import INTEGRATION_TESTING
 
 
-class InstallTest(unittest.TestCase):
+class InstallTestCase(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
@@ -22,32 +20,28 @@ class InstallTest(unittest.TestCase):
 
     def test_installed(self):
         qi = getattr(self.portal, 'portal_quickinstaller')
-        self.failUnless(qi.isProductInstalled(PROJECTNAME))
+        self.assertTrue(qi.isProductInstalled(PROJECTNAME))
 
     def test_browserlayer_installed(self):
         layers = [l.getName() for l in registered_layers()]
-        self.failUnless('IAtomSyndicationLayer' in layers)
+        self.assertTrue('IAtomSyndicationLayer' in layers,
+                        'browser layer was not installed')
 
 
-class UninstallTest(unittest.TestCase):
+class UninstallTestCase(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        login(self.portal, TEST_USER_NAME)
+        self.qi = getattr(self.portal, 'portal_quickinstaller')
+        self.qi.uninstallProducts(products=[PROJECTNAME])
 
     def test_uninstalled(self):
-        qi = getattr(self.portal, 'portal_quickinstaller')
-        qi.uninstallProducts(products=[PROJECTNAME])
-        self.failIf(qi.isProductInstalled(PROJECTNAME))
+        self.assertFalse(self.qi.isProductInstalled(PROJECTNAME))
 
-    # FIXME: need to apply uninstall profile
-    def test_browserlayer_uninstalled(self):
+    def test_browserlayer_removed(self):
         layers = [l.getName() for l in registered_layers()]
-        self.failIf('IAtomSyndicationLayer' in layers)
-
-
-def test_suite():
-    return unittest.defaultTestLoader.loadTestsFromName(__name__)
+        self.assertFalse('IAtomSyndicationLayer' in layers,
+                         'browser layer was not removed')
