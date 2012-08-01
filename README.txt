@@ -2,22 +2,7 @@
 collective.atomsyndication
 **************************
 
-.. contents:: Table of Contents
+The use of this package is deprecated as starting Plone 4.3 `Atom is among the
+standard supported syndication formats`_.
 
-Life, the Universe, and Everything
-----------------------------------
-
-TBD.
-
-Don't Panic
------------
-
-TBD.
-
-Mostly Harmless
----------------
-
-Have an idea? Found a bug? Let us know by `opening a support ticket`_.
-
-.. _`opening a support ticket`: https://github.com/collective/collective.atomsyndication/issues
-
+.. _`Atom is among the standard supported syndication formats`: https://dev.plone.org/ticket/12908
