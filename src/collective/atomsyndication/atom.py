@@ -103,10 +103,10 @@ class AtomFeedView(grok.View):
 class RootAtomFeedView(AtomFeedView):
     grok.context(IPloneSiteRoot)
 
-    query = dict(portal_type=('Topic', 'Folder',))
+    query = dict(portal_type=('Topic', 'Folder', 'Collection',))
 
     def update(self):
         if getattr(self.request, 'RESPONSE', None):
             self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')
-        q_results = self.query_catalog({'portal_type': ('Topic', 'Folder',)})
+        q_results = self.query_catalog(self.query)
         self.results = self.filter_syndicatable(q_results)

@@ -25,7 +25,7 @@
                     effective python:has_effective and obj_item.effective().HTML4() or '';
                     modified python:obj_item.modified.HTML4();
                     creator obj_item/Creator|nothing;">
-        <title tal:content="obj_item/pretty_title_or_id">Atom-Powered Robots Run Amok</title>
+        <title tal:content="obj_item/Title|obj_item/getId">Atom-Powered Robots Run Amok</title>
         <link href="http://example.org/2003/12/13/atom03" tal:attributes="href obj_item/getURL" />
         <link rel="alternate" type="text/html" href="http://example.org/2003/12/13/atom03.html" tal:attributes="href string:${obj_item/Identifier}" />
         <link rel="edit" href="http://example.org/2003/12/13/atom03/edit" tal:attributes="href string:${obj_item/Identifier}/edit" />
