@@ -5,6 +5,13 @@ from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import FunctionalTesting
 
+try:
+    # Try to get the new collection type
+    import plone.app.collection
+    HAS_COLLECTION = True
+except:
+    HAS_COLLECTION = False
+
 
 class Fixture(PloneSandboxLayer):
 
@@ -14,6 +21,10 @@ class Fixture(PloneSandboxLayer):
         # Load ZCML
         import collective.atomsyndication
         self.loadZCML(package=collective.atomsyndication)
+        if HAS_COLLECTION:
+            self['has_collection'] = True
+        else:
+            self['has_collection'] = False
 
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup

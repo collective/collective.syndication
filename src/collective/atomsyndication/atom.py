@@ -58,11 +58,13 @@ class AtomFeedView(grok.View):
             self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')
         syn_tool = getToolByName(self.context, 'portal_syndication')
         self.results = syn_tool.getSyndicatableContent(self.context)
+        self.results.sort(key=lambda x:x.Date)
 
     def filter_syndicatable(self, results):
         syn_tool = getToolByName(self.context, 'portal_syndication')
-        filtered = {}
+        filtered_aux = {}
         intermed = []
+
         for res in results:
             obj = res.getObject()
             if syn_tool.isSyndicationAllowed(obj):
@@ -72,12 +74,15 @@ class AtomFeedView(grok.View):
                 objlist = list(syn_tool.getSyndicatableContent(obj))[:limit]
                 for sobj in objlist:
                     uid = sobj.UID
-                    if uid in filtered:
-                        filtered[uid]['categories'].append((obj_name, obj_label))
+                    if uid in filtered_aux:
+                        filtered_aux[uid]['categories'].append((obj_name, obj_label))
                     else:
-                        filtered[uid] = {'categories': [(obj_name, obj_label)], 'object': sobj}
+                        filtered_aux[uid] = {'categories': [(obj_name, obj_label)], 'object': sobj}
                     intermed.append(sobj)
-        self.filtered = filtered
+
+        self.filtered = filtered_aux.values()
+        self.filtered.sort(key=lambda x:x['object'].Date)
+
         return intermed
 
     def query_catalog(self, query):
@@ -109,4 +114,7 @@ class RootAtomFeedView(AtomFeedView):
         if getattr(self.request, 'RESPONSE', None):
             self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')
         q_results = self.query_catalog(self.query)
+
         self.results = self.filter_syndicatable(q_results)
+        self.results.sort(key=lambda x:x.Date)
+

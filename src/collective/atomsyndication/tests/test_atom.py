@@ -14,6 +14,13 @@ from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import login
 from plone.app.testing import setRoles
 
+try:
+    # Try to get the new collection type
+    import plone.app.collection
+    HAS_COLLECTION = True
+except:
+    HAS_COLLECTION = False
+
 from collective.atomsyndication import atom
 from collective.atomsyndication.testing import INTEGRATION_TESTING
 
@@ -27,7 +34,7 @@ logger.addHandler(handler)
 logger.debug(u'\nBegin collective.syndication LOG')
 
 PROJECTNAME = 'collective.atomsyndication'
-CONTENT_STRUCTURE = (dict(type='News Item',
+CONTENT_STRUCTURE = [dict(type='News Item',
                           id='news-1',
                           title=u"News Article Number One",
                           description=u"A brief description about the\
@@ -47,13 +54,21 @@ CONTENT_STRUCTURE = (dict(type='News Item',
                                   artcile, explaining things\
                                   about stuff."
                                   ),
-                     dict(type='Topic',
-                          id='topic-1',
-                          title=u"A Collection of Articles",
-                          description=u"A brief description about the\
-                                  artcile, explaining things\
-                                  about stuff."),
-                    )
+                    ]
+if HAS_COLLECTION:
+    CONTENT_STRUCTURE.append(dict(type='Collection',
+                                  id='topic-1',
+                                  title=u"A Collection of Articles",
+                                  description=u"A brief description about the\
+                                          artcile, explaining things\
+                                          about stuff."))
+else:
+    CONTENT_STRUCTURE.append(dict(type='Topic',
+                                  id='topic-1',
+                                  title=u"A Collection of Articles",
+                                  description=u"A brief description about the\
+                                          artcile, explaining things\
+                                          about stuff."))
 
 
 class TestSetup(unittest.TestCase):
@@ -77,6 +92,17 @@ class TestSetup(unittest.TestCase):
                 colec_obj = container[item["id"]]
                 type_crit = colec_obj.addCriterion('Type', 'ATPortalTypeCriterion')
                 type_crit.setValue('News Item')
+                if not syndication_tool.isSyndicationAllowed(colec_obj):
+                    syndication_tool.enableSyndication(colec_obj)
+
+            if item["type"] == "Collection":
+                colec_obj = container[item["id"]]
+
+                query = [{'i': 'portal_type',
+                          'o': 'plone.app.querystring.operation.selection.is',
+                          'v': ['News Item']}]
+
+                colec_obj.query = query
                 if not syndication_tool.isSyndicationAllowed(colec_obj):
                     syndication_tool.enableSyndication(colec_obj)
 
