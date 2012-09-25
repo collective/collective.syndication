@@ -6,6 +6,6 @@ contribution of the following people:
 
 - Joaquín Rosales
 - Héctor Velarde
+- Franco Pellegrini
 
 Development sponsored by Open Multimedia.
-

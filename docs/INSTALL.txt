@@ -11,6 +11,13 @@ To enable this product in a buildout-based installation:
     eggs =
         collective.atomsyndication
 
+2. If you are using Plone 4.2 you may need to use plone.app.collection version
+   1.0.6 or later::
+
+    [versions]
+    ...
+    plone.app.collection = 1.0.6
+
 After updating the configuration you need to run ''bin/buildout'', which will
 take care of updating your system.
 
@@ -21,4 +28,3 @@ button.
 
 Note: You may have to empty your browser cache and save your resource
 registries in order to see the effects of the product installation.
-
