@@ -11,10 +11,10 @@ long_description = open("README.txt").read() + "\n" + \
 
 setup(name='collective.atomsyndication',
       version=version,
-      description="",
+      description="An Atom feed generator for Plone sites.",
       long_description=long_description,
       classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Framework :: Plone",
         "Framework :: Plone :: 4.1",
