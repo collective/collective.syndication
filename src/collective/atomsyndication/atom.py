@@ -20,6 +20,18 @@ from collective.atomsyndication.controlpanel import IAtomSettings
 grok.templatedir('templates')
 
 
+def getDate(obj):
+    # This is needed since in some situations, Date is a callable
+    # and sometimes just a string...
+    date = ''
+    if isinstance(obj.Date, str):
+        date = obj.Date
+    else:
+        date = obj.Date()
+
+    return date
+
+
 class IAtomSyndicationLayer(IDefaultBrowserLayer):
     """ Default browser layer for the package. """
 
@@ -57,8 +69,8 @@ class AtomFeedView(grok.View):
         if getattr(self.request, 'RESPONSE', None):
             self.request.RESPONSE.setHeader('Content-Type', 'application/atom+xml;;charset=utf-8')
         syn_tool = getToolByName(self.context, 'portal_syndication')
-        self.results = syn_tool.getSyndicatableContent(self.context)
-        self.results.sort(key=lambda x: x.Date, reverse=True)
+        self.results = list(syn_tool.getSyndicatableContent(self.context))
+        self.results.sort(key=lambda x: getDate(x), reverse=True)
 
     def filter_syndicatable(self, results):
         syn_tool = getToolByName(self.context, 'portal_syndication')
@@ -81,7 +93,7 @@ class AtomFeedView(grok.View):
                     intermed.append(sobj)
 
         self.filtered = filtered_aux.values()
-        self.filtered.sort(key=lambda x: x['object'].Date, reverse=True)
+        self.filtered.sort(key=lambda x: getDate(x['object']), reverse=True)
 
         return intermed
 
@@ -116,4 +128,4 @@ class RootAtomFeedView(AtomFeedView):
         q_results = self.query_catalog(self.query)
 
         self.results = self.filter_syndicatable(q_results)
-        self.results.sort(key=lambda x: x.Date, reverse=True)
+        self.results.sort(key=lambda x: getDate(x), reverse=True)
