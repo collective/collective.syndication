@@ -4,37 +4,57 @@
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="collective.atomsyndication">
 
-    <i18n:registerTranslations directory="locales" />
+    <configure 
+        zcml:condition="not-have plone-43">
 
-    <include package="Products.CMFCore" file="permissions.zcml" />
+        <i18n:registerTranslations directory="locales" />
 
-    <includeDependencies package="." />
+        <include package="Products.CMFCore" file="permissions.zcml" />
 
-    <!-- Grok the package to initialise schema interfaces and content classes -->
-    <grok:grok package="." />
-    <browser:page
-        name="atom_settings"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        class=".controlpanel.AtomSettingsControlPanel"
-        permission="cmf.ManagePortal"
-        />
-    <!-- Register an extension profile to make the product installable -->
-    <genericsetup:registerProfile
-        name="default"
-        title="collective.atomsyndication"
-        directory="profiles/default"
-        description="Installs the collective.atomsyndication package"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-    <genericsetup:registerProfile
-        name="uninstall"
-        title="collective.atomsyndication Uninstall profile"
-        directory="profiles/uninstall"
-        description="Uninstalls the collective.atomsyndication package"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-    <!-- -*- extra stuff goes here -*- -->
+        <includeDependencies package="." />
 
+        <!-- Grok the package to initialise schema interfaces and content classes -->
+        <grok:grok package="." />
+        <browser:page
+            name="atom_settings"
+            for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+            class=".controlpanel.AtomSettingsControlPanel"
+            permission="cmf.ManagePortal"
+            />
+        <!-- Register an extension profile to make the product installable -->
+        <genericsetup:registerProfile
+            name="default"
+            title="collective.atomsyndication"
+            directory="profiles/default"
+            description="Installs the collective.atomsyndication package"
+            provides="Products.GenericSetup.interfaces.EXTENSION"
+            />
+        <genericsetup:registerProfile
+            name="uninstall"
+            title="collective.atomsyndication Uninstall profile"
+            directory="profiles/uninstall"
+            description="Uninstalls the collective.atomsyndication package"
+            provides="Products.GenericSetup.interfaces.EXTENSION"
+            />
+        <!-- -*- extra stuff goes here -*- -->
+
+    </configure>
+    <configure 
+        zcml:condition="have plone-43">
+
+        <!-- Register an extension profile to migrate the needed bits to the 
+             default syndication system in Plone 4.3+ -->
+
+        <genericsetup:registerProfile
+            name="migrate43"
+            title="Migrate collective.atomsyndication to default syndication in 4.3"
+            directory="profiles/migrate43"
+            description="Migrate collective.atomsyndication to default syndication in 4.3"
+            provides="Products.GenericSetup.interfaces.EXTENSION"
+            />
+
+    </configure>
 </configure>
