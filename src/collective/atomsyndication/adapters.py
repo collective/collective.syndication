@@ -21,17 +21,17 @@ from zope.cachedescriptors.property import Lazy as lazy_property
 try:
     from plone.dexterity.interfaces import IDexterityContent
 except ImportError:
-    class IDexterityContent(Interface):
+    class IDexterityContent(Interface):  # NOQA
         pass
 try:
     from plone.rfc822.interfaces import IPrimaryFieldInfo
 except ImportError:
-    class IPrimaryFieldInfo(Interface):
+    class IPrimaryFieldInfo(Interface):  # NOQA
         pass
 try:
     from plone.namedfile.interfaces import INamedField
 except ImportError:
-    class INamedField(Interface):
+    class INamedField(Interface):  # NOQA
         pass
 
 
