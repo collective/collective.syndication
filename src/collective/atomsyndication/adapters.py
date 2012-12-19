@@ -135,7 +135,7 @@ class FolderFeed(BaseFeedData):
         return catalog(path={
             'query': '/'.join(self.context.getPhysicalPath()),
             'depth': 1
-            })
+        })
 
     def _items(self):
         """
@@ -179,7 +179,7 @@ class SearchFeed(FolderFeed):
         request.set('sort_order', 'reverse')
         request.set('sort_on', request.get('sort_on', 'effective'))
         return self.context.queryCatalog(show_all=1, use_types_blacklist=True,
-            use_navigation_root=True)[start:end]
+                                         use_navigation_root=True)[start:end]
 
 
 class BaseItem(BaseFeedData):

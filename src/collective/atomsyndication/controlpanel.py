@@ -35,8 +35,10 @@ class SyndicationControlPanelForm(controlpanel.RegistryEditForm):
         We override this so we can get actual
         settings for portal_actions related settings
         """
-        content = getUtility(IRegistry).forInterface(self.schema,
-            prefix=self.schema_prefix)
+        content = getUtility(IRegistry).forInterface(
+            self.schema,
+            prefix=self.schema_prefix
+        )
         show_settings_btn = self.getSyndicationSettingsButtonShown()
         if show_settings_btn != content.show_syndication_button:
             content.show_syndication_button = show_settings_btn
@@ -48,11 +50,15 @@ class SyndicationControlPanelForm(controlpanel.RegistryEditForm):
     def setSyndicationActionSettings(self, data):
         actions = getToolByName(self.context, 'portal_actions')
         if 'syndication' in actions.object.objectIds():
-            actions.object.syndication._setPropValue('visible',
-                data['show_syndication_button'])
+            actions.object.syndication._setPropValue(
+                'visible',
+                data['show_syndication_button']
+            )
         if 'rss' in actions.document_actions.objectIds():
-            actions.document_actions.rss._setPropValue('visible',
-                data['show_syndication_link'])
+            actions.document_actions.rss._setPropValue(
+                'visible',
+                data['show_syndication_link']
+            )
 
     @button.buttonAndHandler(_(u"Save"), name='save')
     def handleSave(self, action):
@@ -77,7 +83,8 @@ class SyndicationControlPanelForm(controlpanel.RegistryEditForm):
         IStatusMessage(self.request).addStatusMessage(
             _(u"Edit cancelled."), "info")
         self.request.response.redirect("%s/%s" % (
-            self.context.absolute_url(), self.control_panel_view))
+            self.context.absolute_url(), self.control_panel_view)
+        )
 
 
 class SyndicationControlPanel(controlpanel.ControlPanelFormWrapper):

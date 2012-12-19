@@ -44,10 +44,11 @@ class SearchFeedView(FeedView):
 
 class SettingsForm(form.EditForm):
     label = _(u'heading_syndication_properties',
-        default=u'Syndication Properties')
-    description = _(u'description_syndication_properties',
+              default=u'Syndication Properties')
+    description = _(
+        u'description_syndication_properties',
         default=u'Syndication enables you to syndicate this folder so it can'
-                u'be synchronized from other web sites.')
+        u'be synchronized from other web sites.')
     fields = field.Fields(IFeedSettings)
 
     @button.buttonAndHandler(_(u'Save'), name='save')

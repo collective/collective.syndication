@@ -1,5 +1,4 @@
 from Products.CMFCore.utils import getToolByName
-from AccessControl import Unauthorized
 from Products.CMFPlone.tests import PloneTestCase
 from collective.atomsyndication.interfaces import IFeedSettings
 from collective.atomsyndication.interfaces import ISiteSyndicationSettings
@@ -115,7 +114,7 @@ class TestSyndicationViews(BaseSyndicationTest):
     def test_search_feed_view_raises_404(self):
         self.site_settings.search_rss_enabled = False
         self.assertRaises(NotFound,
-            self.portal.restrictedTraverse('@@search_rss'))
+                          self.portal.restrictedTraverse('@@search_rss'))
 
 
 class TestSyndicationFeedAdapter(BaseSyndicationTest):
@@ -133,7 +132,7 @@ class TestSyndicationFeedAdapter(BaseSyndicationTest):
 
     def test_link_on_file(self):
         self.assertEqual(self.feeddatafile.link,
-            self.file.absolute_url() + '/view')
+                         self.file.absolute_url() + '/view')
 
     def test_items(self):
         self.assertEqual(len(self.feed._brains()), 3)

@@ -19,7 +19,8 @@ class SyndicationUtil(BrowserView):
 
     def allowed_feed_types(self):
         settings = IFeedSettings(self.context)
-        factory = getUtility(IVocabularyFactory,
+        factory = getUtility(
+            IVocabularyFactory,
             "collective.atomsyndication.vocabularies.SyndicationFeedTypes")
         vocabulary = factory(self.context)
         types = []
