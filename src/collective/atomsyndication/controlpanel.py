@@ -1,52 +1,91 @@
-# -*- coding: utf-8 -*-
-
-from five import grok
-
-from zope import schema
-from zope.interface import Interface
-
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-
+from Products.CMFCore.utils import getToolByName
+from zope.component import getUtility
+from plone.registry.interfaces import IRegistry
 from plone.app.registry.browser import controlpanel
+from z3c.form import button
+from Products.statusmessages.interfaces import IStatusMessage
 
+from collective.atomsyndication.interfaces import ISiteSyndicationSettings
 from collective.atomsyndication import _
 
 
-class IAtomSettings(Interface):
-    """ Interface for the form on the control panel. """
-    atom_enabled = schema.Bool(
-        title=_(u"Enable Atom 1.0 feeds"),
-        description=_(u"Checking this box will create an Atom feed at the root of the portal that will include all of the published content within this portal."),
-        required=True, default=True)
-#    max_entries = schema.Int(title=_(u"Maximum number of entries on feed"), description=_(u"The maximum number of entries that will be seen on the atom feed."), min=0, required=False, default=None)
-    feed_depth = schema.Int(
-        title=_(u"Depth of the site-wide feed"),
-        description=_(u"The number of levels of folders below the portal root to be included in the site-wide Atom feed. 0 indicates no limits on depth. 1 indicates that only the root folder will be included."),
-        min=0, required=True, default=0)
+class SyndicationControlPanelForm(controlpanel.RegistryEditForm):
+    schema = ISiteSyndicationSettings
+    label = _(u'Syndication Settings')
+    description = _(u'Default syndication settings.')
+
+    def getSyndicationSettingsButtonShown(self):
+        actions = getToolByName(self.context, 'portal_actions')
+        if 'syndication' in actions.object.objectIds():
+            return actions.object.syndication.getProperty('visible')
+        else:
+            IStatusMessage(self.request).addStatusMessage(
+                _(u"Missing syndication settings action."), "warn")
+
+    def getSyndicationLinkShown(self):
+        actions = getToolByName(self.context, 'portal_actions')
+        if 'rss' in actions.document_actions.objectIds():
+            return actions.document_actions.rss.getProperty('visible')
+        else:
+            IStatusMessage(self.request).addStatusMessage(
+                _(u"Missing rss link action."), "warn")
+
+    def getContent(self):
+        """
+        We override this so we can get actual
+        settings for portal_actions related settings
+        """
+        content = getUtility(IRegistry).forInterface(
+            self.schema,
+            prefix=self.schema_prefix
+        )
+        show_settings_btn = self.getSyndicationSettingsButtonShown()
+        if show_settings_btn != content.show_syndication_button:
+            content.show_syndication_button = show_settings_btn
+        show_link_btn = self.getSyndicationLinkShown()
+        if show_link_btn != content.show_syndication_link:
+            content.show_syndication_link = show_link_btn
+        return content
+
+    def setSyndicationActionSettings(self, data):
+        actions = getToolByName(self.context, 'portal_actions')
+        if 'syndication' in actions.object.objectIds():
+            actions.object.syndication._setPropValue(
+                'visible',
+                data['show_syndication_button']
+            )
+        if 'rss' in actions.document_actions.objectIds():
+            actions.document_actions.rss._setPropValue(
+                'visible',
+                data['show_syndication_link']
+            )
+
+    @button.buttonAndHandler(_(u"Save"), name='save')
+    def handleSave(self, action):
+        """
+        Again, we're customizing this to handle saving
+        portal_actions related setting data.
+        """
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+
+        self.setSyndicationActionSettings(data)
+        self.applyChanges(data)
+        IStatusMessage(self.request).addStatusMessage(
+            _(u"Changes saved."), "info")
+        self.request.response.redirect("%s/%s" % (
+            self.context.absolute_url(), self.control_panel_view))
+
+    @button.buttonAndHandler(_(u"Cancel"), name='cancel')
+    def handleCancel(self, action):
+        IStatusMessage(self.request).addStatusMessage(
+            _(u"Edit cancelled."), "info")
+        self.request.response.redirect("%s/%s" % (
+            self.context.absolute_url(), self.control_panel_view)
+        )
 
 
-class AtomSettingsEditForm(controlpanel.RegistryEditForm):
-    grok.context(IPloneSiteRoot)
-    grok.name("atom_settings")
-    grok.require("cmf.ManagePortal")
-
-    schema = IAtomSettings
-    label = _(u"Atom Syndication Settings")
-    description = _(u"Here you can modify the settings for Atom syndication.")
-
-    def updateFields(self):
-        super(AtomSettingsEditForm, self).updateFields()
-#        self.fields['required_categories'].widgetFactory = TextLinesFieldWidget
-
-    def updateWidgets(self):
-        super(AtomSettingsEditForm, self).updateWidgets()
-#        self.widgets['tags'].rows = 8
-#        self.widgets['tags'].style = u'width: 30%;'
-#        self.widgets['unique_categories'].rows = 8
-#        self.widgets['unique_categories'].style = u'width: 30%;'
-#        self.widgets['required_categories'].rows = 8
-#        self.widgets['required_categories'].style = u'width: 30%;'
-
-
-class AtomSettingsControlPanel(controlpanel.ControlPanelFormWrapper):
-    form = AtomSettingsEditForm
+class SyndicationControlPanel(controlpanel.ControlPanelFormWrapper):
+    form = SyndicationControlPanelForm

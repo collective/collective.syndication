@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <layers>
  <layer name="collective.atomsyndication.layer"
-        interface="collective.atomsyndication.atom.IAtomSyndicationLayer" />
+        interface="collective.atomsyndication.layer.IAtomSyndicationLayer" />
 </layers>

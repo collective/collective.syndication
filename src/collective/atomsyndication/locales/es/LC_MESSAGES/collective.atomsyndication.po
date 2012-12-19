@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-05-28 02:28+0000\n"
+"POT-Creation-Date: 2012-12-19 13:58+0000\n"
 "PO-Revision-Date: 2011-05-27 18:38-0500\n"
 "Last-Translator: Héctor Velarde <hector.velarde@gmail.com>\n"
 "Language-Team: Spanish\n"
@@ -16,31 +16,141 @@ msgstr ""
 "Generated-By: zope/app/locales/extract.py\n"
 "Language: es\n"
 
-#: collective.atomsyndication/collective/atomsyndication/profiles/default/controlpanel.xml
-msgid "Atom Syndication"
-msgstr "Sindicación Atom"
+#: collective/atomsyndication/interfaces.py:153
+msgid "Allow syndication for collections and folders on site."
+msgstr "Permitir sindicaciòn para carpetas y collecciones en el sitio."
 
-#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:39
-msgid "Atom Syndication Settings"
-msgstr "Configuración de la sindicación Atom"
+#: collective/atomsyndication/interfaces.py:152
+msgid "Allowed"
+msgstr "Permitido"
 
-#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:25
-msgid "Checking this box will create an Atom feed at the root of the portal that will include all of the published content within this portal."
-msgstr "Seleccione para crear un feed Atom en la raíz del sitio que incluirá todo el contenido publicado."
+#: collective/atomsyndication/interfaces.py:181
+msgid "Allowed Feed Types"
+msgstr "Tipos de Feed permitidos"
 
-#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:29
-msgid "Depth of the site-wide feed"
-msgstr "Profundidad del feed para el sitio completo"
+#: collective/atomsyndication/interfaces.py:165
+msgid "Allows users to subscribe to feeds of search results"
+msgstr "Permitir Usuarios subscribirse a resulatedo de busqueda de feeds"
 
-#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:24
-msgid "Enable Atom 1.0 feeds"
-msgstr "Habilitar feeds Atom 1.0"
+#: collective/atomsyndication/controlpanel.py:75
+msgid "Cancel"
+msgstr "Cancelar"
 
-#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:40
-msgid "Here you can modify the settings for Atom syndication."
-msgstr "Aquí puede modificar la configuración de la sindicación Atom"
+#: collective/atomsyndication/controlpanel.py:71
+msgid "Changes saved."
+msgstr "Cambios Guardados"
 
-#: collective.atomsyndication/collective/atomsyndication/controlpanel.py:30
-msgid "The number of levels of folders below the portal root to be included in the site-wide Atom feed. 0 indicates no limits on depth. 1 indicates that only the root folder will be included."
-msgstr "Número de niveles de carpetas debajo de la raíz que se incluirán en el feed del sitio. 0 indica que no hay límite en la profundidad. 1 indica que sólo se incluirá la raíz del sitio."
+#: collective/atomsyndication/controlpanel.py:15
+msgid "Default syndication settings."
+msgstr "Configuracion por defecto de la sindicación"
+
+#: collective/atomsyndication/controlpanel.py:78
+msgid "Edit cancelled."
+msgstr "Edicion cancelada"
+
+#: collective/atomsyndication/interfaces.py:210
+msgid "Enable RSS link document action on the syndication content item."
+msgstr "Mostrar Link RSS en el contenido"
+
+#: collective/atomsyndication/interfaces.py:217
+msgid "Enabled"
+msgstr "Activado"
+
+#: collective/atomsyndication/interfaces.py:158
+msgid "Enabled by default"
+msgstr "Activado po defecto"
+
+#: collective/atomsyndication/interfaces.py:221
+msgid "Feed Types"
+msgstr "Tipos de Feed"
+
+#: collective/atomsyndication/interfaces.py:159
+msgid "If syndication should be enabled by default for all folders and collections."
+msgstr "Sindicación esta por activada defecto para toda als carpetas y collecciones"
+
+#: collective/atomsyndication/interfaces.py:205
+msgid "Makes it possible to customize syndication settings for particular folders and collections "
+msgstr "Hace posible configurar la sindicación para carpetas y collecciones por separado"
+
+#: collective/atomsyndication/controlpanel.py:31
+msgid "Missing rss link action."
+msgstr "Falta link Rss"
+
+#: collective/atomsyndication/controlpanel.py:23
+msgid "Missing syndication settings action."
+msgstr "Falta configuracion de sindicación"
+
+#: collective/atomsyndication/interfaces.py:195
+msgid "Paths to folders and collections to link to at the portal root."
+msgstr "ruta a carpetas y collecciones hacia el root del sitio"
+
+#: collective/atomsyndication/interfaces.py:230
+msgid "Render Body"
+msgstr "Mostar Cuerpo"
+
+#: collective/atomsyndication/controlpanel.py:57
+#: collective/atomsyndication/views.py:53
+msgid "Save"
+msgstr "Guardar"
+
+#: collective/atomsyndication/interfaces.py:164
+msgid "Search RSS enabled"
+msgstr "Busqueda RSS activada"
+
+#: collective/atomsyndication/interfaces.py:182
+msgid "Separate view name and title by "|""
+msgstr "Separar nombre de la vista y titulo con '|'"
+
+#: collective/atomsyndication/interfaces.py:170
+msgid "Should feeds include author information"
+msgstr "Incluir información de autor"
+
+#: collective/atomsyndication/interfaces.py:209
+msgid "Show Feed Link"
+msgstr "Mostrar link del Feed"
+
+#: collective/atomsyndication/interfaces.py:204
+msgid "Show Settings Button"
+msgstr "Mostrar boton de configuración"
+
+#: collective/atomsyndication/interfaces.py:169
+msgid "Show author info"
+msgstr "Mostrar información de autor"
+
+#: collective/atomsyndication/interfaces.py:194
+msgid "Site RSS"
+msgstr "RSS del sitio"
+
+#: collective/atomsyndication/profiles/default/controlpanel.xml
+msgid "Syndication"
+msgstr "Sindicación"
+
+#: collective/atomsyndication/controlpanel.py:14
+msgid "Syndication Settings"
+msgstr "Configuración de Sindicación"
+
+#. Default: "Syndication enables you to syndicate this folder so it canbe synchronized from other web sites."
+#: collective/atomsyndication/views.py:48
+msgid "description_syndication_properties"
+msgstr "Sindicacion permite sindicar esta carpeta"
+
+#. Default: "Syndication Properties"
+#: collective/atomsyndication/views.py:46
+msgid "heading_syndication_properties"
+msgstr "Propiedades de sindicación"
+
+#. Default: "If body text available for item, render it, otherwise use description."
+#: collective/atomsyndication/interfaces.py:231
+msgid "help_render_body"
+msgstr "Si existe texto en el elemento, mostrarlo, sino usar descripción "
+
+#. Default: "Maximum number of items that will be syndicated."
+#: collective/atomsyndication/interfaces.py:176
+msgid "help_syndication_max_items"
+msgstr "Cantidad maxima de elementos a sindicar"
+
+#. Default: "Maximum Items"
+#: collective/atomsyndication/interfaces.py:174
+msgid "label_syndication_max_items"
+msgstr "Elementos Maximos"
 

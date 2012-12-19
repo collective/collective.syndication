@@ -41,7 +41,6 @@ setup(name='collective.atomsyndication',
       zip_safe=False,
       install_requires=[
         'setuptools',
-        'five.grok>=1.2.0',
         ],
       extras_require={
         'test': ['plone.app.testing'],

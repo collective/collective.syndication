@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <registry>
-    <records name="collective.atomsyndication.Settings" interface="collective.atomsyndication.controlpanel.IAtomSettings" />
+    <records interface="collective.atomsyndication.interfaces.ISiteSyndicationSettings" />
 </registry>
