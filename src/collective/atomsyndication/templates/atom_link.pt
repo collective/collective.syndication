@@ -1,5 +1,0 @@
-<link rel="alternate" href="atom.xml" title="Atom 1.0"
-    type="application/atom+xml"
-    tal:condition="viewlet/allowed"
-    tal:attributes="href viewlet/url"
-    />

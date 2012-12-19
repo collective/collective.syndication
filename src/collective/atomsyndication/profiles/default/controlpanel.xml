@@ -3,15 +3,11 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     i18n:domain="collective.atomsyndication"
     purge="False">
-    <configlet title="Atom Syndication"
-        action_id="atom_syndication"
-        appId="collective.atomsyndication"
-        category="Products"
-        condition_expr=""
-        url_expr="string:${portal_url}/@@atom_settings"
-        icon_expr="string:${portal_url}/++resource++collective.atomsyndication/16px-Feed-icon.svg.png"
-        visible="True"
-        i18n:attributes="title">
-        <permission>Manage portal</permission>
+    <configlet title="Syndication" action_id="syndication" appId="Plone"
+    category="Plone" condition_expr=""
+    icon_expr="string:$portal_url/rss.png"
+    url_expr="string:${portal_url}/@@syndication-settings" visible="True"
+    i18n:attributes="title">
+  <permission>Manage portal</permission>
     </configlet>
 </object>

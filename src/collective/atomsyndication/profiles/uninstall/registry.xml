@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <registry>
-    <records name="collective.atomsyndication.Settings" delete="true" />
+    <records interface="collective.atomsyndication.interfaces.ISiteSyndicationSettings" delete="true" />
 </registry>

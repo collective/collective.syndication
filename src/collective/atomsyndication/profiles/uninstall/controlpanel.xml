@@ -3,7 +3,6 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     i18n:domain="collective.atomsyndication"
     purge="True">
-    <configlet title="Atom Syndication"
-        action_id="atom_syndication"
+    <configlet title="Syndication" action_id="syndication"
         remove="True" />
 </object>

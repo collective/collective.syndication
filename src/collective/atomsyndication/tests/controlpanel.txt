@@ -1,6 +1,7 @@
-controlpanel.txt
-================
+Site control panel
+==================
 
+First some initial setup code:
     >>> app = layer['app']
     >>> portal = layer['portal']
     >>> request = layer['request']
@@ -8,12 +9,51 @@ controlpanel.txt
     True
     >>> from plone.testing.z2 import Browser
     >>> browser = Browser(app)
+    >>> syndication_configlet_url = 'http://nohost/plone/@@syndication-settings'
     >>> from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
     >>> from plone.app.testing import SITE_OWNER_NAME, SITE_OWNER_PASSWORD
     >>> browser.addHeader('Authorization', 'Basic %s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD,))
-    >>> portalURL = portal.absolute_url()
-    >>> browser.open(portalURL+'/atom_settings')
 
-    # FIXME: TEMPORARY LINES TO BE REMOVED AFTER DEV
-    >>> f = open('/tmp/atom_settings.html', 'w')
-    >>> f.write(browser.contents)
+Test Form
+---------
+
+Edit some settings and make sure they stick.
+
+    >>> browser.open(syndication_configlet_url)
+    >>> browser.getControl('Enabled').selected = False
+    >>> browser.getControl('Show author info').selected = False
+    >>> browser.getControl('Show Feed Link').selected = True
+    >>> browser.getControl('Save').click()
+
+We should be back on the Site Setup screen:
+
+    >>> 'plone_control_panel' in browser.url
+    True
+
+Navigate back to the syndication settings:
+
+    >>> browser.getLink('Syndication').click()
+
+Check values:
+
+    >>> browser.getControl('Enabled').selected
+    False
+    >>> browser.getControl('Show author info').selected
+    False
+    >>> browser.getControl('Show Feed Link').selected
+    True
+
+Test enabling syndication settings button:
+
+    >>> browser.getControl('Enabled').selected = True
+    >>> browser.getControl('Show Settings Button').selected = True
+    >>> browser.getControl('Save').click()
+
+Create collection and check syndication settings button:
+
+    >>> browser.open('http://nohost/plone/createObject?type_name=Folder')
+    >>> browser.getControl(name="title").value = 'test-collection'
+    >>> browser.getControl('Save').click()
+
+    >>> '/synPropertiesForm' in browser.contents
+    True

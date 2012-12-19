@@ -14,8 +14,5 @@ def test_suite():
         layered(doctest.DocFileSuite('controlpanel.txt',
             optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
             layer=FUNCTIONAL_TESTING),
-        layered(doctest.DocFileSuite('atom.txt',
-            optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
-            layer=FUNCTIONAL_TESTING),
     ])
     return suite
