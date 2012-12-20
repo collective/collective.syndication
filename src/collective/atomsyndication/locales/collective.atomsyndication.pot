@@ -99,7 +99,7 @@ msgid "Search RSS enabled"
 msgstr ""
 
 #: collective/atomsyndication/interfaces.py:182
-msgid "Separate view name and title by "|""
+msgid "Separate view name and title by '|'"
 msgstr ""
 
 #: collective/atomsyndication/interfaces.py:170
