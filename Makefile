@@ -10,7 +10,7 @@
 SHELL = /bin/sh
 
 options = -N -q -t 3
-src = src/collective/atomsyndication/
+src = src/collective/syndication/
 minimum_coverage = 86
 pep8_ignores = E501
 max_complexity = 12

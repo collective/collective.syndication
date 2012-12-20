@@ -3,13 +3,13 @@ Installation
 
 To enable this product in a buildout-based installation:
 
-1. Edit your buildout.cfg and add ``collective.atomsyndication`` to the list
+1. Edit your buildout.cfg and add ``collective.syndication`` to the list
    of eggs to install::
 
     [buildout]
     ...
     eggs =
-        collective.atomsyndication
+        collective.syndication
 
 2. If you are using Plone 4.2 you may need to use plone.app.collection version
    1.0.6 or later::
@@ -23,7 +23,7 @@ take care of updating your system.
 
 Go to the 'Site Setup' page in a Plone site and click on the 'Add-ons' link.
 
-Check the box next to ``collective.atomsyndication`` and click the 'Activate'
+Check the box next to ``collective.syndication`` and click the 'Activate'
 button.
 
 Note: You may have to empty your browser cache and save your resource

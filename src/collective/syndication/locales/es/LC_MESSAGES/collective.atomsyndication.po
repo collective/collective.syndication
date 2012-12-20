@@ -1,0 +1,156 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2012-12-19 13:58+0000\n"
+"PO-Revision-Date: 2012-12-19 21:57-0400\n"
+"Last-Translator: Leonardo J. Caballero G. <leonardocaballero@gmail.com>\n"
+"Language-Team: Spanish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+"Generated-By: zope/app/locales/extract.py\n"
+"Language: es\n"
+
+#: collective/syndication/interfaces.py:153
+msgid "Allow syndication for collections and folders on site."
+msgstr "Permitir sindicaciòn para carpetas y collecciones en el sitio."
+
+#: collective/syndication/interfaces.py:152
+msgid "Allowed"
+msgstr "Permitido"
+
+#: collective/syndication/interfaces.py:181
+msgid "Allowed Feed Types"
+msgstr "Tipos de Feed permitidos"
+
+#: collective/syndication/interfaces.py:165
+msgid "Allows users to subscribe to feeds of search results"
+msgstr "Permitir Usuarios subscribirse a resulatedo de busqueda de feeds"
+
+#: collective/syndication/controlpanel.py:75
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: collective/syndication/controlpanel.py:71
+msgid "Changes saved."
+msgstr "Cambios Guardados"
+
+#: collective/syndication/controlpanel.py:15
+msgid "Default syndication settings."
+msgstr "Configuracion por defecto de la sindicación"
+
+#: collective/syndication/controlpanel.py:78
+msgid "Edit cancelled."
+msgstr "Edicion cancelada"
+
+#: collective/syndication/interfaces.py:210
+msgid "Enable RSS link document action on the syndication content item."
+msgstr "Mostrar Link RSS en el contenido"
+
+#: collective/syndication/interfaces.py:217
+msgid "Enabled"
+msgstr "Activado"
+
+#: collective/syndication/interfaces.py:158
+msgid "Enabled by default"
+msgstr "Activado po defecto"
+
+#: collective/syndication/interfaces.py:221
+msgid "Feed Types"
+msgstr "Tipos de Feed"
+
+#: collective/syndication/interfaces.py:159
+msgid "If syndication should be enabled by default for all folders and collections."
+msgstr "Sindicación esta por activada defecto para toda als carpetas y collecciones"
+
+#: collective/syndication/interfaces.py:205
+msgid "Makes it possible to customize syndication settings for particular folders and collections "
+msgstr "Hace posible configurar la sindicación para carpetas y collecciones por separado"
+
+#: collective/syndication/controlpanel.py:31
+msgid "Missing rss link action."
+msgstr "Falta link Rss"
+
+#: collective/syndication/controlpanel.py:23
+msgid "Missing syndication settings action."
+msgstr "Falta configuracion de sindicación"
+
+#: collective/syndication/interfaces.py:195
+msgid "Paths to folders and collections to link to at the portal root."
+msgstr "ruta a carpetas y collecciones hacia el root del sitio"
+
+#: collective/syndication/interfaces.py:230
+msgid "Render Body"
+msgstr "Mostar Cuerpo"
+
+#: collective/syndication/controlpanel.py:57
+#: collective/syndication/views.py:53
+msgid "Save"
+msgstr "Guardar"
+
+#: collective/syndication/interfaces.py:164
+msgid "Search RSS enabled"
+msgstr "Busqueda RSS activada"
+
+#: collective/syndication/interfaces.py:182
+msgid "Separate view name and title by '|'"
+msgstr "Separar nombre de la vista y titulo con '|'"
+
+#: collective/syndication/interfaces.py:170
+msgid "Should feeds include author information"
+msgstr "Incluir información de autor"
+
+#: collective/syndication/interfaces.py:209
+msgid "Show Feed Link"
+msgstr "Mostrar link del Feed"
+
+#: collective/syndication/interfaces.py:204
+msgid "Show Settings Button"
+msgstr "Mostrar boton de configuración"
+
+#: collective/syndication/interfaces.py:169
+msgid "Show author info"
+msgstr "Mostrar información de autor"
+
+#: collective/syndication/interfaces.py:194
+msgid "Site RSS"
+msgstr "RSS del sitio"
+
+#: collective/syndication/profiles/default/controlpanel.xml
+msgid "Syndication"
+msgstr "Sindicación"
+
+#: collective/syndication/controlpanel.py:14
+msgid "Syndication Settings"
+msgstr "Configuración de Sindicación"
+
+#. Default: "Syndication enables you to syndicate this folder so it canbe synchronized from other web sites."
+#: collective/syndication/views.py:48
+msgid "description_syndication_properties"
+msgstr "Sindicacion permite sindicar esta carpeta"
+
+#. Default: "Syndication Properties"
+#: collective/syndication/views.py:46
+msgid "heading_syndication_properties"
+msgstr "Propiedades de sindicación"
+
+#. Default: "If body text available for item, render it, otherwise use description."
+#: collective/syndication/interfaces.py:231
+msgid "help_render_body"
+msgstr "Si existe texto en el elemento, mostrarlo, sino usar descripción "
+
+#. Default: "Maximum number of items that will be syndicated."
+#: collective/syndication/interfaces.py:176
+msgid "help_syndication_max_items"
+msgstr "Cantidad maxima de elementos a sindicar"
+
+#. Default: "Maximum Items"
+#: collective/syndication/interfaces.py:174
+msgid "label_syndication_max_items"
+msgstr "Elementos Maximos"
+

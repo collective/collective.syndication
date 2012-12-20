@@ -1,6 +1,6 @@
-**************************
-collective.atomsyndication
-**************************
+**********************
+collective.syndication
+**********************
 
 Life, the Universe, and Everything
 ----------------------------------
@@ -32,12 +32,12 @@ syndication formats`_, so this package will not be needed.
 Mostly Harmless
 ---------------
 
-.. image:: https://secure.travis-ci.org/collective/collective.atomsyndication.png
-    :target: http://travis-ci.org/collective/collective.atomsyndication
+.. image:: https://secure.travis-ci.org/collective/collective.syndication.png
+    :target: http://travis-ci.org/collective/collective.syndication
 
 Have an idea? Found a bug? Let us know by `opening a support ticket`_.
 
 .. _`Atom`: https://www.ietf.org/rfc/rfc4287.txt
 .. _`advantages`: http://www.intertwingly.net/wiki/pie/Rss20AndAtom10Compared
 .. _`Atom is among the standard supported syndication formats`: https://dev.plone.org/ticket/12908
-.. _`opening a support ticket`: https://github.com/collective/collective.atomsyndication/issues
+.. _`opening a support ticket`: https://github.com/collective/collective.syndication/issues

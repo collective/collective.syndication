@@ -9,7 +9,7 @@ long_description = open("README.txt").read() + "\n" + \
                    open(os.path.join("docs", "CREDITS.txt")).read() + "\n" + \
                    open(os.path.join("docs", "HISTORY.txt")).read()
 
-setup(name='collective.atomsyndication',
+setup(name='collective.syndication',
       version=version,
       description="An Atom feed generator for Plone sites.",
       long_description=long_description,
@@ -32,7 +32,7 @@ setup(name='collective.atomsyndication',
       keywords='plone atom syndication',
       author='Joaquín Rosales',
       author_email='globojorro@gmail.com',
-      url='http://github.com/collective/collective.atomsyndication',
+      url='http://github.com/collective/collective.syndication',
       license='GPLv2',
       packages=find_packages('src'),
       package_dir={'': 'src'},

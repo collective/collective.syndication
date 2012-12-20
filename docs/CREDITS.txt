@@ -1,7 +1,7 @@
 Share and Enjoy
 ---------------
 
-collective.atomsyndication would not have been possible without the
+collective.syndication would not have been possible without the
 contribution of the following people:
 
 - Joaquín Rosales

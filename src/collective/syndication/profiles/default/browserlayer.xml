@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<layers>
+ <layer name="collective.syndication.layer"
+        interface="collective.syndication.layer.ISyndicationLayer" />
+</layers>

@@ -1,0 +1,172 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="collective.syndication">
+
+    <configure
+        zcml:condition="not-have plone-43">
+
+        <i18n:registerTranslations directory="locales" />
+
+        <include package="Products.CMFCore" file="permissions.zcml" />
+
+        <includeDependencies package="." />
+
+
+
+        <!-- Register an extension profile to make the product installable -->
+        <genericsetup:registerProfile
+            name="default"
+            title="collective.syndication"
+            directory="profiles/default"
+            description="Installs the collective.syndication package"
+            provides="Products.GenericSetup.interfaces.EXTENSION"
+            />
+        <genericsetup:registerProfile
+            name="uninstall"
+            title="collective.syndication Uninstall profile"
+            directory="profiles/uninstall"
+            description="Uninstalls the collective.syndication package"
+            provides="Products.GenericSetup.interfaces.EXTENSION"
+            />
+        <!-- -*- extra stuff goes here -*- -->
+
+         <class class="plone.dexterity.content.Container"
+            zcml:condition="installed plone.dexterity">
+            <implements interface="collective.syndication.interfaces.ISyndicatable" />
+        </class>
+
+        <class class="Products.ATContentTypes.content.folder.ATFolder"
+            zcml:condition="installed Products.ATContentTypes">
+            <implements interface="collective.syndication.interfaces.ISyndicatable" />
+        </class>
+
+        <class class="Products.ATContentTypes.content.topic.ATTopic"
+            zcml:condition="installed Products.ATContentTypes">
+            <implements interface="collective.syndication.interfaces.ISyndicatable" />
+        </class>
+
+        <class class="plone.app.collection.collection.Collection"
+            zcml:condition="installed plone.app.collection">
+            <implements interface="collective.syndication.interfaces.ISyndicatable" />
+        </class>
+
+        <class class="Products.CMFPlone.Portal.PloneSite">
+            <implements interface="collective.syndication.interfaces.ISyndicatable" />
+        </class>
+
+  <adapter factory=".settings.FeedSettings" />
+  <adapter factory=".adapters.FolderFeed"
+    for="Products.CMFCore.interfaces._content.IFolderish" />
+  <adapter factory=".adapters.CollectionFeed"
+    for="plone.app.collection.interfaces.ICollection"
+    zcml:condition="installed plone.app.collection" />
+  <adapter factory=".adapters.CollectionFeed"
+    for="Products.ATContentTypes.interfaces.topic.IATTopic"
+    zcml:condition="installed Products.ATContentTypes" />
+  <adapter factory=".adapters.SearchFeed"
+    for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+    provides="collective.syndication.interfaces.ISearchFeed" />
+  <adapter factory=".adapters.DexterityItem"
+    zcml:condition="installed plone.dexterity"
+    for="plone.dexterity.interfaces.IDexterityContent
+         Products.CMFPlone.interfaces.syndication.IFeed"
+    provides="collective.syndication.interfaces.IFeedItem" />
+
+  <browser:page
+    for="collective.syndication.interfaces.ISyndicatable"
+    name="synPropertiesForm"
+    class=".views.SettingsFormView"
+    permission="cmf.ModifyPortalContent"
+    />
+
+  <browser:page
+    for="*"
+    name="syndication-util"
+    class=".utils.SyndicationUtil"
+    allowed_interface="collective.syndication.interfaces.ISyndicationUtil"
+    permission="zope2.View"
+    />
+
+  <browser:page
+    for="collective.syndication.interfaces.ISyndicatable"
+    class=".views.FeedView"
+    name="atom.xml"
+    permission="zope2.View"
+    template="templates/atom.xml.pt"
+    />
+
+  <browser:page
+    for="collective.syndication.interfaces.ISyndicatable"
+    class=".views.FeedView"
+    name="rss.xml"
+    permission="zope2.View"
+    template="templates/rss.xml.pt"
+    />
+  <browser:page
+    for="collective.syndication.interfaces.ISyndicatable"
+    class=".views.FeedView"
+    name="RSS"
+    permission="zope2.View"
+    template="templates/RSS.pt"
+    />
+
+  <browser:page
+    for="collective.syndication.interfaces.ISyndicatable"
+    class=".views.FeedView"
+    name="itunes.xml"
+    permission="zope2.View"
+    template="templates/itunes.xml.pt"
+    />
+
+  <browser:page
+    for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+    class=".views.SearchFeedView"
+    name="search_rss"
+    permission="zope2.View"
+    template="templates/search-rss.pt"
+    />
+
+  <utility
+    factory=".tool.SyndicationTool"
+    provides="Products.CMFCore.interfaces.ISyndicationTool"
+    />
+
+      <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="syndication-settings"
+      class=".controlpanel.SyndicationControlPanel"
+      permission="cmf.ManagePortal"
+      />
+
+    <utility
+        component=".vocabularies.SyndicationFeedTypesVocabularyFactory"
+        name="collective.syndication.vocabularies.SyndicationFeedTypes"
+    />
+
+    <utility
+        component=".vocabularies.SyndicatableFeedItemsFactory"
+        name="collective.syndication.vocabularies.SyndicatableFeedItems"
+    />
+
+    </configure>
+    <configure
+        zcml:condition="have plone-43">
+
+        <!-- Register an extension profile to migrate the needed bits to the
+             default syndication system in Plone 4.3+ -->
+
+        <genericsetup:registerProfile
+            name="migrate43"
+            title="Migrate collective.syndication to default syndication in 4.3"
+            directory="profiles/migrate43"
+            description="Migrate collective.syndication to default syndication in 4.3"
+            provides="Products.GenericSetup.interfaces.EXTENSION"
+            />
+
+    </configure>
+</configure>
