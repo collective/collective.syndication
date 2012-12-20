@@ -74,7 +74,7 @@
   <adapter factory=".adapters.DexterityItem"
     zcml:condition="installed plone.dexterity"
     for="plone.dexterity.interfaces.IDexterityContent
-         Products.CMFPlone.interfaces.syndication.IFeed"
+         collective.syndication.interfaces.IFeed"
     provides="collective.syndication.interfaces.IFeedItem" />
 
   <browser:page
