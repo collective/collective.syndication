@@ -41,6 +41,7 @@ setup(name='collective.syndication',
       zip_safe=False,
       install_requires=[
         'setuptools',
+        'beautifulsoup4',
         ],
       extras_require={
         'test': ['plone.app.testing'],
