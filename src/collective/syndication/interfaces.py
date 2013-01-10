@@ -150,7 +150,7 @@ class IFeedItem(IFeedData):
         """
 
 
-class INewsMLFeed(IFeed):
+class INewsMLFeed(Interface):
     def _brains():
         """
         return list of brains

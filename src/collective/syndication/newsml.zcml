@@ -20,12 +20,10 @@
   <adapter factory=".settings.NewsMLFeedSettings" />
 
   <adapter factory=".adapters.NewsMLFeed"
-    for="Products.CMFCore.interfaces._content.IContentish" 
-    provides="collective.syndication.interfaces.INewsMLFeed"/>
+    for="Products.CMFCore.interfaces._content.IContentish"/>
 
   <adapter factory=".adapters.NewsMLFeed"
-    for="Products.CMFCore.interfaces._content.IFolderish" 
-    provides="collective.syndication.interfaces.INewsMLFeed"/>
+    for="Products.CMFCore.interfaces._content.IFolderish"/>
 
   <adapter factory=".adapters.NewsMLCollectionFeed"
     for="plone.app.collection.interfaces.ICollection"

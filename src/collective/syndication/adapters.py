@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from zope.component.hooks import getSite
 from zope.component import adapts
 from zope.interface import implements, Interface
+from zope.interface import implementsOnly
 from zope.component import queryMultiAdapter
 
 from DateTime import DateTime
@@ -190,7 +191,7 @@ class SearchFeed(FolderFeed):
 
 
 class NewsMLFeed(FolderFeed):
-    implements(INewsMLFeed)
+    implementsOnly(INewsMLFeed)
 
     @lazy_property
     def current_date(self):
