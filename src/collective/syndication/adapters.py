@@ -1,3 +1,7 @@
+import uuid
+
+from bs4 import BeautifulSoup
+
 from zope.component.hooks import getSite
 from zope.component import adapts
 from zope.interface import implements, Interface
@@ -325,3 +329,75 @@ class DexterityItem(BaseItem):
     @property
     def file_type(self):
         return self.file.contentType
+
+
+class BaseNewsMLItem(BaseItem):
+    implements(INewsMLSyndicatable)
+    adapts(IItem, INewsMLFeed)
+
+    def __init__(self, context, feed):
+        super(BaseNewsMLItem, self).__init__(context, feed)
+        self.site = getSite()
+
+    @property
+    def body(self):
+        body = super(BaseNewsMLItem, self).body
+        
+        # valid_tags = ['p', 'ul', 'hedline', 'hl1', 'media']
+        
+        soup = BeautifulSoup(body)
+
+        for tag in soup.findAll(True):
+            attrs = dict()
+            if 'href' in tag.attrs:
+                attrs['href'] = tag.attrs['href']
+
+            tag.attrs = attrs
+            
+            if tag.name == 'h2':
+                tag.name = 'p'
+            elif tag.name == 'span':
+                tag.unwrap()
+            elif tag.name == 'ol':
+                tag.name = 'ul'
+                
+        return str(soup)
+    
+    @lazy_property
+    def site_url(self):
+        return self.site.absolute_url()
+
+    @property
+    def image_url(self):
+        # Support up to 768px max size
+        url = "%s/image_large" % self.base_url
+        return url
+
+    @property
+    def image_mime_type(self):
+        if self.has_image:
+            img = self.context.getImage()
+            return img.content_type
+
+    @property
+    def image_title(self):
+        result = ''
+        if self.has_image:
+            caption = getattr(self.context, 'imageCaption', None)
+            if caption and caption != '':
+                result = caption
+            else:
+                result = self.title
+        return result
+
+    @property
+    def has_image(self):
+        result = False
+        img = getattr(self.context, 'getImage', None)
+        if img:
+            result = img() != ''
+        return result
+    
+    def duid(self, value):
+        uid = uuid.uuid3(uuid.NAMESPACE_OID, self.uid+str(value))
+        return uid.hex
