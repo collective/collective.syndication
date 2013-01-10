@@ -12,6 +12,9 @@ from collective.syndication.interfaces import IFeed
 from collective.syndication.interfaces import IFeedItem
 from collective.syndication.interfaces import ISearchFeed
 from collective.syndication.interfaces import IFeedSettings
+from collective.syndication.interfaces import INewsMLFeed
+from collective.syndication.interfaces import INewsMLSyndicatable
+
 from Products.ATContentTypes.interfaces.file import IFileContent
 from plone.uuid.interfaces import IUUID
 from zope.cachedescriptors.property import Lazy as lazy_property
@@ -180,6 +183,33 @@ class SearchFeed(FolderFeed):
         request.set('sort_on', request.get('sort_on', 'effective'))
         return self.context.queryCatalog(show_all=1, use_types_blacklist=True,
                                          use_navigation_root=True)[start:end]
+
+
+class NewsMLFeed(FolderFeed):
+    implements(INewsMLFeed)
+
+    @lazy_property
+    def current_date(self):
+        return DateTime()
+
+    @property
+    def items(self):
+        if INewsMLSyndicatable.providedBy(self.context):
+            adapter = queryMultiAdapter((self.context, self), INewsMLSyndicatable)
+            yield adapter
+        else:
+            for item in self._items():
+                if INewsMLSyndicatable.providedBy(item):
+                    adapter = queryMultiAdapter((item, self), INewsMLSyndicatable)
+                    yield adapter
+                else:
+                    continue
+
+
+class NewsMLCollectionFeed(NewsMLFeed, CollectionFeed):
+
+    def _brains(self):
+        return self.context.queryCatalog(batch=False)[:self.limit]
 
 
 class BaseItem(BaseFeedData):

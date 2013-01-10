@@ -7,6 +7,10 @@ class ISyndicatable(Interface):
     pass
 
 
+class INewsMLSyndicatable(Interface):
+    pass
+
+
 class IFeedData(Interface):
     def link():
         """
@@ -146,6 +150,18 @@ class IFeedItem(IFeedData):
         """
 
 
+class INewsMLFeed(IFeed):
+    def _brains():
+        """
+        return list of brains
+        """
+
+    def _items():
+        """
+        return full objects
+        """
+
+
 class ISiteSyndicationSettings(Interface):
 
     allowed = schema.Bool(
@@ -188,7 +204,8 @@ class ISiteSyndicationSettings(Interface):
             "RSS|RSS 1.0",
             "rss.xml|RSS 2.0",
             "atom.xml|Atom",
-            "itunes.xml|iTunes"),
+            "itunes.xml|iTunes",
+            "newsml.xml|NewsML 1.2"),
         value_type=schema.TextLine()
     )
 
@@ -223,7 +240,7 @@ class IFeedSettings(Interface):
         title=_(u'Feed Types'),
         required=True,
         missing_value=None,
-        default=("rss.xml", "atom.xml"),
+        default=("rss.xml", "atom.xml", "newsml.xml"),
         value_type=schema.Choice(
             vocabulary="collective.syndication.vocabularies.SyndicationFeedTypes"
         ))
