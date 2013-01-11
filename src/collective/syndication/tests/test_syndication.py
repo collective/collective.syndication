@@ -35,7 +35,7 @@ class TestSyndicationUtility(BaseSyndicationTest):
     layer = INTEGRATION_TESTING
 
     def test_context_allowed_not_syndicatable(self):
-        util = self.doc1.restrictedTraverse('@@syndication-util')
+        util = self.folder.file.restrictedTraverse('@@syndication-util')
         self.assertEqual(util.context_allowed(), False)
 
     def test_context_allowed(self):
