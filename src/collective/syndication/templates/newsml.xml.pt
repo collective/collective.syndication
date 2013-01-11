@@ -21,6 +21,7 @@
                         published_iso python:date.asdatetime().strftime('%Y%m%dT%H%M%S%z');
                         ob_title item/title;
                         ob_description item/description;
+                        author item/author;
                         body item/body;
                         has_image item/has_image;
                         image_url item/image_url;
@@ -53,6 +54,7 @@
             <tal:comment replace="nothing">
                 <!-- This is part of the standard, but apparently MSN, doesn't like it -->
                 <DateLine tal:content="date_id"></DateLine>
+                <ByLine tal:content="author"></ByLine>
             </tal:comment>
             </NewsLines>
             <ContentItem>
