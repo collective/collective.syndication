@@ -344,25 +344,28 @@ class BaseNewsMLItem(BaseItem):
     def body(self):
         body = super(BaseNewsMLItem, self).body
         
-        # valid_tags = ['p', 'ul', 'hedline', 'hl1', 'media']
-        
-        soup = BeautifulSoup(body)
-
-        for tag in soup.findAll(True):
-            attrs = dict()
-            if 'href' in tag.attrs:
-                attrs['href'] = tag.attrs['href']
-
-            tag.attrs = attrs
+        if body:
+            # valid_tags = ['p', 'ul', 'hedline', 'hl1', 'media']
             
-            if tag.name == 'h2':
-                tag.name = 'p'
-            elif tag.name == 'span':
-                tag.unwrap()
-            elif tag.name == 'ol':
-                tag.name = 'ul'
+            soup = BeautifulSoup(body)
 
-        return soup.body.renderContents()
+            for tag in soup.findAll(True):
+                attrs = dict()
+                if 'href' in tag.attrs:
+                    attrs['href'] = tag.attrs['href']
+
+                tag.attrs = attrs
+                
+                if tag.name == 'h2':
+                    tag.name = 'p'
+                elif tag.name == 'span':
+                    tag.unwrap()
+                elif tag.name == 'ol':
+                    tag.name = 'ul'
+            if soup.find('body'):
+                return soup.body.renderContents()
+            else:
+                return str(soup)
     
     @lazy_property
     def site_url(self):
