@@ -361,8 +361,8 @@ class BaseNewsMLItem(BaseItem):
                 tag.unwrap()
             elif tag.name == 'ol':
                 tag.name = 'ul'
-                
-        return str(soup)
+
+        return soup.body.renderContents()
     
     @lazy_property
     def site_url(self):
