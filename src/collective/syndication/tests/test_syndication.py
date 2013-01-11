@@ -153,6 +153,7 @@ BODY_TEXT = """<p>Test text</p>
 <ul><li>one</li><li>two</li><ul>
 """
 
+
 class NewsMLBaseSyndicationTest(PloneTestCase.PloneTestCase):
 
     layer = INTEGRATION_TESTING
@@ -257,7 +258,7 @@ class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
         super(TestNewsMLSyndicationFeedAdapter, self).afterSetUp()
         docfeed = INewsMLFeed(self.doc)
         self.docfeed = BaseNewsMLItem(self.doc, docfeed)
-        
+
         self.feed = INewsMLFeed(self.folder)
         self.feeddatadoc = BaseNewsMLItem(self.doc1, self.feed)
         self.feeddatnews = BaseNewsMLItem(self.news1, self.feed)

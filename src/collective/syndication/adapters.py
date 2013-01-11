@@ -1,4 +1,5 @@
-import uuid
+from uuid import uuid3
+from uuid import NAMESPACE_OID
 
 from bs4 import BeautifulSoup
 
@@ -343,10 +344,10 @@ class BaseNewsMLItem(BaseItem):
     @property
     def body(self):
         body = super(BaseNewsMLItem, self).body
-        
+
         if body:
             # valid_tags = ['p', 'ul', 'hedline', 'hl1', 'media']
-            
+
             soup = BeautifulSoup(body)
 
             for tag in soup.findAll(True):
@@ -355,7 +356,7 @@ class BaseNewsMLItem(BaseItem):
                     attrs['href'] = tag.attrs['href']
 
                 tag.attrs = attrs
-                
+
                 if tag.name == 'h2':
                     tag.name = 'p'
                 elif tag.name == 'span':
@@ -366,7 +367,7 @@ class BaseNewsMLItem(BaseItem):
                 return soup.body.renderContents()
             else:
                 return str(soup)
-    
+
     @lazy_property
     def site_url(self):
         return self.site.absolute_url()
@@ -401,7 +402,7 @@ class BaseNewsMLItem(BaseItem):
         if img:
             result = img() != ''
         return result
-    
+
     def duid(self, value):
-        uid = uuid.uuid3(uuid.NAMESPACE_OID, self.uid+str(value))
+        uid = uuid3(NAMESPACE_OID, self.uid + str(value))
         return uid.hex
