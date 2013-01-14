@@ -149,8 +149,8 @@ BODY_TEXT = """<p>Test text</p>
 <h2>Header</h2>
 <p class="one" id="test">New <span>Line</span></p>
 <a href="http://www.google.com" class="new">Google</a>
-<ol><li>one</li><li>two</li><ol>
-<ul><li>one</li><li>two</li><ul>
+<ol><li>one</li><li>two</li></ol>
+<ul><li>one</li><li>two</li></ul>
 """
 
 
@@ -268,5 +268,5 @@ class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
         self.assertEqual(len([i for i in self.feed.items]), 3)
 
     def test_filter_body(self):
-        output = '<p>Test text</p>\n<p>Header</p>\n<p>New Line</p>\n<a href="http://www.google.com">Google</a>\n<ul><li>one</li><li>two</li><ul>\n<ul><li>one</li><li>two</li><ul>\n</ul></ul></ul></ul>'
+        output = '<p>Test text</p>\n<p>Header</p>\n<p>New Line</p>\n<a href="http://www.google.com">Google</a>\n<ul><li>one</li><li>two</li></ul>\n<ul><li>one</li><li>two</li></ul>\n'
         self.assertEqual(self.docfeed.body, output)
