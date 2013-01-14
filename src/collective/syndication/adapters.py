@@ -400,7 +400,8 @@ class BaseNewsMLItem(BaseItem):
         result = False
         img = getattr(self.context, 'getImage', None)
         if img:
-            result = img() != ''
+            img_contents = img()
+            result = img_contents and img_contents != ''
         return result
 
     def duid(self, value):
