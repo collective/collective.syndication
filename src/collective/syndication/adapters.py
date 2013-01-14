@@ -401,7 +401,7 @@ class BaseNewsMLItem(BaseItem):
             if caption and caption != '':
                 result = caption
             else:
-                result = self.title
+                result = self.description
         return result
 
     @property

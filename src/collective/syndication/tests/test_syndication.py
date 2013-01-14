@@ -270,3 +270,14 @@ class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
     def test_filter_body(self):
         output = '<p>Test text</p><p>Header</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
         self.assertEqual(self.docfeed.body, output)
+
+    def test_image_caption(self):
+        self.news1.image = "Image"
+        
+        self.assertEqual(self.feeddatnews.image_title, "")
+        
+        self.news1.setDescription("News description")
+        self.assertEqual(self.feeddatnews.image_title, "News description")
+        
+        self.news1.imageCaption = "Image caption"
+        self.assertEqual(self.feeddatnews.image_title, "Image caption")
