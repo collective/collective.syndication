@@ -268,5 +268,5 @@ class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
         self.assertEqual(len([i for i in self.feed.items]), 3)
 
     def test_filter_body(self):
-        output = '<p>Test text</p>\n<p>Header</p>\n<p>New Line</p>\n<a href="http://www.google.com">Google</a>\n<ul><li>one</li><li>two</li></ul>\n<ul><li>one</li><li>two</li></ul>\n'
+        output = '<p>Test text</p><p>Header</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
         self.assertEqual(self.docfeed.body, output)

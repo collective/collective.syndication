@@ -344,6 +344,7 @@ class BaseNewsMLItem(BaseItem):
     @property
     def body(self):
         body = super(BaseNewsMLItem, self).body
+        result = ""
 
         if body:
             # valid_tags = ['p', 'ul', 'hedline', 'hl1', 'media']
@@ -352,21 +353,29 @@ class BaseNewsMLItem(BaseItem):
 
             for tag in soup.findAll(True):
                 attrs = dict()
+                # Remove all attributes, except hrefs
                 if 'href' in tag.attrs:
                     attrs['href'] = tag.attrs['href']
 
                 tag.attrs = attrs
 
+                # Now replace some common tags
                 if tag.name == 'h2':
                     tag.name = 'p'
                 elif tag.name == 'span':
                     tag.unwrap()
                 elif tag.name == 'ol':
                     tag.name = 'ul'
+            
             if soup.find('body'):
-                return soup.body.renderContents()
+                result = soup.body.renderContents()
             else:
-                return str(soup)
+                result = str(soup)
+        
+        # Remove some whitespace
+        result = result.replace('\n','')
+        result.strip()
+        return result
 
     @lazy_property
     def site_url(self):
