@@ -416,3 +416,7 @@ class BaseNewsMLItem(BaseItem):
     def duid(self, value):
         uid = uuid3(NAMESPACE_OID, self.uid + str(value))
         return uid.hex
+
+    @property
+    def created(self):
+        return self.context.created()

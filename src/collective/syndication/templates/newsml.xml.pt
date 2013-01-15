@@ -1,17 +1,19 @@
 <?xml version="1.0" ?>
-<tal:comment replace="nothing">
-    <!--
-    This NewsML implementation is done to be used by MSN to provide news feeds.
-    Some things are missing from the full specification because then it will
-    not validate against MSN service (http://feedverificationtool.msn.com/)
-    For more information, check the provided PDF in the docs folder.
-    -->
-</tal:comment>
 <NewsML xmlns:tal="http://xml.zope.org/namespaces/tal"
         tal:define="feed view/feed;
                     date python:feed.published or feed.current_date;
                     published_iso python:date.asdatetime().strftime('%Y%m%dT%H%M%S%z');
                     logo feed/logo;">
+                    
+    <tal:comment replace="nothing">
+        <!--
+        This NewsML implementation is done to be used by MSN to provide news feeds.
+        Some things are missing from the full specification because then it will
+        not validate against MSN service (http://feedverificationtool.msn.com/)
+        For more information, check the provided PDF in the docs folder.
+        -->
+    </tal:comment>
+
   <Catalog Href="http://www.iptc.org/IPTC/catalog/catalog.IptcMasterCatalog.xml"/>
 
   <NewsEnvelope>
@@ -27,6 +29,7 @@
                         date_id python:date.strftime('%Y%m%d');
                         news_item_id item/uid;
                         published_iso python:date.asdatetime().strftime('%Y%m%dT%H%M%S%z');
+                        date_created python:item.created.asdatetime().strftime('%Y%m%dT%H%M%S%z');
                         ob_title item/title;
                         ob_description item/description;
                         author item/author;
@@ -47,8 +50,8 @@
 
       <NewsManagement>
         <NewsItemType FormalName="News"/>
-        <FirstCreated tal:content="published_iso"></FirstCreated>
-        <ThisRevisionCreated tal:content="published_iso"></ThisRevisionCreated>
+        <FirstCreated tal:content="date_created"></FirstCreated>
+        <ThisRevisionCreated tal:content="date_created"></ThisRevisionCreated>
         <Status FormalName="Usable"/>
       </NewsManagement>
 
