@@ -1,4 +1,12 @@
 <?xml version="1.0" ?>
+<tal:comment replace="nothing">
+    <!--
+    This NewsML implementation is done to be used by MSN to provide news feeds.
+    Some things are missing from the full specification because then it will
+    not validate against MSN service (http://feedverificationtool.msn.com/)
+    For more information, check the provided PDF in the docs folder.
+    -->
+</tal:comment>
 <NewsML xmlns:tal="http://xml.zope.org/namespaces/tal"
         tal:define="feed view/feed;
                     date python:feed.published or feed.current_date;
