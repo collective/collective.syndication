@@ -6,7 +6,7 @@ Because you have to know where your towel is.
 1.0a2 (unreleased)
 ^^^^^^^^^^^^^^^^^^
 
-- Nothing changed yet.
+- Implement NewsML 1 syndication. [frapell]
 
 
 1.0a1 (2013-01-10)

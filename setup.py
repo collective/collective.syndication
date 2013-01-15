@@ -4,6 +4,8 @@ from setuptools import setup, find_packages
 import os
 
 version = '1.0a2.dev0'
+description = "Improved syndication for Plone sites providing Atom, iTunes, \
+NewsML 1, RSS 1.0 and RSS 2.0 feeds."
 long_description = \
     open("README.txt").read() + "\n" + \
     open(os.path.join("docs", "INSTALL.txt")).read() + "\n" + \
@@ -12,7 +14,7 @@ long_description = \
 
 setup(name='collective.syndication',
       version=version,
-      description="Improved syndication for Plone sites.",
+      description=description,
       long_description=long_description,
       classifiers=[
           "Development Status :: 3 - Alpha",

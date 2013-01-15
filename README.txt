@@ -2,11 +2,14 @@
 collective.syndication
 **********************
 
+.. contents:: Table of Contents
+
 Life, the Universe, and Everything
 ----------------------------------
 
 ``collective.syndication`` improves standard syndication on Plone sites by
-providing 4 feed types: `RSS 1.0`_, `RSS 2.0`_, `Atom`_ and iTunes.
+providing 5 feed types: `Atom`_, iTunes, `NewsML 1`_, `RSS 1.0`_ and `RSS
+2.0`_.
 
 This package is a backport for Plone 4.1 and 4.2 of `Nathan Van Gheem`_'s
 `Improved Syndication`_ PLIP implementation made for Plone 4.3.
@@ -33,11 +36,12 @@ iTunes
 
 TBD.
 
-NewsML
-^^^^^^
+NewsML 1
+^^^^^^^^
 
-NewsML is an XML standard designed to provide a media-independent, structural
-framework for multi-media news.
+NewsML 1 is an XML standard designed to provide a media-independent,
+structural framework for multi-media news.
+
 In this package, we implement part of the standard, to be usable by MSN.
 There's no online reference on how MSN expects data, just a PDF included
 in the docs folder of this package.
@@ -63,9 +67,10 @@ Mostly Harmless
 
 Got an idea? Found a bug? Let us know by `opening a support ticket`_.
 
+.. _`Atom`: https://www.ietf.org/rfc/rfc4287.txt
+.. _`NewsML 1`: https://www.iptc.org/site/News_Exchange_Formats/NewsML_1/
 .. _`RSS 1.0`: http://web.resource.org/rss/1.0/spec
 .. _`RSS 2.0`: https://cyber.law.harvard.edu/rss/rss.html
-.. _`Atom`: https://www.ietf.org/rfc/rfc4287.txt
 .. _`Nathan Van Gheem`: https://github.com/vangheem
 .. _`Improved Syndication`: https://dev.plone.org/ticket/12908
 .. _`advantages`: http://www.intertwingly.net/wiki/pie/Rss20AndAtom10Compared
