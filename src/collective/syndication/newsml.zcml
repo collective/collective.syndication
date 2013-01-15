@@ -12,11 +12,6 @@
         <implements interface="collective.syndication.interfaces.INewsMLSyndicatable" />
     </class>
 
-    <class class="Products.ATContentTypes.content.document.ATDocument"
-        zcml:condition="installed Products.ATContentTypes">
-        <implements interface="collective.syndication.interfaces.INewsMLSyndicatable" />
-    </class>
-
   <adapter factory=".settings.NewsMLFeedSettings" />
 
   <adapter factory=".adapters.NewsMLFeed"
