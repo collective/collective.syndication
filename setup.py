@@ -42,6 +42,8 @@ setup(name='collective.syndication',
       install_requires=[
         'setuptools',
         'beautifulsoup4',
+        'Pillow',
+        'Products.CMFPlone>=4.1',
         ],
       extras_require={
         'test': ['plone.app.testing'],
