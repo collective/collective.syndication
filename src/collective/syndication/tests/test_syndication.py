@@ -273,11 +273,11 @@ class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
 
     def test_image_caption(self):
         self.news1.image = "Image"
-        
+
         self.assertEqual(self.feeddatnews.image_title, "")
-        
+
         self.news1.setDescription("News description")
         self.assertEqual(self.feeddatnews.image_title, "News description")
-        
+
         self.news1.imageCaption = "Image caption"
         self.assertEqual(self.feeddatnews.image_title, "Image caption")

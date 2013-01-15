@@ -366,14 +366,14 @@ class BaseNewsMLItem(BaseItem):
                     tag.unwrap()
                 elif tag.name == 'ol':
                     tag.name = 'ul'
-            
+
             if soup.find('body'):
                 result = soup.body.renderContents()
             else:
                 result = str(soup)
-        
+
         # Remove some whitespace
-        result = result.replace('\n','')
+        result = result.replace('\n', '')
         result.strip()
         return result
 
