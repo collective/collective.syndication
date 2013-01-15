@@ -36,7 +36,11 @@ TBD.
 NewsML
 ^^^^^^
 
-TBD.
+NewsML is an XML standard designed to provide a media-independent, structural
+framework for multi-media news.
+In this package, we implement part of the standard, to be usable by MSN.
+There's no online reference on how MSN expects data, just a PDF included
+in the docs folder of this package.
 
 RSS 1.0 (RDF Site Summary)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
