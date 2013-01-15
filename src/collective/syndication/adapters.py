@@ -394,7 +394,7 @@ class BaseNewsMLItem(BaseItem):
             return img.content_type
 
     @property
-    def image_title(self):
+    def image_caption(self):
         result = ''
         if self.has_image:
             caption = getattr(self.context, 'imageCaption', None)

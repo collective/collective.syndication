@@ -26,7 +26,7 @@
                         has_image item/has_image;
                         image_url item/image_url;
                         image_mime_type item/image_mime_type | nothing;
-                        image_title item/image_title;">
+                        image_caption item/image_caption;">
       <Identification>
         <NewsIdentifier>
         <ProviderId tal:content="base_domain"></ProviderId>
@@ -75,7 +75,7 @@
                                                         source image_url;
                                                         alternate-text ob_title">
                         </media-reference>
-                        <media-caption tal:content="image_title"></media-caption>
+                        <media-caption tal:content="image_caption"></media-caption>
                         </media>
                         <tal:content tal:replace="structure body" />
                     </body.content>
