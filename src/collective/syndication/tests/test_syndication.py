@@ -6,7 +6,9 @@ from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zExceptions import NotFound
 from collective.syndication.interfaces import IFeed
+from collective.syndication.interfaces import INewsMLFeed
 from collective.syndication.adapters import BaseItem
+from collective.syndication.adapters import BaseNewsMLItem
 from collective.syndication.testing import INTEGRATION_TESTING
 
 
@@ -35,7 +37,7 @@ class TestSyndicationUtility(BaseSyndicationTest):
     layer = INTEGRATION_TESTING
 
     def test_context_allowed_not_syndicatable(self):
-        util = self.doc1.restrictedTraverse('@@syndication-util')
+        util = self.folder.file.restrictedTraverse('@@syndication-util')
         self.assertEqual(util.context_allowed(), False)
 
     def test_context_allowed(self):
@@ -141,3 +143,123 @@ class TestSyndicationFeedAdapter(BaseSyndicationTest):
     def test_has_enclosure(self):
         self.assertEqual(self.feeddatadoc.has_enclosure, False)
         self.assertEqual(self.feeddatafile.has_enclosure, True)
+
+
+BODY_TEXT = """<p>Test text</p>
+<h2>Header</h2>
+<p class="one" id="test">New <span>Line</span></p>
+<a href="http://www.google.com" class="new">Google</a>
+<ol><li>one</li><li>two</li></ol>
+<ul><li>one</li><li>two</li></ul>
+"""
+
+
+class NewsMLBaseSyndicationTest(PloneTestCase.PloneTestCase):
+
+    layer = INTEGRATION_TESTING
+
+    def afterSetUp(self):
+        self.syndication = getToolByName(self.portal, 'portal_syndication')
+        self.folder.invokeFactory('Document', 'doc')
+        self.folder.invokeFactory('Document', 'doc1')
+        self.folder.invokeFactory('News Item', 'news1')
+        self.folder.invokeFactory('File', 'file')
+        self.doc1 = self.folder.doc1
+        self.news1 = self.folder.news1
+        self.news1.setText(BODY_TEXT)
+        self.file = self.folder.file
+        #Enable syndication on folder
+        registry = getUtility(IRegistry)
+        self.site_settings = registry.forInterface(ISiteSyndicationSettings)
+        settings = IFeedSettings(self.folder)
+        settings.enabled = True
+        self.folder_settings = settings
+        settings = IFeedSettings(self.news1)
+        settings.enabled = True
+        self.news1_settings = settings
+
+
+class TestNewsMLSyndicationUtility(NewsMLBaseSyndicationTest):
+
+    layer = INTEGRATION_TESTING
+
+    def test_context_allowed_not_syndicatable(self):
+        util = self.folder.file.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_allowed(), False)
+
+    def test_context_allowed(self):
+        util = self.folder.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_allowed(), True)
+        util = self.news1.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_allowed(), True)
+
+    def test_context_allowed_site_disabled(self):
+        self.site_settings.allowed = False
+        util = self.folder.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_allowed(), False)
+        util = self.news1.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_allowed(), False)
+
+    def test_context_enabled(self):
+        self.folder_settings.enabled = True
+        util = self.folder.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_enabled(), True)
+        util = self.news1.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_enabled(), True)
+
+    def test_not_context_enabled(self):
+        self.folder_settings.enabled = False
+        self.news1_settings.enabled = False
+        util = self.folder.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_enabled(), False)
+        util = self.news1.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_enabled(), False)
+
+    def test_context_enabled_site_disabled(self):
+        self.site_settings.allowed = False
+        self.folder_settings.enabled = True
+        self.news1_settings.enabled = True
+        util = self.folder.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_enabled(), False)
+        util = self.news1.restrictedTraverse('@@syndication-util')
+        self.assertEqual(util.context_enabled(), False)
+
+    def test_context_enabled_raises_404(self):
+        self.site_settings.allowed = False
+        util = self.folder.restrictedTraverse('@@syndication-util')
+        self.assertRaises(NotFound, util.context_enabled, True)
+        util = self.folder.news1.restrictedTraverse('@@syndication-util')
+        self.assertRaises(NotFound, util.context_enabled, True)
+
+
+class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
+
+    layer = INTEGRATION_TESTING
+
+    def afterSetUp(self):
+        super(TestNewsMLSyndicationFeedAdapter, self).afterSetUp()
+
+        self.feed = INewsMLFeed(self.folder)
+        self.feeddatnews = BaseNewsMLItem(self.news1, self.feed)
+
+    def test_items(self):
+        self.assertEqual(len(self.feed._brains()), 4)
+        self.assertEqual(len([i for i in self.feed.items]), 1)
+
+    def test_filter_body(self):
+        output = '<p>Test text</p><p>Header</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
+        self.assertEqual(self.feeddatnews.body, output)
+
+    def test_image_caption(self):
+        self.news1.image = "Image"
+
+        self.assertEqual(self.feeddatnews.image_caption, "")
+
+        self.news1.setDescription("News description")
+        self.assertEqual(self.feeddatnews.image_caption, "News description")
+
+        self.news1.imageCaption = "Image caption"
+        self.assertEqual(self.feeddatnews.image_caption, "Image caption")
+
+    def test_created_date(self):
+        self.assertEqual(self.feeddatnews.created, self.news1.created())

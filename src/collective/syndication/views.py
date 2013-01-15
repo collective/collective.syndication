@@ -6,6 +6,8 @@ from zExceptions import NotFound
 from collective.syndication.interfaces import ISearchFeed
 from collective.syndication.interfaces import IFeed
 from collective.syndication.interfaces import IFeedSettings
+from collective.syndication.interfaces import INewsMLFeed
+
 from collective.syndication import _
 
 from z3c.form import form, button, field
@@ -40,6 +42,12 @@ class SearchFeedView(FeedView):
             self.request.response.setHeader('Content-Type',
                                             'application/atom+xml')
             return self.index()
+
+
+class NewsMLFeedView(FeedView):
+
+    def feed(self):
+        return getAdapter(self.context, INewsMLFeed)
 
 
 class SettingsForm(form.EditForm):

@@ -16,7 +16,7 @@
 
         <includeDependencies package="." />
 
-
+        <include file="newsml.zcml" />
 
         <!-- Register an extension profile to make the product installable -->
         <genericsetup:registerProfile

@@ -1,6 +1,12 @@
+from uuid import uuid3
+from uuid import NAMESPACE_OID
+
+from bs4 import BeautifulSoup
+
 from zope.component.hooks import getSite
 from zope.component import adapts
 from zope.interface import implements, Interface
+from zope.interface import implementsOnly
 from zope.component import queryMultiAdapter
 
 from DateTime import DateTime
@@ -12,6 +18,9 @@ from collective.syndication.interfaces import IFeed
 from collective.syndication.interfaces import IFeedItem
 from collective.syndication.interfaces import ISearchFeed
 from collective.syndication.interfaces import IFeedSettings
+from collective.syndication.interfaces import INewsMLFeed
+from collective.syndication.interfaces import INewsMLSyndicatable
+
 from Products.ATContentTypes.interfaces.file import IFileContent
 from plone.uuid.interfaces import IUUID
 from zope.cachedescriptors.property import Lazy as lazy_property
@@ -182,6 +191,33 @@ class SearchFeed(FolderFeed):
                                          use_navigation_root=True)[start:end]
 
 
+class NewsMLFeed(FolderFeed):
+    implementsOnly(INewsMLFeed)
+
+    @lazy_property
+    def current_date(self):
+        return DateTime()
+
+    @property
+    def items(self):
+        if INewsMLSyndicatable.providedBy(self.context):
+            adapter = queryMultiAdapter((self.context, self), INewsMLSyndicatable)
+            yield adapter
+        else:
+            for item in self._items():
+                if INewsMLSyndicatable.providedBy(item):
+                    adapter = queryMultiAdapter((item, self), INewsMLSyndicatable)
+                    yield adapter
+                else:
+                    continue
+
+
+class NewsMLCollectionFeed(NewsMLFeed, CollectionFeed):
+
+    def _brains(self):
+        return self.context.queryCatalog(batch=False)[:self.limit]
+
+
 class BaseItem(BaseFeedData):
     implements(IFeedItem)
     adapts(IItem, IFeed)
@@ -295,3 +331,92 @@ class DexterityItem(BaseItem):
     @property
     def file_type(self):
         return self.file.contentType
+
+
+class BaseNewsMLItem(BaseItem):
+    implements(INewsMLSyndicatable)
+    adapts(IItem, INewsMLFeed)
+
+    def __init__(self, context, feed):
+        super(BaseNewsMLItem, self).__init__(context, feed)
+        self.site = getSite()
+
+    @property
+    def body(self):
+        body = super(BaseNewsMLItem, self).body
+        result = ""
+
+        if body:
+            # valid_tags = ['p', 'ul', 'hedline', 'hl1', 'media']
+
+            soup = BeautifulSoup(body)
+
+            for tag in soup.findAll(True):
+                attrs = dict()
+                # Remove all attributes, except hrefs
+                if 'href' in tag.attrs:
+                    attrs['href'] = tag.attrs['href']
+
+                tag.attrs = attrs
+
+                # Now replace some common tags
+                if tag.name == 'h2':
+                    tag.name = 'p'
+                elif tag.name == 'span':
+                    tag.unwrap()
+                elif tag.name == 'ol':
+                    tag.name = 'ul'
+
+            if soup.find('body'):
+                result = soup.body.renderContents()
+            else:
+                result = str(soup)
+
+        # Remove some whitespace
+        result = result.replace('\n', '')
+        result.strip()
+        return result
+
+    @lazy_property
+    def site_url(self):
+        return self.site.absolute_url()
+
+    @property
+    def image_url(self):
+        # Support up to 768px max size
+        url = "%s/image_large" % self.base_url
+        return url
+
+    @property
+    def image_mime_type(self):
+        if self.has_image:
+            img = self.context.getImage()
+            return img.content_type
+
+    @property
+    def image_caption(self):
+        result = ''
+        if self.has_image:
+            caption = getattr(self.context, 'imageCaption', None)
+            if caption and caption != '':
+                result = caption
+            else:
+                result = self.description
+        return result
+
+    @property
+    def has_image(self):
+        result = False
+        img = getattr(self.context, 'getImage', None)
+        if img:
+            img_contents = img()
+            result = img_contents and img_contents != ''
+        return result
+
+    def duid(self, value):
+        uid = uuid3(NAMESPACE_OID, self.uid + str(value))
+        return uid.hex
+
+    @property
+    def created(self):
+        return self.context.created()

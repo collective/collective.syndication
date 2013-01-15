@@ -9,6 +9,7 @@ from collective.syndication.interfaces import ISyndicationUtil
 from collective.syndication.interfaces import IFeedSettings
 from collective.syndication.interfaces import ISiteSyndicationSettings
 from collective.syndication.interfaces import ISyndicatable
+from collective.syndication.interfaces import INewsMLSyndicatable
 
 from plone.registry.interfaces import IRegistry
 from plone.memoize.view import memoize
@@ -38,7 +39,7 @@ class SyndicationUtil(BrowserView):
         return '%s/%s' % (url, _type)
 
     def context_allowed(self):
-        if not ISyndicatable.providedBy(self.context):
+        if not (ISyndicatable.providedBy(self.context) or INewsMLSyndicatable.providedBy(self.context)):
             return False
         elif not self.site_enabled():
             return False

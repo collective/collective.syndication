@@ -1,0 +1,54 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="collective.syndication">
+
+    <class class="Products.ATContentTypes.content.newsitem.ATNewsItem"
+        zcml:condition="installed Products.ATContentTypes">
+        <implements interface="collective.syndication.interfaces.INewsMLSyndicatable" />
+    </class>
+
+  <adapter factory=".settings.NewsMLFeedSettings" />
+
+  <adapter factory=".adapters.NewsMLFeed"
+    for="Products.CMFCore.interfaces._content.IContentish"/>
+
+  <adapter factory=".adapters.NewsMLFeed"
+    for="Products.CMFCore.interfaces._content.IFolderish"/>
+
+  <adapter factory=".adapters.NewsMLCollectionFeed"
+    for="plone.app.collection.interfaces.ICollection"
+    provides="collective.syndication.interfaces.INewsMLFeed"
+    zcml:condition="installed plone.app.collection" />
+
+  <adapter factory=".adapters.NewsMLCollectionFeed"
+    for="Products.ATContentTypes.interfaces.topic.IATTopic"
+    provides="collective.syndication.interfaces.INewsMLFeed"
+    zcml:condition="installed Products.ATContentTypes" />
+
+  <adapter factory=".adapters.BaseNewsMLItem"
+    for="OFS.interfaces.IItem
+         collective.syndication.interfaces.INewsMLFeed"
+    provides="collective.syndication.interfaces.INewsMLSyndicatable" />
+
+  <browser:page
+    for="collective.syndication.interfaces.ISyndicatable"
+    class=".views.NewsMLFeedView"
+    name="newsml.xml"
+    permission="zope2.View"
+    template="templates/newsml.xml.pt"
+    />
+
+  <browser:page
+    for="collective.syndication.interfaces.INewsMLSyndicatable"
+    class=".views.NewsMLFeedView"
+    name="newsml.xml"
+    permission="zope2.View"
+    template="templates/newsml.xml.pt"
+    />
+
+</configure>
