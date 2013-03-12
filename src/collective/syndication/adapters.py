@@ -13,6 +13,12 @@ from zope.component import queryMultiAdapter
 from DateTime import DateTime
 from OFS.interfaces import IItem
 
+try:
+    from plone.app.textfield.value import RichTextValue
+    HAS_PAT = True
+except:
+    HAS_PAT = False
+
 from Products.CMFCore.utils import getToolByName
 
 from collective.syndication.interfaces import IFeed
@@ -377,8 +383,11 @@ class BaseNewsMLItem(BaseItem):
     @property
     def body(self):
         body = super(BaseNewsMLItem, self).body
-        result = ""
+        if HAS_PAT:
+            if isinstance(body, RichTextValue):
+                body = body.output
 
+        result = ""
         if body:
             # valid_tags = ['p', 'ul', 'hedline', 'hl1', 'media']
 
