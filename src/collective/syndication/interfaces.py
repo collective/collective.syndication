@@ -229,6 +229,15 @@ class ISiteSyndicationSettings(Interface):
         description=_(u"Enable RSS link document action on the syndication "
                       u"content item."))
 
+    newsml_enabled_types = schema.Tuple(
+        title=_(u'NewsML enabled types'),
+        description=_(u'Content types that allow NewsML syndication.'),
+        required=False,
+        default=('News Item',),
+        value_type=schema.Choice(
+            vocabulary="plone.app.vocabularies.ReallyUserFriendlyTypes")
+    )
+
 
 class IFeedSettings(Interface):
 
