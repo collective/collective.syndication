@@ -39,7 +39,7 @@ class SyndicationUtil(BrowserView):
         return '%s/%s' % (url, _type)
 
     def context_allowed(self):
-        if not (ISyndicatable.providedBy(self.context) or INewsMLSyndicatable.providedBy(self.context)):
+        if not ISyndicatable.providedBy(self.context):
             return False
         elif not self.site_enabled():
             return False
@@ -48,6 +48,28 @@ class SyndicationUtil(BrowserView):
     def context_enabled(self, raise404=False):
         settings = IFeedSettings(self.context, None)
         if not self.context_allowed() or not settings.enabled:
+            if raise404:
+                raise NotFound
+            else:
+                return False
+        else:
+            return True
+
+    def newsml_allowed(self):
+        enabled_types = self.site_settings.newsml_enabled_types
+
+        if not self.site_enabled():
+            return False
+        elif ISyndicatable.providedBy(self.context):
+            settings = IFeedSettings(self.context, None)
+            if settings.enabled:
+                return True
+        elif self.context.portal_type in enabled_types:
+            return True
+        return False
+
+    def newsml_enabled(self, raise404=False):
+        if not self.newsml_allowed():
             if raise404:
                 raise NotFound
             else:
