@@ -7,11 +7,6 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="collective.syndication">
 
-    <class class="Products.ATContentTypes.content.newsitem.ATNewsItem"
-        zcml:condition="installed Products.ATContentTypes">
-        <implements interface="collective.syndication.interfaces.INewsMLSyndicatable" />
-    </class>
-
   <adapter factory=".settings.NewsMLFeedSettings" />
 
   <adapter factory=".adapters.NewsMLFeed"
