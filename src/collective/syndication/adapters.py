@@ -246,7 +246,7 @@ class NewsMLRootFeed(NewsMLFeed):
         enabled_types = util.site_settings.newsml_enabled_types
         catalog = getToolByName(self.context, 'portal_catalog')
 
-        return catalog(portal_type=enabled_types, 
+        return catalog(portal_type=enabled_types,
                        sort_on="Date",
                        sort_order="reverse")[:self.limit]
 

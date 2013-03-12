@@ -67,6 +67,7 @@ class NewsMLFeedView(BrowserView):
                                             'application/atom+xml')
             return self.index()
 
+
 class SettingsForm(form.EditForm):
     label = _(u'heading_syndication_properties',
               default=u'Syndication Properties')

@@ -9,7 +9,6 @@ from collective.syndication.interfaces import ISyndicationUtil
 from collective.syndication.interfaces import IFeedSettings
 from collective.syndication.interfaces import ISiteSyndicationSettings
 from collective.syndication.interfaces import ISyndicatable
-from collective.syndication.interfaces import INewsMLSyndicatable
 
 from plone.registry.interfaces import IRegistry
 from plone.memoize.view import memoize
