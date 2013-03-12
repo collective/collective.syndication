@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 from zope.component.hooks import getSite
 from zope.component import adapts
+from zope.component import getMultiAdapter
 from zope.interface import implements, Interface
 from zope.interface import implementsOnly
 from zope.component import queryMultiAdapter
@@ -194,25 +195,44 @@ class SearchFeed(FolderFeed):
 class NewsMLFeed(FolderFeed):
     implementsOnly(INewsMLFeed)
 
+    def __init__(self, context):
+        self.context = context
+        self.settings = IFeedSettings(context, None)
+        self.site = getSite()
+        if self.show_about:
+            self.pm = getToolByName(self.context, 'portal_membership')
+        pprops = getToolByName(self.context, 'portal_properties')
+        self.site_props = pprops.site_properties
+        self.view_action_types = self.site_props.getProperty(
+            'typesUseViewActionInListings', ('File', 'Image'))
+
+    @lazy_property
+    def show_about(self):
+        return self.settings.show_author_info if self.settings else False
+
     @lazy_property
     def current_date(self):
         return DateTime()
 
     @property
     def items(self):
-        if INewsMLSyndicatable.providedBy(self.context):
+        request = self.context.REQUEST
+        util = getMultiAdapter((self.context, request), name="syndication-util")
+        enabled_types = util.site_settings.newsml_enabled_types
+
+        if self.context.portal_type in enabled_types:
             adapter = queryMultiAdapter((self.context, self), INewsMLSyndicatable)
             yield adapter
         else:
             for item in self._items():
-                if INewsMLSyndicatable.providedBy(item):
+                if item.portal_type in enabled_types:
                     adapter = queryMultiAdapter((item, self), INewsMLSyndicatable)
                     yield adapter
                 else:
                     continue
 
 
-class NewsMLCollectionFeed(NewsMLFeed, CollectionFeed):
+class NewsMLCollectionFeed(NewsMLFeed):
 
     def _brains(self):
         return self.context.queryCatalog(batch=False)[:self.limit]

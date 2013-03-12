@@ -31,15 +31,7 @@
     provides="collective.syndication.interfaces.INewsMLSyndicatable" />
 
   <browser:page
-    for="collective.syndication.interfaces.ISyndicatable"
-    class=".views.NewsMLFeedView"
-    name="newsml.xml"
-    permission="zope2.View"
-    template="templates/newsml.xml.pt"
-    />
-
-  <browser:page
-    for="collective.syndication.interfaces.INewsMLSyndicatable"
+    for="OFS.interfaces.IItem"
     class=".views.NewsMLFeedView"
     name="newsml.xml"
     permission="zope2.View"

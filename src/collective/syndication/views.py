@@ -44,11 +44,28 @@ class SearchFeedView(FeedView):
             return self.index()
 
 
-class NewsMLFeedView(FeedView):
+class NewsMLFeedView(BrowserView):
 
     def feed(self):
         return getAdapter(self.context, INewsMLFeed)
 
+    def context_enabled(self):
+        settings = IFeedSettings(self.context, None)
+        if settings and not settings.enabled:
+            raise NotFound
+        else:
+            return True
+
+    def __call__(self):
+        util = getMultiAdapter((self.context, self.request),
+                               name='syndication-util')
+        if util.newsml_enabled(raise404=True):
+            settings = IFeedSettings(self.context, None)
+            if settings and self.__name__ not in settings.feed_types:
+                raise NotFound
+            self.request.response.setHeader('Content-Type',
+                                            'application/atom+xml')
+            return self.index()
 
 class SettingsForm(form.EditForm):
     label = _(u'heading_syndication_properties',
