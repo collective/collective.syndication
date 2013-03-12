@@ -238,6 +238,19 @@ class NewsMLCollectionFeed(NewsMLFeed):
         return self.context.queryCatalog(batch=False)[:self.limit]
 
 
+class NewsMLRootFeed(NewsMLFeed):
+
+    def _brains(self):
+        request = self.context.REQUEST
+        util = getMultiAdapter((self.context, request), name="syndication-util")
+        enabled_types = util.site_settings.newsml_enabled_types
+        catalog = getToolByName(self.context, 'portal_catalog')
+
+        return catalog(portal_type=enabled_types, 
+                       sort_on="Date",
+                       sort_order="reverse")[:self.limit]
+
+
 class BaseItem(BaseFeedData):
     implements(IFeedItem)
     adapts(IItem, IFeed)

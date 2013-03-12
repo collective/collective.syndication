@@ -15,6 +15,9 @@
   <adapter factory=".adapters.NewsMLFeed"
     for="Products.CMFCore.interfaces._content.IFolderish"/>
 
+  <adapter factory=".adapters.NewsMLRootFeed"
+    for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"/>
+    
   <adapter factory=".adapters.NewsMLCollectionFeed"
     for="plone.app.collection.interfaces.ICollection"
     provides="collective.syndication.interfaces.INewsMLFeed"
