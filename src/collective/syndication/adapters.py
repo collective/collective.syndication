@@ -271,7 +271,7 @@ class NewsMLRootFeed(NewsMLFeed):
         catalog = getToolByName(self.context, 'portal_catalog')
 
         return catalog(portal_type=enabled_types,
-                       sort_on="Date",
+                       sort_on="effective",
                        sort_order="reverse")[:self.limit]
 
 
