@@ -198,6 +198,24 @@ class SearchFeed(FolderFeed):
                                          use_navigation_root=True)[start:end]
 
 
+class RootFeed(SearchFeed):
+
+    def _brains(self):
+        request = self.context.REQUEST
+        util = getMultiAdapter((self.context, request), name="syndication-util")
+        site_rss_items = util.site_settings.site_rss_items
+        
+        catalog = getToolByName(self.context, 'portal_catalog')
+        ucatalog = getToolByName(self.context, 'uid_catalog')
+        
+        uids = ucatalog(UID=site_rss_items)
+        paths = ['/'.join(i.getObject().getPhysicalPath()) for i in uids]
+        
+        if paths != []:
+            request.set('path', paths)
+        return super(RootFeed, self)._brains()
+
+
 class NewsMLFeed(FolderFeed):
     implementsOnly(INewsMLFeed)
 
