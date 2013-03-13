@@ -249,7 +249,7 @@ class IFeedSettings(Interface):
         title=_(u'Feed Types'),
         required=True,
         missing_value=None,
-        default=("rss.xml", "atom.xml", "newsml.xml"),
+        default=("RSS", "rss", "rss.xml", "atom.xml", "newsml.xml"),
         value_type=schema.Choice(
             vocabulary="collective.syndication.vocabularies.SyndicationFeedTypes"
         ))
