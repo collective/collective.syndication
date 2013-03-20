@@ -103,7 +103,10 @@ class TestSyndicationViews(BaseSyndicationTest):
 
     def test_valid_feeds(self):
         for _type in self.folder_settings.feed_types:
-            self.folder.restrictedTraverse(str(_type))()
+            if str(_type) not in ["RSS", "rss"]:
+                # RSS and rss are special cases that redirect to @@RSS and
+                # @@rss respectively. see events.py for more details
+                self.folder.restrictedTraverse(str(_type))()
 
     def test_invalid_feed_raises_404(self):
         self.folder_settings.feed_types = ('RSS',)
