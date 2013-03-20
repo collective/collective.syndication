@@ -202,6 +202,7 @@ class ISiteSyndicationSettings(Interface):
         missing_value=None,
         default=(
             "RSS|RSS 1.0",
+            "rss|RSS 2.0",
             "rss.xml|RSS 2.0",
             "atom.xml|Atom",
             "itunes.xml|iTunes",
