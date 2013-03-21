@@ -9,4 +9,8 @@ contribution of the following people:
 - Franco Pellegrini
 - Héctor Velarde
 
-Development sponsored by OpenMultimedia.
+You can find an updated list of package contributors on `GitHub`_.
+
+Development sponsored by Open Multimedia.
+
+.. _`GitHub`: https://github.com/collective/collective.syndication/contributors
