@@ -11,7 +11,7 @@ SHELL = /bin/sh
 
 options = -N -q -t 3
 src = src/collective/syndication/
-minimum_coverage = 86
+minimum_coverage = 84
 pep8_ignores = E501
 max_complexity = 12
 css_ignores = ! -name jquery\*
@@ -45,7 +45,7 @@ js-validation: ack-install jshint-install
 
 quality-assurance: python-validation
 	@echo Quality assurance
-	./coverage.sh $(minimum_coverage)
+	bin/coverage.sh $(minimum_coverage)
 
 install:
 	mkdir -p buildout-cache/downloads
