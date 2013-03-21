@@ -6,7 +6,7 @@ Because you have to know where your towel is.
 1.0a3 (unreleased)
 ^^^^^^^^^^^^^^^^^^
 
-- Nothing changed yet.
+- Don't use an interface as filtering mechanism to get newsml items. [frapell]
 
 
 1.0a2 (2013-01-15)
