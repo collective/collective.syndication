@@ -202,6 +202,7 @@ class ISiteSyndicationSettings(Interface):
         missing_value=None,
         default=(
             "RSS|RSS 1.0",
+            "rss|RSS 2.0",
             "rss.xml|RSS 2.0",
             "atom.xml|Atom",
             "itunes.xml|iTunes",
@@ -229,6 +230,15 @@ class ISiteSyndicationSettings(Interface):
         description=_(u"Enable RSS link document action on the syndication "
                       u"content item."))
 
+    newsml_enabled_types = schema.Tuple(
+        title=_(u'NewsML enabled types'),
+        description=_(u'Content types that allow NewsML syndication.'),
+        required=False,
+        default=('News Item',),
+        value_type=schema.Choice(
+            vocabulary="plone.app.vocabularies.ReallyUserFriendlyTypes")
+    )
+
 
 class IFeedSettings(Interface):
 
@@ -240,7 +250,7 @@ class IFeedSettings(Interface):
         title=_(u'Feed Types'),
         required=True,
         missing_value=None,
-        default=("rss.xml", "atom.xml", "newsml.xml"),
+        default=("RSS", "rss", "rss.xml", "atom.xml", "newsml.xml"),
         value_type=schema.Choice(
             vocabulary="collective.syndication.vocabularies.SyndicationFeedTypes"
         ))

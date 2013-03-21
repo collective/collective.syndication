@@ -5,12 +5,19 @@ from bs4 import BeautifulSoup
 
 from zope.component.hooks import getSite
 from zope.component import adapts
+from zope.component import getMultiAdapter
 from zope.interface import implements, Interface
 from zope.interface import implementsOnly
 from zope.component import queryMultiAdapter
 
 from DateTime import DateTime
 from OFS.interfaces import IItem
+
+try:
+    from plone.app.textfield.value import RichTextValue
+    HAS_PAT = True
+except:
+    HAS_PAT = False
 
 from Products.CMFCore.utils import getToolByName
 
@@ -191,8 +198,40 @@ class SearchFeed(FolderFeed):
                                          use_navigation_root=True)[start:end]
 
 
+class RootFeed(SearchFeed):
+
+    def _brains(self):
+        request = self.context.REQUEST
+        util = getMultiAdapter((self.context, request), name="syndication-util")
+        site_rss_items = util.site_settings.site_rss_items
+
+        ucatalog = getToolByName(self.context, 'uid_catalog')
+
+        uids = ucatalog(UID=site_rss_items)
+        paths = ['/'.join(i.getObject().getPhysicalPath()) for i in uids]
+
+        if paths != []:
+            request.set('path', paths)
+        return super(RootFeed, self)._brains()
+
+
 class NewsMLFeed(FolderFeed):
     implementsOnly(INewsMLFeed)
+
+    def __init__(self, context):
+        self.context = context
+        self.settings = IFeedSettings(context, None)
+        self.site = getSite()
+        if self.show_about:
+            self.pm = getToolByName(self.context, 'portal_membership')
+        pprops = getToolByName(self.context, 'portal_properties')
+        self.site_props = pprops.site_properties
+        self.view_action_types = self.site_props.getProperty(
+            'typesUseViewActionInListings', ('File', 'Image'))
+
+    @lazy_property
+    def show_about(self):
+        return self.settings.show_author_info if self.settings else False
 
     @lazy_property
     def current_date(self):
@@ -200,22 +239,39 @@ class NewsMLFeed(FolderFeed):
 
     @property
     def items(self):
-        if INewsMLSyndicatable.providedBy(self.context):
+        request = self.context.REQUEST
+        util = getMultiAdapter((self.context, request), name="syndication-util")
+        enabled_types = util.site_settings.newsml_enabled_types
+
+        if self.context.portal_type in enabled_types:
             adapter = queryMultiAdapter((self.context, self), INewsMLSyndicatable)
             yield adapter
         else:
             for item in self._items():
-                if INewsMLSyndicatable.providedBy(item):
+                if item.portal_type in enabled_types:
                     adapter = queryMultiAdapter((item, self), INewsMLSyndicatable)
                     yield adapter
                 else:
                     continue
 
 
-class NewsMLCollectionFeed(NewsMLFeed, CollectionFeed):
+class NewsMLCollectionFeed(NewsMLFeed):
 
     def _brains(self):
         return self.context.queryCatalog(batch=False)[:self.limit]
+
+
+class NewsMLRootFeed(NewsMLFeed):
+
+    def _brains(self):
+        request = self.context.REQUEST
+        util = getMultiAdapter((self.context, request), name="syndication-util")
+        enabled_types = util.site_settings.newsml_enabled_types
+        catalog = getToolByName(self.context, 'portal_catalog')
+
+        return catalog(portal_type=enabled_types,
+                       sort_on="effective",
+                       sort_order="reverse")[:self.limit]
 
 
 class BaseItem(BaseFeedData):
@@ -344,8 +400,11 @@ class BaseNewsMLItem(BaseItem):
     @property
     def body(self):
         body = super(BaseNewsMLItem, self).body
-        result = ""
+        if HAS_PAT:
+            if isinstance(body, RichTextValue):
+                body = body.output
 
+        result = ""
         if body:
             # valid_tags = ['p', 'ul', 'hedline', 'hl1', 'media']
 

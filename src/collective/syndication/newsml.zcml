@@ -7,11 +7,6 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="collective.syndication">
 
-    <class class="Products.ATContentTypes.content.newsitem.ATNewsItem"
-        zcml:condition="installed Products.ATContentTypes">
-        <implements interface="collective.syndication.interfaces.INewsMLSyndicatable" />
-    </class>
-
   <adapter factory=".settings.NewsMLFeedSettings" />
 
   <adapter factory=".adapters.NewsMLFeed"
@@ -20,6 +15,9 @@
   <adapter factory=".adapters.NewsMLFeed"
     for="Products.CMFCore.interfaces._content.IFolderish"/>
 
+  <adapter factory=".adapters.NewsMLRootFeed"
+    for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"/>
+    
   <adapter factory=".adapters.NewsMLCollectionFeed"
     for="plone.app.collection.interfaces.ICollection"
     provides="collective.syndication.interfaces.INewsMLFeed"
@@ -36,15 +34,7 @@
     provides="collective.syndication.interfaces.INewsMLSyndicatable" />
 
   <browser:page
-    for="collective.syndication.interfaces.ISyndicatable"
-    class=".views.NewsMLFeedView"
-    name="newsml.xml"
-    permission="zope2.View"
-    template="templates/newsml.xml.pt"
-    />
-
-  <browser:page
-    for="collective.syndication.interfaces.INewsMLSyndicatable"
+    for="OFS.interfaces.IItem"
     class=".views.NewsMLFeedView"
     name="newsml.xml"
     permission="zope2.View"
