@@ -19,6 +19,10 @@ class FeedView(BrowserView):
     def feed(self):
         return getAdapter(self.context, IFeed)
 
+    def set_response_header(self):
+        # implement in a sub class
+        raise NotImplementedError
+
     def __call__(self):
         util = getMultiAdapter((self.context, self.request),
                                name='syndication-util')
@@ -26,9 +30,36 @@ class FeedView(BrowserView):
             settings = IFeedSettings(self.context)
             if self.__name__ not in settings.feed_types:
                 raise NotFound
-            self.request.response.setHeader('Content-Type',
-                                            'application/atom+xml')
+            self.set_response_header()
             return self.index()
+
+
+class AtomFeedView(FeedView):
+
+    def set_response_header(self):
+        self.request.response.setHeader('Content-Type',
+                                        'application/atom+xml')
+
+
+class Rss2FeedView(FeedView):
+
+    def set_response_header(self):
+        self.request.response.setHeader('Content-Type',
+                                        'text/xml')
+
+
+class Rss1FeedView(FeedView):
+
+    def set_response_header(self):
+        self.request.response.setHeader('Content-Type',
+                                        'application/rdf+xml')
+
+
+class ItunesFeedView(FeedView):
+
+    def set_response_header(self):
+        self.request.response.setHeader('Content-Type',
+                                        'text/xml')
 
 
 class SearchFeedView(FeedView):
@@ -40,7 +71,7 @@ class SearchFeedView(FeedView):
                                name='syndication-util')
         if util.search_rss_enabled(raise404=True):
             self.request.response.setHeader('Content-Type',
-                                            'application/atom+xml')
+                                            'application/rdf+xml')
             return self.index()
 
 
@@ -64,7 +95,7 @@ class NewsMLFeedView(BrowserView):
             if settings and self.__name__ not in settings.feed_types:
                 raise NotFound
             self.request.response.setHeader('Content-Type',
-                                            'application/atom+xml')
+                                            'application/vnd.iptc.g2.newsitem+xml')
             return self.index()
 
 

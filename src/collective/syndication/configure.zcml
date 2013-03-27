@@ -104,7 +104,7 @@
 
         <browser:page
             for="collective.syndication.interfaces.ISyndicatable"
-            class=".views.FeedView"
+            class=".views.AtomFeedView"
             name="atom.xml"
             permission="zope2.View"
             template="templates/atom.xml.pt"
@@ -112,7 +112,7 @@
 
         <browser:page
             for="collective.syndication.interfaces.ISyndicatable"
-            class=".views.FeedView"
+            class=".views.Rss2FeedView"
             name="rss.xml"
             permission="zope2.View"
             template="templates/rss.xml.pt"
@@ -120,7 +120,7 @@
 
         <browser:page
             for="collective.syndication.interfaces.ISyndicatable"
-            class=".views.FeedView"
+            class=".views.Rss1FeedView"
             name="RSS"
             permission="zope2.View"
             template="templates/RSS.pt"
@@ -129,7 +129,7 @@
         <!-- Backwards compatibility -->
         <browser:page
             for="collective.syndication.interfaces.ISyndicatable"
-            class=".views.FeedView"
+            class=".views.Rss1FeedView"
             name="rss"
             permission="zope2.View"
             template="templates/RSS.pt"
@@ -137,7 +137,7 @@
 
         <browser:page
             for="collective.syndication.interfaces.ISyndicatable"
-            class=".views.FeedView"
+            class=".views.ItunesFeedView"
             name="itunes.xml"
             permission="zope2.View"
             template="templates/itunes.xml.pt"
