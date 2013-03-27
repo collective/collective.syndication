@@ -121,6 +121,32 @@ class TestSyndicationViews(BaseSyndicationTest):
         self.assertRaises(NotFound,
                           self.portal.restrictedTraverse('@@search_rss'))
 
+    def test_proper_response_headers(self):
+        self.folder_settings.feed_types = ('RSS',
+                                           'rss',
+                                           'rss.xml',
+                                           'atom.xml',
+                                           'newsml.xml',
+                                           'itunes.xml')
+        self.folder.restrictedTraverse("@@RSS")()
+        header = self.folder.REQUEST.response.getHeader("Content-Type")
+        self.assertEqual(header, "application/rdf+xml")
+        self.folder.restrictedTraverse("@@rss")()
+        header = self.folder.REQUEST.response.getHeader("Content-Type")
+        self.assertEqual(header, "application/rdf+xml")
+        self.folder.restrictedTraverse("@@rss.xml")()
+        header = self.folder.REQUEST.response.getHeader("Content-Type")
+        self.assertEqual(header, "text/xml")
+        self.folder.restrictedTraverse("@@atom.xml")()
+        header = self.folder.REQUEST.response.getHeader("Content-Type")
+        self.assertEqual(header, "application/atom+xml")
+        self.folder.restrictedTraverse("@@newsml.xml")()
+        header = self.folder.REQUEST.response.getHeader("Content-Type")
+        self.assertEqual(header, "application/vnd.iptc.g2.newsitem+xml")
+        self.folder.restrictedTraverse("@@itunes.xml")()
+        header = self.folder.REQUEST.response.getHeader("Content-Type")
+        self.assertEqual(header, "text/xml")
+
 
 class TestSyndicationFeedAdapter(BaseSyndicationTest):
 
