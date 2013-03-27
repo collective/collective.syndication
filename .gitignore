@@ -28,8 +28,7 @@ fake-eggs/
 parts/
 dist/
 var/
-
-
+Makefile
 
 # OSX
 .DS_Store
