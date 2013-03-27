@@ -6,7 +6,7 @@ Because you have to know where your towel is.
 1.0a4 (unreleased)
 ^^^^^^^^^^^^^^^^^^
 
-- Nothing changed yet.
+- (Bugfix) Return proper headers with the feeds. [frapell]
 
 
 1.0a3 (2013-03-21)
