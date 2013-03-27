@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0a4'
+version = '1.0a5.dev0'
 description = "Improved syndication for Plone sites providing Atom, iTunes, \
 NewsML 1, RSS 1.0 and RSS 2.0 feeds."
 long_description = \
