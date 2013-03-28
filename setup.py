@@ -47,7 +47,7 @@ setup(name='collective.syndication',
           'beautifulsoup4',
           'Pillow',
           'Plone',
-          'plone.registry',
+          'plone.app.registry',
           'setuptools',
       ],
       extras_require={
