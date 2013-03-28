@@ -4,8 +4,8 @@ python:
   - 2.7
 env:
   - PLONE_VERSION=4.0
-  - PLONE_VERSION=4.1
-  - PLONE_VERSION=4.2 QA=true
+#  - PLONE_VERSION=4.1
+#  - PLONE_VERSION=4.2 QA=true
 matrix:
   exclude:
     - python: 2.7
