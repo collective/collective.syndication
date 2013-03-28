@@ -11,7 +11,7 @@ Life, the Universe, and Everything
 providing 5 feed types: `Atom`_, iTunes, `NewsML 1`_, `RSS 1.0`_ and `RSS
 2.0`_.
 
-This package is a backport for Plone 4.1 and 4.2 of `Nathan Van Gheem`_'s
+This package is a backport for Plone 4.0, 4.1 and 4.2 of `Nathan Van Gheem`_'s
 `Improved Syndication`_ PLIP implementation made for Plone 4.3.
 
 Don't Panic
