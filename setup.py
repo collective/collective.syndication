@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from setuptools import find_packages
+from setuptools import setup
+
 import os
 
 version = '1.0a5.dev0'
@@ -20,7 +22,6 @@ setup(name='collective.syndication',
           "Development Status :: 3 - Alpha",
           "Environment :: Web Environment",
           "Framework :: Plone",
-          "Framework :: Plone :: 4.0",
           "Framework :: Plone :: 4.1",
           "Framework :: Plone :: 4.2",
           "Intended Audience :: End Users/Desktop",
@@ -46,8 +47,7 @@ setup(name='collective.syndication',
       install_requires=[
           'beautifulsoup4',
           'Pillow',
-          'Plone',
-          'plone.app.registry',
+          'Products.CMFPlone>=4.1, <=4.2',
           'setuptools',
       ],
       extras_require={

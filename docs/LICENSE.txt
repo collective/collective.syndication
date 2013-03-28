@@ -1,4 +1,4 @@
-  collective.syndication is copyright 2011-2013, OpenMultimedia.
+  collective.syndication is copyright 2011-2013, Open Multimedia.
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

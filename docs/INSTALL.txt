@@ -11,17 +11,6 @@ To enable this product in a buildout-based installation:
     eggs =
         collective.syndication
 
-2. If you are using Plone 4.0 you should extend your default configuration
-   with something like this::
-
-    [buildout]
-    extends =
-        https://good-py.appspot.com/release/plone.app.registry/1.0b2?plone=4.0.9
-
-    [versions]
-    zope.component = 3.8.0
-    zope.contenttype = 4.0.1
-
 After updating the configuration you need to run ''bin/buildout'', which will
 take care of updating your system.
 
