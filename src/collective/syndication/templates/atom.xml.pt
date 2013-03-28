@@ -14,15 +14,18 @@
         href=""
         tal:attributes="href request/ACTUAL_URL" />
   <title type="html" tal:content="feed/title" />
-  <subtitle tal:content="feed/description" />
+  <subtitle tal:content="feed/description" 
+            tal:condition="feed/description" />
   <updated tal:content="python:feed.modified.ISO8601()" />
   <link tal:attributes="href url" rel="alternate" type="text/html" />
-  <id tal:content="string:urn:syndication:${feed/uid}" />
+  <id   tal:condition="feed/uid"
+        tal:content="string:urn:syndication:${feed/uid}" />
   <logo tal:content="feed/logo" />
   <icon tal:content="feed/icon" />
   <generator uri="http://www.plone.org" version="1.0">plone</generator>
-  <rights tal:content="feed/rights" />
-  <author tal:condition="feed/show_about">
+  <rights tal:content="feed/rights" 
+          tal:condition="feed/rights"/>
+  <author tal:condition="python:feed.show_about and feed.author_name and feed.author_email">
     <name tal:content="feed/author_name" />
     <email tal:content="feed/author_email" />
   </author>
@@ -46,7 +49,7 @@
         <tal:block tal:replace="structure string:]]&gt;"/>
       </content>
 
-      <author>
+      <author tal:condition="python:feed.show_about and item.author_name and item.author_email">
         <name tal:content="item/author_name" />
         <email tal:content="item/author_email" />
       </author>
@@ -56,7 +59,8 @@
       <updated tal:content="python:modified.ISO8601()"></updated>
 
       <tal:block repeat="category item/categories">
-        <category tal:attributes="term category"/>
+        <category tal:attributes="term category"
+                  tal:condition="category"/>
       </tal:block>
 
     </entry>
