@@ -47,7 +47,7 @@ setup(name='collective.syndication',
       install_requires=[
           'beautifulsoup4',
           'Pillow',
-          'Products.CMFPlone>=4.1, <=4.2',
+          'Products.CMFPlone>=4.1, <4.3',
           'setuptools',
       ],
       extras_require={
