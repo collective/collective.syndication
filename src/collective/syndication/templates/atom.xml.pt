@@ -48,9 +48,10 @@
         <tal:block tal:replace="structure string:]]&gt;"/>
       </content>
 
-      <author tal:condition="python:feed.show_about and item.author_name and item.author_email">
+      <author>
         <name tal:content="item/author_name" />
-        <email tal:content="item/author_email" />
+        <email tal:condition="item/author_email" 
+               tal:content="item/author_email" />
       </author>
 
       <published tal:content="python: published and published.ISO8601() or modified.ISO8601()"></published>

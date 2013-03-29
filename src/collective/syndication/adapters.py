@@ -58,8 +58,7 @@ class BaseFeedData(object):
         self.context = context
         self.settings = IFeedSettings(context)
         self.site = getSite()
-        if self.show_about:
-            self.pm = getToolByName(self.context, 'portal_membership')
+        self.pm = getToolByName(self.context, 'portal_membership')
         pprops = getToolByName(self.context, 'portal_properties')
         self.site_props = pprops.site_properties
         self.view_action_types = self.site_props.getProperty(
@@ -290,13 +289,13 @@ class BaseItem(BaseFeedData):
     def __init__(self, context, feed):
         self.context = context
         self.feed = feed
+        self.pm = self.feed.pm
 
     @lazy_property
     def author(self):
-        if self.feed.show_about:
-            creator = self.context.Creator()
-            member = self.feed.pm.getMemberById(creator)
-            return member and member.getProperty('fullname') or creator
+        creator = self.context.Creator()
+        member = self.pm.getMemberById(creator)
+        return member
 
     @property
     def author_name(self):
