@@ -1,5 +1,6 @@
 from uuid import uuid3
 from uuid import NAMESPACE_OID
+from uuid import NAMESPACE_URL
 
 from bs4 import BeautifulSoup
 
@@ -199,6 +200,14 @@ class SearchFeed(FolderFeed):
 
 
 class RootFeed(SearchFeed):
+
+    @property
+    def uid(self):
+        uuid = super(RootFeed, self).uid
+        if not uuid:
+            # Portal Root doesn't have an UUID, so we forge one up from the url
+            uuid = uuid3(NAMESPACE_URL, self.link).hex
+        return uuid
 
     def _brains(self):
         request = self.context.REQUEST

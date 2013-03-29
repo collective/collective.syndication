@@ -18,8 +18,7 @@
             tal:condition="feed/description" />
   <updated tal:content="python:feed.modified.ISO8601()" />
   <link tal:attributes="href url" rel="alternate" type="text/html" />
-  <id   tal:condition="feed/uid"
-        tal:content="string:urn:syndication:${feed/uid}" />
+  <id tal:content="string:urn:syndication:${feed/uid}"/>
   <logo tal:content="feed/logo" />
   <icon tal:content="feed/icon" />
   <generator uri="http://www.plone.org" version="1.0">plone</generator>
