@@ -17,7 +17,10 @@
   <subtitle tal:content="feed/description" 
             tal:condition="feed/description" />
   <updated tal:content="python:feed.modified.ISO8601()" />
-  <link tal:attributes="href url" rel="alternate" type="text/html" />
+  <link href="."
+        rel="alternate" 
+        type="text/html" 
+        tal:attributes="xml:base url"/>
   <id tal:content="string:urn:syndication:${feed/uid}"/>
   <logo tal:content="feed/logo" />
   <icon tal:content="feed/icon" />
