@@ -230,8 +230,7 @@ class NewsMLFeed(FolderFeed):
         self.context = context
         self.settings = IFeedSettings(context, None)
         self.site = getSite()
-        if self.show_about:
-            self.pm = getToolByName(self.context, 'portal_membership')
+        self.pm = getToolByName(self.context, 'portal_membership')
         pprops = getToolByName(self.context, 'portal_properties')
         self.site_props = pprops.site_properties
         self.view_action_types = self.site_props.getProperty(
