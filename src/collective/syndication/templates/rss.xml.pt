@@ -14,7 +14,7 @@
     <item tal:repeat="item feed/items">
       <title tal:content="item/title" />
       <description tal:content="item/description" />
-      <pubDate tal:content="item/published/HTML4|item/modified/HTML4" />
+      <pubDate tal:content="item/published/rfc822|item/modified/rfc822" />
       <guid tal:content="item/guid|nothing" />
     </item>
   </channel>
