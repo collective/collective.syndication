@@ -2,8 +2,12 @@
 <rss version="2.0"
   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
   xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:atom="http://www.w3.org/2005/Atom"
   tal:define="feed view/feed">
   <channel>
+    <atom:link rel="self" 
+               type="application/rss+xml"
+               tal:attributes="href feed/link" />
     <title tal:content="feed/title" />
     <link tal:content="feed/link" />
     <description tal:content="feed/description" />
