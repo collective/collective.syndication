@@ -489,6 +489,28 @@ class BaseNewsMLItem(BaseItem):
             result = img_contents and img_contents != ''
         return result
 
+    def get_videos(self):
+        result = []
+        videos = getattr(self.context, 'getVideos', None)
+        if videos:
+          for video in videos():
+              elem = {'href': video.absolute_url(),
+                      'contenttype': video.content_type,
+                      'title': video.title}
+              result.append(elem)
+        return result
+
+    def get_images(self):
+        result = []
+        images = getattr(self.context, 'getImages', None)
+        if images:
+          for image in images():
+              elem = {'href': image.absolute_url(),
+                      'contenttype': image.content_type,
+                      'title': image.title}
+              result.append(elem)
+        return result
+
     def duid(self, value):
         uid = uuid3(NAMESPACE_OID, self.uid + str(value))
         return uid.hex
