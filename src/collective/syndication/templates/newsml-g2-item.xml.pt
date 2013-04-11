@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<tal:repeat xmlns:tal="http://xml.zope.org/namespaces/tal"
+            define="feed view/feed;"
+            repeat="item feed/items">
+  <newsItem xmlns="http://iptc.org/std/nar/2006-10-01/"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.iptc.org/std/NewsML-G2/2.12/
+                  specification/NewsML-G2_2.12-spec-All-Core.xsd"
+            standard="NewsML-G2"
+            standardversion="2.12"
+            conformance="core"
+            tal:define="base_domain item/site_url;
+                        date python:item.published or item.modified;
+                        date_id python:date.strftime('%Y%m%d');
+                        news_item_id item/uid;
+                        copyright item/rights;
+                        language item/language;
+                        site_title item/site/title;
+                        version_date python:item.created.asdatetime().isoformat();
+                        item_created python:item.created.asdatetime().strftime('%Y-%m-%d');
+                        location item/location;
+                        author_name item/author_name;
+                        ob_title item/title;
+                        ob_description item/description;
+                        body item/body;
+                        categories item/categories"
+            tal:attributes="guid string:urn:newsml:${base_domain}:${date_id}:${news_item_id};
+                            xml:lang language;"
+            version="1"
+            >
+
+    <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_19.xml"/>
+  
+    <rightsInfo tal:condition="copyright">
+      <copyrightHolder tal:attributes="literal copyright" />
+    </rightsInfo>
+  
+    <itemMeta>
+      <itemClass qcode="ninat:composite" />
+      <provider tal:attributes="literal site_title" />
+      <versionCreated tal:content="version_date"></versionCreated>
+      <pubStatus qcode="stat:usable" />
+    </itemMeta>
+
+    <contentMeta>
+      <contentCreated tal:content="item_created"></contentCreated>
+      <located>
+        <tal:comment replace="nothing">
+            <!-- XXX: Should we use 'literal' in parent tag? if so, what to put? -->
+        </tal:comment>
+        <name tal:content="location"></name>
+      </located>
+      <creator>
+        <tal:comment replace="nothing">
+            <!-- XXX: Should we use 'literal' in parent tag? if so, what to put? -->
+        </tal:comment>
+        <name tal:content="author_name"></name>
+      </creator>
+      <language tal:attributes="tag language" />
+      <tal:comment replace="nothing">
+          <!-- XXX: Should we provide a vocabulary with valid subjects?
+          <subject type="cpnat:abstract" qcode="subj:01026002">
+            <name>art, culture and entertainment &gt; news &gt; media</name>
+          </subject>
+          -->
+      </tal:comment>
+      <slugline tal:content="ob_description"></slugline>
+      <headline tal:content="ob_title"></headline>
+    </contentMeta>
+
+    <contentSet>
+      <inlineXML contenttype="application/nitf+xml">
+        <nitf xmlns="http://iptc.org/std/NITF/2006-10-18/">
+          <head>
+            <key-list tal:repeat="subject categories">
+                <keyword key="" tal:attributes="key subject" />
+            </key-list>
+          </head>
+          <body>
+            <body.head>
+              <hedline>
+                <hl1 tal:content="ob_title"></hl1>
+              </hedline>
+              <byline>
+                <byttl tal:content="author_name"></byttl>
+              </byline>
+            </body.head>
+            <body.content>
+              <tal:content tal:replace="structure body" />
+            </body.content>
+          </body>
+        </nitf>
+      </inlineXML>
+      <remoteContent
+        tal:repeat="content item/get_images"
+        tal:attributes="href python:content['href'];
+                        contenttype python:content['contenttype'];">
+        <title tal:content="python:content['title']" />
+      </remoteContent>
+      <remoteContent
+        tal:repeat="content item/get_videos"
+        tal:attributes="href python:content['href'];
+                        contenttype python:content['contenttype'];">
+        <title tal:content="python:content['title']" />
+      </remoteContent>
+
+    </contentSet>
+  </newsItem>
+</tal:repeat>

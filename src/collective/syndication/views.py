@@ -3,6 +3,8 @@ from zope.component import getMultiAdapter
 from Products.Five import BrowserView
 from zExceptions import NotFound
 
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+
 from collective.syndication.interfaces import ISearchFeed
 from collective.syndication.interfaces import IFeed
 from collective.syndication.interfaces import IFeedSettings
@@ -96,7 +98,16 @@ class NewsMLFeedView(BrowserView):
                 raise NotFound
             self.request.response.setHeader('Content-Type',
                                             'application/vnd.iptc.g2.newsitem+xml')
-            return self.index()
+
+            #XXX: When we properly implement the newsml feed, we should
+            #     do this in a better way...
+            newsml_items = util.site_settings.newsml_enabled_types
+            if self.context.portal_type in newsml_items:
+                pt = ViewPageTemplateFile('templates/newsml-g2-item.xml.pt')
+            else:
+                pt = ViewPageTemplateFile('templates/newsml-g2-listing.xml.pt')
+
+            return pt(self)
 
 
 class SettingsForm(form.EditForm):

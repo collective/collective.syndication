@@ -206,7 +206,8 @@ class ISiteSyndicationSettings(Interface):
             "rss.xml|RSS 2.0",
             "atom.xml|Atom",
             "itunes.xml|iTunes",
-            "newsml.xml|NewsML 1.2"),
+            "newsml.xml|NewsML 1.2",
+            "newsml-g2.xml|NewsML 2.12",),
         value_type=schema.TextLine()
     )
 
@@ -250,7 +251,8 @@ class IFeedSettings(Interface):
         title=_(u'Feed Types'),
         required=True,
         missing_value=None,
-        default=("RSS", "rss", "rss.xml", "atom.xml", "newsml.xml"),
+        default=("RSS", "rss", "rss.xml", "atom.xml", 
+                 "newsml.xml", "newsml-g2.xml"),
         value_type=schema.Choice(
             vocabulary="collective.syndication.vocabularies.SyndicationFeedTypes"
         ))

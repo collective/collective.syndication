@@ -41,4 +41,11 @@
     template="templates/newsml.xml.pt"
     />
 
+  <browser:page
+    for="OFS.interfaces.IItem"
+    class=".views.NewsMLFeedView"
+    name="newsml-g2.xml"
+    permission="zope2.View"
+    />
+
 </configure>

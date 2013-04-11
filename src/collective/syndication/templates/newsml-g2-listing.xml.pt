@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<packageItem xmlns="http://iptc.org/std/nar/2006-10-01/"
+          xmlns:tal="http://xml.zope.org/namespaces/tal"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.iptc.org/std/NewsML-G2/2.12/
+                  specification/NewsML-G2_2.12-spec-All-Core.xsd"
+          standard="NewsML-G2"
+          standardversion="2.12"
+          conformance="core"
+          tal:define="feed view/feed;
+                      base_domain feed/site_url;
+                      date feed/today;
+                      date_id python:date.strftime('%Y%m%d');
+                      feed_uid feed/uid;
+                      language feed/language;
+                      copyright feed/rights;
+                      site_title feed/site/title;
+                      version_date python:date.asdatetime().isoformat();
+                      feed_title feed/title;"
+          tal:attributes="guid string:urn:newsml:${base_domain}:${date_id}:${feed_uid};
+                          xml:lang language;"
+          version="1"
+          >
+
+  <catalogRef href="http://www.iptc.org/std/catalog/catalog.IPTC-G2-Standards_19.xml"/>
+
+  <rightsInfo tal:condition="copyright">
+    <copyrightHolder tal:attributes="literal copyright" />
+  </rightsInfo>
+
+  <itemMeta>
+    <itemClass qcode="ninat:composite" />
+    <provider tal:attributes="literal site_title" />
+    <versionCreated tal:content="version_date"></versionCreated>
+    <pubStatus qcode="stat:usable" />
+  </itemMeta>
+
+  <contentMeta>
+    <headline tal:content="feed_title"></headline>
+  </contentMeta>
+  <groupSet root="G1">
+    <group id="G1" role="group:main">
+      <tal:items repeat="item feed/items">
+        <itemRef contenttype="application/vnd.iptc.g2.newsitem+xml"
+                 tal:define="full_url string:${item/link}/newsml-g2.xml;
+                             version_date python:item.created.asdatetime().isoformat();
+                             ob_title item/title;
+                             ob_description item/description;"
+                 tal:attributes="href full_url">
+          <itemClass qcode="ninat:composite" />
+          <provider tal:attributes="literal site_title" />
+          <versionCreated tal:content="version_date"></versionCreated>
+          <pubStatus qcode="stat:usable" />
+          <headline tal:content="ob_title"></headline>
+          <description role="drol:summary"
+                       tal:content="ob_description">
+          </description>
+        </itemRef>
+      </tal:items>
+    </group>
+  </groupSet>
+</packageItem>
