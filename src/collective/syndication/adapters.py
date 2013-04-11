@@ -528,3 +528,7 @@ class BaseNewsMLItem(BaseItem):
             result = self.feed.language
         return result
 
+    @property
+    def location(self):
+        return self.context.getLocation()
+
