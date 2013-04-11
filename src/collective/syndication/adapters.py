@@ -76,6 +76,10 @@ class BaseFeedData(object):
     def base_url(self):
         return self.context.absolute_url()
 
+    @lazy_property
+    def site_url(self):
+        return self.site.absolute_url()
+
     @property
     def title(self):
         return self.context.Title()
