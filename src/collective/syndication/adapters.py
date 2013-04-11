@@ -518,3 +518,13 @@ class BaseNewsMLItem(BaseItem):
     @property
     def created(self):
         return self.context.created()
+
+    @property
+    def language(self):
+        lang = getattr(self.context, 'Language', None)
+        if lang:
+            result = lang()
+        else:
+            result = self.feed.language
+        return result
+
