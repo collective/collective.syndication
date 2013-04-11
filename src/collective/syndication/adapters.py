@@ -276,7 +276,9 @@ class NewsMLCollectionFeed(NewsMLFeed):
         return self.context.queryCatalog(batch=False)[:self.limit]
 
 
-class NewsMLRootFeed(NewsMLFeed):
+class NewsMLRootFeed(NewsMLFeed, RootFeed):
+    
+    implementsOnly(INewsMLFeed)
 
     def _brains(self):
         request = self.context.REQUEST
