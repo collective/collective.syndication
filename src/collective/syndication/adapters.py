@@ -105,6 +105,10 @@ class BaseFeedData(object):
             return DateTime(date)
 
     @property
+    def today(self):
+        return DateTime()
+
+    @property
     def uid(self):
         uuid = IUUID(self.context, None)
         if uuid is None and hasattr(self.context, 'UID'):
