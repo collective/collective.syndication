@@ -313,7 +313,10 @@ class BaseItem(BaseFeedData):
         if hasattr(self.context, 'getText'):
             return self.context.getText()
         elif hasattr(self.context, 'text'):
-            return self.context.text
+            if isinstance(self.context.text, (str, unicode)):
+                return self.context.text
+            elif hasattr(self.context.text, 'output'):
+                return self.context.text.output
         return self.description
 
     @property
