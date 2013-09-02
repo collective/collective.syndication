@@ -3,16 +3,14 @@
 from setuptools import find_packages
 from setuptools import setup
 
-import os
-
 version = '1.0a5.dev0'
 description = "Improved syndication for Plone sites providing Atom, iTunes, \
 NewsML 1, RSS 1.0 and RSS 2.0 feeds."
-long_description = \
-    open("README.txt").read() + "\n" + \
-    open(os.path.join("docs", "INSTALL.txt")).read() + "\n" + \
-    open(os.path.join("docs", "CREDITS.txt")).read() + "\n" + \
-    open(os.path.join("docs", "HISTORY.txt")).read()
+long_description = (
+    open("README.rst").read() + "\n" +
+    open("CONTRIBUTORS.rst").read() + "\n" +
+    open("CHANGES.rst").read()
+)
 
 setup(name='collective.syndication',
       version=version,
