@@ -45,6 +45,7 @@ setup(name='collective.syndication',
       install_requires=[
           'Pillow',
           'Products.CMFPlone>=4.1, <4.3',
+          'lxml',
           'setuptools',
       ],
       extras_require={
