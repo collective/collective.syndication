@@ -13,7 +13,6 @@ from collective.syndication.adapters import BaseNewsMLItem
 from collective.syndication.testing import INTEGRATION_TESTING
 from plone.dexterity.fti import DexterityFTI
 from zope.interface import Interface
-from zope import schema
 from plone.app.textfield import RichText
 
 
@@ -310,12 +309,6 @@ class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
 class ITestSchema(Interface):
     """Schema used for testing
     """
-    
-    title = schema.TextLine(title=u"Title",
-                            description=u"Administrative title")
-                        
-    description = schema.Text(title=u"Description",
-                              required=False)
 
     text = RichText(
         # nitf/body/body.content
@@ -330,7 +323,7 @@ class TestDexterityItems(BaseSyndicationTest):
 
     def afterSetUp(self):
         super(TestDexterityItems, self).afterSetUp()
-        portal = self.portal        
+        portal = self.portal
         fti = DexterityFTI('dxtest_type')
         fti.schema = u'collective.syndication.tests.test_syndication.ITestSchema'
         portal.portal_types._setObject('dxtest_type', fti)

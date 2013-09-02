@@ -3,7 +3,7 @@ from uuid import NAMESPACE_OID
 from uuid import NAMESPACE_URL
 
 from lxml import etree, html
-from lxml.html import clean 
+from lxml.html import clean
 
 from zope.component.hooks import getSite
 from zope.component import adapts
@@ -14,12 +14,6 @@ from zope.component import queryMultiAdapter
 
 from DateTime import DateTime
 from OFS.interfaces import IItem
-
-try:
-    from plone.app.textfield.value import RichTextValue
-    HAS_PAT = True
-except:
-    HAS_PAT = False
 
 from Products.CMFCore.utils import getToolByName
 
@@ -431,9 +425,9 @@ class BaseNewsMLItem(BaseItem):
                     el.tag = 'ul'
 
         result = etree.tostring(tree)
-        cleaner = clean.Cleaner(remove_tags=('span',))    
-        result = cleaner.clean_html(result)    
-        
+        cleaner = clean.Cleaner(remove_tags=('span',))
+        result = cleaner.clean_html(result)
+
         # Remove some whitespace
         result = result.replace('\n', '')
         result.strip()
