@@ -3,6 +3,7 @@ from Products.CMFPlone.tests import PloneTestCase
 from collective.syndication.interfaces import IFeedSettings
 from collective.syndication.interfaces import ISiteSyndicationSettings
 from plone.registry.interfaces import IRegistry
+from zope.component import getAdapter
 from zope.component import getUtility
 from zExceptions import NotFound
 from collective.syndication.interfaces import IFeed
@@ -10,6 +11,10 @@ from collective.syndication.interfaces import INewsMLFeed
 from collective.syndication.adapters import BaseItem
 from collective.syndication.adapters import BaseNewsMLItem
 from collective.syndication.testing import INTEGRATION_TESTING
+from plone.dexterity.fti import DexterityFTI
+from zope.interface import Interface
+from zope import schema
+from plone.app.textfield import RichText
 
 
 class BaseSyndicationTest(PloneTestCase.PloneTestCase):
@@ -181,6 +186,15 @@ BODY_TEXT = """<p>Test text</p>
 <ol><li>one</li><li>two</li></ol>
 <ul><li>one</li><li>two</li></ul>
 """
+ROOTED_BODY_TEXT = """<body>
+<p>Test text</p>
+<h2>Header</h2>
+<p class="one" id="test">New <span>Line</span></p>
+<a href="http://www.google.com" class="new">Google</a>
+<ol><li>one</li><li>two</li></ol>
+<ul><li>one</li><li>two</li></ul>
+</body>
+"""
 
 
 class NewsMLBaseSyndicationTest(PloneTestCase.PloneTestCase):
@@ -192,10 +206,13 @@ class NewsMLBaseSyndicationTest(PloneTestCase.PloneTestCase):
         self.folder.invokeFactory('Document', 'doc')
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.invokeFactory('News Item', 'news1')
+        self.folder.invokeFactory('News Item', 'news2')
         self.folder.invokeFactory('File', 'file')
         self.doc1 = self.folder.doc1
         self.news1 = self.folder.news1
         self.news1.setText(BODY_TEXT)
+        self.news2 = self.folder.news2
+        self.news2.setText(ROOTED_BODY_TEXT)
         self.file = self.folder.file
         #Enable syndication on folder
         registry = getUtility(IRegistry)
@@ -262,26 +279,64 @@ class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
         super(TestNewsMLSyndicationFeedAdapter, self).afterSetUp()
 
         self.feed = INewsMLFeed(self.folder)
-        self.feeddatnews = BaseNewsMLItem(self.news1, self.feed)
+        self.feeddatnews1 = BaseNewsMLItem(self.news1, self.feed)
+        self.feeddatnews2 = BaseNewsMLItem(self.news2, self.feed)
 
     def test_items(self):
-        self.assertEqual(len(self.feed._brains()), 4)
-        self.assertEqual(len([i for i in self.feed.items]), 1)
+        self.assertEqual(len(self.feed._brains()), 5)
+        self.assertEqual(len([i for i in self.feed.items]), 2)
 
     def test_filter_body(self):
         output = '<p>Test text</p><p>Header</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
-        self.assertEqual(self.feeddatnews.body, output)
+        self.assertEqual(self.feeddatnews1.body, output)
+        output = '<p>Test text</p><p>Header</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
+        self.assertEqual(self.feeddatnews2.body, output)
 
     def test_image_caption(self):
         self.news1.image = "Image"
 
-        self.assertEqual(self.feeddatnews.image_caption, "")
+        self.assertEqual(self.feeddatnews1.image_caption, "")
 
         self.news1.setDescription("News description")
-        self.assertEqual(self.feeddatnews.image_caption, "News description")
+        self.assertEqual(self.feeddatnews1.image_caption, "News description")
 
         self.news1.imageCaption = "Image caption"
-        self.assertEqual(self.feeddatnews.image_caption, "Image caption")
+        self.assertEqual(self.feeddatnews1.image_caption, "Image caption")
 
     def test_created_date(self):
-        self.assertEqual(self.feeddatnews.created, self.news1.created())
+        self.assertEqual(self.feeddatnews1.created, self.news1.created())
+
+
+class ITestSchema(Interface):
+    """Schema used for testing
+    """
+    
+    title = schema.TextLine(title=u"Title",
+                            description=u"Administrative title")
+                        
+    description = schema.Text(title=u"Description",
+                              required=False)
+
+    text = RichText(
+        # nitf/body/body.content
+        title=u'Body text',
+        required=False,
+    )
+
+
+class TestDexterityItems(BaseSyndicationTest):
+
+    layer = INTEGRATION_TESTING
+
+    def afterSetUp(self):
+        super(TestDexterityItems, self).afterSetUp()
+        portal = self.portal        
+        fti = DexterityFTI('dxtest_type')
+        fti.schema = u'collective.syndication.tests.test_syndication.ITestSchema'
+        portal.portal_types._setObject('dxtest_type', fti)
+        self.folder.invokeFactory('dxtest_type', 'dxtest1')
+        self.folder.dxtest1.text = u'<p>Lorem ipsum dolor sit amet.</p>'
+
+    def test_body(self):
+        feed = getAdapter(self.folder, IFeed)
+        self.assertTrue(u'<p>Lorem ipsum dolor sit amet.</p>' == tuple(feed.items)[-1].body)

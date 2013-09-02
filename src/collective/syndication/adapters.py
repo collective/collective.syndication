@@ -2,7 +2,8 @@ from uuid import uuid3
 from uuid import NAMESPACE_OID
 from uuid import NAMESPACE_URL
 
-from bs4 import BeautifulSoup
+from lxml import etree, html
+from lxml.html import clean 
 
 from zope.component.hooks import getSite
 from zope.component import adapts
@@ -410,41 +411,33 @@ class BaseNewsMLItem(BaseItem):
     @property
     def body(self):
         body = super(BaseNewsMLItem, self).body
-        if HAS_PAT:
-            if isinstance(body, RichTextValue):
-                body = body.output
 
         result = ""
         if body:
             # valid_tags = ['p', 'ul', 'hedline', 'hl1', 'media']
 
-            soup = BeautifulSoup(body)
+            tree = html.fragment_fromstring(body, create_parent='div')
 
-            for tag in soup.findAll(True):
-                attrs = dict()
+            for el in tree.getchildren():
                 # Remove all attributes, except hrefs
-                if 'href' in tag.attrs:
-                    attrs['href'] = tag.attrs['href']
-
-                tag.attrs = attrs
+                for aname in el.attrib.keys():
+                    if aname != 'href':
+                        del el.attrib[aname]
 
                 # Now replace some common tags
-                if tag.name == 'h2':
-                    tag.name = 'p'
-                elif tag.name == 'span':
-                    tag.unwrap()
-                elif tag.name == 'ol':
-                    tag.name = 'ul'
+                if el.tag == 'h2':
+                    el.tag = 'p'
+                elif el.tag == 'ol':
+                    el.tag = 'ul'
 
-            if soup.find('body'):
-                result = soup.body.renderContents()
-            else:
-                result = str(soup)
-
+        result = etree.tostring(tree)
+        cleaner = clean.Cleaner(remove_tags=('span',))    
+        result = cleaner.clean_html(result)    
+        
         # Remove some whitespace
         result = result.replace('\n', '')
         result.strip()
-        return result
+        return result[5:-6]  # strip <div> root node
 
     @lazy_property
     def site_url(self):

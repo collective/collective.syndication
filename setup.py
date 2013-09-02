@@ -45,15 +45,16 @@ setup(name='collective.syndication',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'beautifulsoup4',
           'Pillow',
           'Products.CMFPlone>=4.1, <4.3',
           'setuptools',
       ],
       extras_require={
           'test': [
+              'plone.app.dexterity',
               'plone.app.testing',
               'plone.browserlayer',
+              'plone.namedfile',
               'plone.testing',
               'unittest2',
           ],

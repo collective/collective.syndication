@@ -6,8 +6,8 @@ Because you have to know where your towel is.
 1.0a5 (unreleased)
 ^^^^^^^^^^^^^^^^^^
 
-- Nothing changed yet.
-
+- Replace beautifulsoup4 with lxml. [jpgimenez] 
+- Fix a bug with body text coming from dexterity content. [jpgimenez] 
 
 1.0a4 (2013-03-27)
 ^^^^^^^^^^^^^^^^^^

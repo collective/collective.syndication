@@ -14,6 +14,9 @@ class Fixture(PloneSandboxLayer):
         # Load ZCML
         import collective.syndication
         self.loadZCML(package=collective.syndication)
+        import plone.app.dexterity
+        self.loadZCML(name='meta.zcml', package=plone.app.dexterity)
+        self.loadZCML(package=plone.app.dexterity)
 
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
