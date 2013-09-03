@@ -1,7 +1,7 @@
 There's a frood who really knows where his towel is
 ---------------------------------------------------
 
-1.0a5 (unreleased)
+1.0b1 (2013-09-03)
 ^^^^^^^^^^^^^^^^^^
 
 - Replace beautifulsoup4 with lxml. [jpgimenez] 
