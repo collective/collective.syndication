@@ -1,3 +1,4 @@
+from lxml import etree
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.tests import PloneTestCase
 from collective.syndication.interfaces import IFeedSettings
@@ -333,3 +334,33 @@ class TestDexterityItems(BaseSyndicationTest):
     def test_body(self):
         feed = getAdapter(self.folder, IFeed)
         self.assertTrue(u'<p>Lorem ipsum dolor sit amet.</p>' == tuple(feed.items)[-1].body)
+
+
+class TestRenderBody(BaseSyndicationTest):
+
+    layer = INTEGRATION_TESTING
+
+    def afterSetUp(self):
+        super(TestRenderBody, self).afterSetUp()
+        self.folder.invokeFactory('News Item', 'news1')
+        self.folder.invokeFactory('News Item', 'news2')
+        self.news1 = self.folder.news1
+        self.news1.setText(BODY_TEXT)
+        self.news2 = self.folder.news2
+        self.news2.setText(ROOTED_BODY_TEXT)
+        #Enable syndication on folder
+        registry = getUtility(IRegistry)
+        self.site_settings = registry.forInterface(ISiteSyndicationSettings)
+        settings = IFeedSettings(self.folder)
+        settings.enabled = True
+        settings.render_body = True
+        self.folder_settings = settings
+
+    def test_atom(self):
+        atom_xml = self.folder.restrictedTraverse("@@atom.xml")()
+        atom_tree = etree.XML(atom_xml)
+        entries = list(atom_tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'))
+        self.assertTrue(len(entries) == 5)
+        for entry in entries:
+            if entry.find('{http://www.w3.org/2005/Atom}content'):
+                self.assertIsNotNone(entry.find('{http://www.w3.org/2005/Atom}summary'))
