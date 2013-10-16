@@ -363,7 +363,7 @@ class TestRenderBody(BaseSyndicationTest):
         self.assertTrue(len(entries) == 5)
         for entry in entries:
             if entry.find('{http://www.w3.org/2005/Atom}content') is not None:
-                self.assertIsNotNone(entry.find('{http://www.w3.org/2005/Atom}summary'))
+                self.assertTrue(entry.find('{http://www.w3.org/2005/Atom}summary') is not None)
 
     def test_rss1(self):
         xml = self.folder.restrictedTraverse("@@RSS")()
@@ -372,4 +372,4 @@ class TestRenderBody(BaseSyndicationTest):
         self.assertTrue(len(items) == 5)
         for item in items:
             if item.find('{http://purl.org/rss/1.0/modules/content/}encoded') is not None:
-                self.assertIsNotNone(item.find('{http://purl.org/rss/1.0/}description'))
+                self.assertTrue(item.find('{http://purl.org/rss/1.0/}description') is not None)
