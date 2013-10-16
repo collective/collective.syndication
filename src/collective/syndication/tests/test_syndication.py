@@ -359,8 +359,17 @@ class TestRenderBody(BaseSyndicationTest):
     def test_atom(self):
         atom_xml = self.folder.restrictedTraverse("@@atom.xml")()
         atom_tree = etree.XML(atom_xml)
-        entries = list(atom_tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'))
+        entries = tuple(atom_tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'))
         self.assertTrue(len(entries) == 5)
         for entry in entries:
-            if entry.find('{http://www.w3.org/2005/Atom}content'):
+            if entry.find('{http://www.w3.org/2005/Atom}content') is not None:
                 self.assertIsNotNone(entry.find('{http://www.w3.org/2005/Atom}summary'))
+
+    def test_rss1(self):
+        xml = self.folder.restrictedTraverse("@@RSS")()
+        tree = etree.XML(xml.encode())
+        items = tuple(tree.iterfind('.//{http://purl.org/rss/1.0/}item'))
+        self.assertTrue(len(items) == 5)
+        for item in items:
+            if item.find('{http://purl.org/rss/1.0/modules/content/}encoded') is not None:
+                self.assertIsNotNone(item.find('{http://purl.org/rss/1.0/}description'))
