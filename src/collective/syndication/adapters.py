@@ -286,9 +286,13 @@ class BaseItem(BaseFeedData):
         self.pm = self.feed.pm
 
     @lazy_property
+    def creator(self):
+        if hasattr(self.context, 'Creator'):
+            return self.context.Creator()
+
+    @lazy_property
     def author(self):
-        creator = self.context.Creator()
-        member = self.pm.getMemberById(creator)
+        member = self.pm.getMemberById(self.creator)
         return member
 
     @property
