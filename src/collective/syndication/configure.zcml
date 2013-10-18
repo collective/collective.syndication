@@ -33,6 +33,14 @@
             description="Uninstalls the collective.syndication package"
             provides="Products.GenericSetup.interfaces.EXTENSION"
             />
+        <genericsetup:upgradeStep
+            title="collective.syndication upgrade to version 1001"
+            source="*"
+            destination="1001"
+            description=""
+            handler="collective.syndication.setuphandlers.upgrade_to_1001"
+            profile="collective.syndication:default"
+            />
         <!-- -*- extra stuff goes here -*- -->
 
          <class class="plone.dexterity.content.Container"
