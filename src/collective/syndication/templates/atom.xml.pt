@@ -38,7 +38,7 @@
                        modified item/modified;">
       <title tal:content="item/title"></title>
       <link rel="alternate" type="text/html" href="" tal:attributes="href item/link" />
-      <link tal:condition="item/has_enclosure" rel="enclosure"
+      <link tal:condition="python:item.has_enclosure and item.file_length" rel="enclosure"
           tal:attributes="href item/file_url;
                           length item/file_length;
                           type item/file_type;" />
@@ -47,7 +47,7 @@
       <content type="xhtml" xml:base="" xml:lang="en-US" xml:space="preserve"
                tal:attributes="xml:base url; xml:lang feed/language;"
                tal:condition="feed/settings/render_body">
-        <tal:block tal:replace="structure string:&lt;div xmlns='http://www.w3.org/1999/xhtml'&gt;"/>
+        <tal:block tal:replace="structure string:&lt;div xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;"/>
         <tal:block tal:replace="structure item/body"/>
         <tal:block tal:replace="structure string:&lt;/div&gt;"/>
       </content>
