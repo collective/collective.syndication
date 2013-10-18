@@ -1,4 +1,4 @@
-from lxml import etree
+import re
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.tests import PloneTestCase
 from collective.syndication.interfaces import IFeedSettings
@@ -345,8 +345,11 @@ class TestRenderBody(BaseSyndicationTest):
         self.folder.invokeFactory('News Item', 'news1')
         self.folder.invokeFactory('News Item', 'news2')
         self.news1 = self.folder.news1
+        self.news1.setTitle('News 1')
+        self.news1.setDescription('The news item #1')
         self.news1.setText(BODY_TEXT)
         self.news2 = self.folder.news2
+        self.news2.setTitle('News 2')
         self.news2.setText(ROOTED_BODY_TEXT)
         #Enable syndication on folder
         registry = getUtility(IRegistry)
@@ -357,19 +360,46 @@ class TestRenderBody(BaseSyndicationTest):
         self.folder_settings = settings
 
     def test_atom(self):
-        atom_xml = self.folder.restrictedTraverse("@@atom.xml")()
-        atom_tree = etree.XML(atom_xml)
-        entries = tuple(atom_tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'))
-        self.assertTrue(len(entries) == 5)
-        for entry in entries:
-            if entry.find('{http://www.w3.org/2005/Atom}content') is not None:
-                self.assertTrue(entry.find('{http://www.w3.org/2005/Atom}summary') is not None)
+        xml = self.folder.restrictedTraverse("@@atom.xml")()
+        self.assertTrue(len(re.findall('<entry>', xml)) == 5)
+        news1_feed = '<entry>\s*<title>News 1</title>\s*' \
+                     '<link rel="alternate" type="text/html" href="{0}"/>\s*' \
+                     '<id>urn:syndication:{1}</id>\s*' \
+                     '<summary>The news item #1</summary>\s*' \
+                     '<content type="xhtml" xml:base="{2}" xml:lang="en" xml:space="preserve">'.format(self.news1.absolute_url(),
+                                                                                                       self.news1.UID(),
+                                                                                                       self.folder.absolute_url())
+        self.assertTrue(re.search(news1_feed, xml) is not None)
+        news2_feed = '<entry>\s*<title>News 2</title>\s*' \
+                     '<link rel="alternate" type="text/html" href="{0}"/>\s*' \
+                     '<id>urn:syndication:{1}</id>\s*' \
+                     '<content type="xhtml" xml:base="{2}" xml:lang="en" xml:space="preserve">'.format(self.news2.absolute_url(),
+                                                                                                       self.news2.UID(),
+                                                                                                       self.folder.absolute_url())
+        self.assertTrue(re.search(news2_feed, xml) is not None)
 
     def test_rss1(self):
         xml = self.folder.restrictedTraverse("@@RSS")()
-        tree = etree.XML(xml.encode())
-        items = tuple(tree.iterfind('.//{http://purl.org/rss/1.0/}item'))
-        self.assertTrue(len(items) == 5)
-        for item in items:
-            if item.find('{http://purl.org/rss/1.0/modules/content/}encoded') is not None:
-                self.assertTrue(item.find('{http://purl.org/rss/1.0/}description') is not None)
+        self.assertTrue(len(re.findall('<item ', xml)) == 5)
+        news_feed = '<item rdf:about="{0}">\s*<title>News 1</title>\s*' \
+                    '<link>{0}</link>\s*' \
+                    '<description>The news item #1</description>\s*' \
+                    '<content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/"'.format(self.news1.absolute_url())
+        self.assertTrue(re.search(news_feed, xml) is not None)
+        news_feed = '<item rdf:about="{0}">\s*<title>News 2</title>\s*' \
+                    '<link>{0}</link>\s*' \
+                    '<description></description>\s*' \
+                    '<content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/"'.format(self.news2.absolute_url())
+        self.assertTrue(re.search(news_feed, xml) is not None)
+
+    def test_rss2(self):
+        xml = self.folder.restrictedTraverse("@@rss.xml")()
+        self.assertTrue(len(re.findall('<item>', xml)) == 5)
+        news_feed = '<item>\s*<title>News 1</title>\s*' \
+                    '<description>The news item #1</description>\s*' \
+                    '<content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/"'
+        self.assertTrue(re.search(news_feed, xml) is not None)
+        news_feed = '<item>\s*<title>News 2</title>\s*' \
+                    '<description></description>\s*' \
+                    '<content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/"'
+        self.assertTrue(re.search(news_feed, xml) is not None)
