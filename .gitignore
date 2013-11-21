@@ -18,6 +18,8 @@
 .svn/
 .project
 .pydevproject
+.coverage
+.settings
 bin/
 coverage/
 build/
@@ -25,10 +27,12 @@ develop-eggs/
 downloads/
 eggs/
 fake-eggs/
+htmlcov/
 parts/
 dist/
 var/
 Makefile
+local.cfg
 
 # OSX
 .DS_Store
