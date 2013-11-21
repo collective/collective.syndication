@@ -20,7 +20,6 @@
 .project
 .pydevproject
 .settings/
-
 bin/
 coverage/
 build/
@@ -34,6 +33,7 @@ parts/
 dist/
 var/
 Makefile
+local.cfg
 
 # OSX
 .DS_Store
