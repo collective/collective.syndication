@@ -188,7 +188,7 @@ BODY_TEXT = """<p>Test text</p>
 """
 ROOTED_BODY_TEXT = """<body>
 <p>Test text</p>
-<h2>Header</h2>
+<h2>Header rooted</h2>
 <p class="one" id="test">New <span>Line</span></p>
 <a href="http://www.google.com" class="new">Google</a>
 <ol><li>one</li><li>two</li></ol>
@@ -289,7 +289,7 @@ class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
     def test_filter_body(self):
         output = '<p>Test text</p><p>Header</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
         self.assertEqual(self.feeddatnews1.body, output)
-        output = '<p>Test text</p><p>Header</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
+        output = '<p>Test text</p><p>Header rooted</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
         self.assertEqual(self.feeddatnews2.body, output)
 
     def test_image_caption(self):
@@ -370,6 +370,7 @@ class TestRenderBody(BaseSyndicationTest):
                                                                                                        self.news1.UID(),
                                                                                                        self.folder.absolute_url())
         self.assertTrue(re.search(news1_feed, xml) is not None)
+        self.assertTrue(re.search(BODY_TEXT, xml) is not None)
         news2_feed = '<entry>\s*<title>News 2</title>\s*' \
                      '<link rel="alternate" type="text/html" href="{0}"/>\s*' \
                      '<id>urn:syndication:{1}</id>\s*' \
@@ -377,6 +378,8 @@ class TestRenderBody(BaseSyndicationTest):
                                                                                                        self.news2.UID(),
                                                                                                        self.folder.absolute_url())
         self.assertTrue(re.search(news2_feed, xml) is not None)
+        self.assertFalse(re.search(ROOTED_BODY_TEXT, xml) is not None)
+        self.assertTrue(re.search('<h2>Header rooted</h2>', xml) is not None)
 
     def test_rss1(self):
         xml = self.folder.restrictedTraverse("@@RSS")()
