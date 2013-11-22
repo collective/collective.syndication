@@ -16,6 +16,7 @@ from DateTime import DateTime
 from OFS.interfaces import IItem
 
 from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 from collective.syndication.interfaces import IFeed
 from collective.syndication.interfaces import IFeedItem
@@ -317,6 +318,12 @@ class BaseItem(BaseFeedData):
             elif hasattr(self.context.text, 'output'):
                 return self.context.text.output
         return self.description
+
+    content_core_template = ViewPageTemplateFile("templates/content_core.pt")
+
+    def render_content_core(self):
+        self.request = self.context.REQUEST
+        return self.content_core_template()
 
     @property
     def link(self):

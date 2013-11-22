@@ -50,14 +50,7 @@
                tal:condition="feed/settings/render_body">
         <tal:block replace="structure string:&lt;div xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;"
                    on-error="nothing"/>
-        <tal:block tal:define="here item/getObject;
-                               actions nothing;
-                               view here/defaultView;
-                               object_title item/pretty_title_or_id"
-                   tal:on-error="nothing">
-           <div metal:use-macro="here/?view/macros/content-core"/>
-
-        </tal:block>
+        <tal:block tal:replace="structure item/render_content_core"/>
         <tal:block replace="structure string:&lt;/div&gt;"/>
       </content>
 
