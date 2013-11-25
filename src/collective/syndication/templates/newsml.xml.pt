@@ -88,7 +88,7 @@
                         </media-reference>
                         <media-caption tal:content="image_caption"></media-caption>
                         </media>
-                        <tal:content tal:replace="structure body" />
+                        <tal:block tal:replace="structure item/render_content_core"/>          
                     </body.content>
                 </body>
                 </nitf>
