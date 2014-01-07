@@ -58,7 +58,7 @@ msgstr "Activado"
 
 #: collective/syndication/interfaces.py:158
 msgid "Enabled by default"
-msgstr "Activado po defecto"
+msgstr "Activado por defecto"
 
 #: collective/syndication/interfaces.py:221
 msgid "Feed Types"
