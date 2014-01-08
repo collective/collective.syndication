@@ -4,7 +4,11 @@ There's a frood who really knows where his towel is
 1.0b2 (unreleased)
 ^^^^^^^^^^^^^^^^^^
 
-- Nothing changed yet.
+- Fix a typo in URLs pointing to files (closes `#19`_). [jpgimenez]
+
+- Implement rendering of body in Atom feeds (closes `#18`_). [jpgimenez]
+
+- Change 'Render Body' future to render the content-core macro, not just the body field. [jpgimenez]
 
 
 1.0b1 (2013-09-03)
