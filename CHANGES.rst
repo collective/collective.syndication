@@ -4,7 +4,7 @@ There's a frood who really knows where his towel is
 1.0b2 (unreleased)
 ^^^^^^^^^^^^^^^^^^
 
-- Nothing changed yet.
+- Obey limit parameter on feeds (fixes `#17`_). [jpgimenez]
 
 
 1.0b1 (2013-09-03)
@@ -35,3 +35,5 @@ There's a frood who really knows where his towel is
 ^^^^^^^^^^^^^^^^^^
 
 - Initial release.
+
+.. _`#17`: https://github.com/collective/collective.syndication/issues/17
