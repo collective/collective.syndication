@@ -1,12 +1,15 @@
+from DateTime import DateTime
+from uuid import uuid3
+from uuid import NAMESPACE_OID
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
+from zope.cachedescriptors.property import Lazy as lazy_property
 from Products.Five import BrowserView
 from zExceptions import NotFound
 
 from collective.syndication.interfaces import ISearchFeed
 from collective.syndication.interfaces import IFeed
 from collective.syndication.interfaces import IFeedSettings
-from collective.syndication.interfaces import INewsMLFeed
 
 from collective.syndication import _
 
@@ -75,10 +78,7 @@ class SearchFeedView(FeedView):
             return self.index()
 
 
-class NewsMLFeedView(BrowserView):
-
-    def feed(self):
-        return getAdapter(self.context, INewsMLFeed)
+class NewsMLFeedView(FeedView):
 
     def context_enabled(self):
         settings = IFeedSettings(self.context, None)
@@ -86,6 +86,23 @@ class NewsMLFeedView(BrowserView):
             raise NotFound
         else:
             return True
+
+    @lazy_property
+    def current_date(self):
+        return DateTime()
+
+    def duid(self, item, value):
+        uid = uuid3(NAMESPACE_OID, item.uid + str(value))
+        return uid.hex
+
+    def get_image(self, item):
+        scales = item.context.restrictedTraverse('@@images')
+        if scales:
+            try:
+                return scales.scale('image')
+            except AttributeError:
+                pass
+        return None
 
     def __call__(self):
         util = getMultiAdapter((self.context, self.request),

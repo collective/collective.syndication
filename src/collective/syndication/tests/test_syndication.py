@@ -8,9 +8,7 @@ from zope.component import getAdapter
 from zope.component import getUtility
 from zExceptions import NotFound
 from collective.syndication.interfaces import IFeed
-from collective.syndication.interfaces import INewsMLFeed
 from collective.syndication.adapters import BaseItem
-from collective.syndication.adapters import BaseNewsMLItem
 from collective.syndication.testing import INTEGRATION_TESTING
 from plone.dexterity.fti import DexterityFTI
 from zope.interface import Interface
@@ -233,8 +231,6 @@ class TestNewsMLSyndicationUtility(NewsMLBaseSyndicationTest):
     def test_newsml_allowed(self):
         util = self.folder.restrictedTraverse('@@syndication-util')
         self.assertEqual(util.newsml_allowed(), True)
-        util = self.news1.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_allowed(), True)
 
     def test_newsml_allowed_site_disabled(self):
         self.site_settings.allowed = False
@@ -246,8 +242,6 @@ class TestNewsMLSyndicationUtility(NewsMLBaseSyndicationTest):
     def test_newsml_enabled(self):
         self.folder_settings.enabled = True
         util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_enabled(), True)
-        util = self.news1.restrictedTraverse('@@syndication-util')
         self.assertEqual(util.newsml_enabled(), True)
 
     def test_not_newsml_enabled(self):
@@ -278,33 +272,13 @@ class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
     def afterSetUp(self):
         super(TestNewsMLSyndicationFeedAdapter, self).afterSetUp()
 
-        self.feed = INewsMLFeed(self.folder)
-        self.feeddatnews1 = BaseNewsMLItem(self.news1, self.feed)
-        self.feeddatnews2 = BaseNewsMLItem(self.news2, self.feed)
+        self.feed = IFeed(self.folder)
+        self.feeddatnews1 = BaseItem(self.news1, self.feed)
+        self.feeddatnews2 = BaseItem(self.news2, self.feed)
 
     def test_items(self):
         self.assertEqual(len(self.feed._brains()), 5)
-        self.assertEqual(len([i for i in self.feed.items]), 2)
-
-    def test_filter_body(self):
-        output = '<p>Test text</p><p>Header</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
-        self.assertEqual(self.feeddatnews1.body, output)
-        output = '<p>Test text</p><p>Header rooted</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
-        self.assertEqual(self.feeddatnews2.body, output)
-
-    def test_image_caption(self):
-        self.news1.image = "Image"
-
-        self.assertEqual(self.feeddatnews1.image_caption, "")
-
-        self.news1.setDescription("News description")
-        self.assertEqual(self.feeddatnews1.image_caption, "News description")
-
-        self.news1.imageCaption = "Image caption"
-        self.assertEqual(self.feeddatnews1.image_caption, "Image caption")
-
-    def test_created_date(self):
-        self.assertEqual(self.feeddatnews1.created, self.news1.created())
+        self.assertEqual(len([i for i in self.feed.items]), 5)
 
 
 class ITestSchema(Interface):
