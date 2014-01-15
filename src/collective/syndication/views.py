@@ -10,6 +10,7 @@ from zExceptions import NotFound
 from collective.syndication.interfaces import ISearchFeed
 from collective.syndication.interfaces import IFeed
 from collective.syndication.interfaces import IFeedSettings
+from collective.syndication.interfaces import ISyndicatable
 
 from collective.syndication import _
 
@@ -104,10 +105,28 @@ class NewsMLFeedView(FeedView):
                 pass
         return None
 
-    def __call__(self):
+    def newsml_allowed(self):
         util = getMultiAdapter((self.context, self.request),
                                name='syndication-util')
-        if util.newsml_enabled(raise404=True):
+        if not util.site_enabled():
+            return False
+        elif ISyndicatable.providedBy(self.context):
+            settings = IFeedSettings(self.context, None)
+            if settings.enabled:
+                return True
+        return False
+
+    def newsml_enabled(self, raise404=False):
+        if not self.newsml_allowed():
+            if raise404:
+                raise NotFound
+            else:
+                return False
+        else:
+            return True
+
+    def __call__(self):
+        if self.newsml_enabled(raise404=True):
             settings = IFeedSettings(self.context, None)
             if settings and self.__name__ not in settings.feed_types:
                 raise NotFound

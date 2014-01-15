@@ -225,44 +225,42 @@ class TestNewsMLSyndicationUtility(NewsMLBaseSyndicationTest):
     layer = INTEGRATION_TESTING
 
     def test_newsml_allowed_not_syndicatable(self):
-        util = self.folder.file.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_allowed(), False)
+        view = self.folder.file.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_allowed(), False)
 
     def test_newsml_allowed(self):
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_allowed(), True)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_allowed(), True)
 
     def test_newsml_allowed_site_disabled(self):
         self.site_settings.allowed = False
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_allowed(), False)
-        util = self.news1.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_allowed(), False)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_allowed(), False)
+        view = self.news1.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_allowed(), False)
 
     def test_newsml_enabled(self):
         self.folder_settings.enabled = True
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_enabled(), True)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_enabled(), True)
 
     def test_not_newsml_enabled(self):
         self.folder_settings.enabled = False
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_enabled(), False)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_enabled(), False)
 
     def test_newsml_enabled_site_disabled(self):
         self.site_settings.allowed = False
         self.folder_settings.enabled = True
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_enabled(), False)
-        util = self.news1.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_enabled(), False)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_enabled(), False)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_enabled(), False)
 
     def test_newsml_enabled_raises_404(self):
         self.site_settings.allowed = False
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertRaises(NotFound, util.newsml_enabled, True)
-        util = self.folder.news1.restrictedTraverse('@@syndication-util')
-        self.assertRaises(NotFound, util.newsml_enabled, True)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertRaises(NotFound, view.newsml_enabled, True)
 
 
 class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
