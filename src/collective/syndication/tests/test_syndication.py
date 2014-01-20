@@ -220,7 +220,7 @@ class NewsMLBaseSyndicationTest(PloneTestCase.PloneTestCase):
         self.folder_settings = settings
 
 
-class TestNewsMLSyndicationUtility(NewsMLBaseSyndicationTest):
+class TestNewsMLView(NewsMLBaseSyndicationTest):
 
     layer = INTEGRATION_TESTING
 
@@ -261,22 +261,6 @@ class TestNewsMLSyndicationUtility(NewsMLBaseSyndicationTest):
         self.site_settings.allowed = False
         view = self.folder.restrictedTraverse('@@newsml.xml')
         self.assertRaises(NotFound, view.newsml_enabled, True)
-
-
-class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
-
-    layer = INTEGRATION_TESTING
-
-    def afterSetUp(self):
-        super(TestNewsMLSyndicationFeedAdapter, self).afterSetUp()
-
-        self.feed = IFeed(self.folder)
-        self.feeddatnews1 = BaseItem(self.news1, self.feed)
-        self.feeddatnews2 = BaseItem(self.news2, self.feed)
-
-    def test_items(self):
-        self.assertEqual(len(self.feed._brains()), 5)
-        self.assertEqual(len([i for i in self.feed.items]), 5)
 
 
 class ITestSchema(Interface):
