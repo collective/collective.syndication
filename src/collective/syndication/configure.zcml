@@ -16,8 +16,6 @@
 
         <includeDependencies package="." />
 
-        <include file="newsml.zcml" />
-
         <!-- Register an extension profile to make the product installable -->
         <genericsetup:registerProfile
             name="default"
@@ -32,6 +30,14 @@
             directory="profiles/uninstall"
             description="Uninstalls the collective.syndication package"
             provides="Products.GenericSetup.interfaces.EXTENSION"
+            />
+        <genericsetup:upgradeStep
+            title="collective.syndication upgrade to version 1001"
+            source="*"
+            destination="1001"
+            description=""
+            handler="collective.syndication.setuphandlers.upgrade_to_1001"
+            profile="collective.syndication:default"
             />
         <!-- -*- extra stuff goes here -*- -->
 
@@ -149,6 +155,14 @@
             name="search_rss"
             permission="zope2.View"
             template="templates/search-rss.pt"
+            />
+
+        <browser:page
+            for="OFS.interfaces.IItem"
+            class=".views.NewsMLFeedView"
+            name="newsml.xml"
+            permission="zope2.View"
+            template="templates/newsml.xml.pt"
             />
 
         <utility

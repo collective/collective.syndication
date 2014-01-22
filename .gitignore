@@ -34,6 +34,7 @@ parts/
 dist/
 var/
 Makefile
+local.cfg
 
 # OSX
 .DS_Store

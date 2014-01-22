@@ -1,3 +1,4 @@
+import re
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.tests import PloneTestCase
 from collective.syndication.interfaces import IFeedSettings
@@ -7,9 +8,7 @@ from zope.component import getAdapter
 from zope.component import getUtility
 from zExceptions import NotFound
 from collective.syndication.interfaces import IFeed
-from collective.syndication.interfaces import INewsMLFeed
 from collective.syndication.adapters import BaseItem
-from collective.syndication.adapters import BaseNewsMLItem
 from collective.syndication.testing import INTEGRATION_TESTING
 from plone.dexterity.fti import DexterityFTI
 from zope.interface import Interface
@@ -187,7 +186,7 @@ BODY_TEXT = """<p>Test text</p>
 """
 ROOTED_BODY_TEXT = """<body>
 <p>Test text</p>
-<h2>Header</h2>
+<h2>Header rooted</h2>
 <p class="one" id="test">New <span>Line</span></p>
 <a href="http://www.google.com" class="new">Google</a>
 <ol><li>one</li><li>two</li></ol>
@@ -221,89 +220,47 @@ class NewsMLBaseSyndicationTest(PloneTestCase.PloneTestCase):
         self.folder_settings = settings
 
 
-class TestNewsMLSyndicationUtility(NewsMLBaseSyndicationTest):
+class TestNewsMLView(NewsMLBaseSyndicationTest):
 
     layer = INTEGRATION_TESTING
 
     def test_newsml_allowed_not_syndicatable(self):
-        util = self.folder.file.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_allowed(), False)
+        view = self.folder.file.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_allowed(), False)
 
     def test_newsml_allowed(self):
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_allowed(), True)
-        util = self.news1.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_allowed(), True)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_allowed(), True)
 
     def test_newsml_allowed_site_disabled(self):
         self.site_settings.allowed = False
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_allowed(), False)
-        util = self.news1.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_allowed(), False)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_allowed(), False)
+        view = self.news1.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_allowed(), False)
 
     def test_newsml_enabled(self):
         self.folder_settings.enabled = True
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_enabled(), True)
-        util = self.news1.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_enabled(), True)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_enabled(), True)
 
     def test_not_newsml_enabled(self):
         self.folder_settings.enabled = False
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_enabled(), False)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_enabled(), False)
 
     def test_newsml_enabled_site_disabled(self):
         self.site_settings.allowed = False
         self.folder_settings.enabled = True
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_enabled(), False)
-        util = self.news1.restrictedTraverse('@@syndication-util')
-        self.assertEqual(util.newsml_enabled(), False)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_enabled(), False)
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertEqual(view.newsml_enabled(), False)
 
     def test_newsml_enabled_raises_404(self):
         self.site_settings.allowed = False
-        util = self.folder.restrictedTraverse('@@syndication-util')
-        self.assertRaises(NotFound, util.newsml_enabled, True)
-        util = self.folder.news1.restrictedTraverse('@@syndication-util')
-        self.assertRaises(NotFound, util.newsml_enabled, True)
-
-
-class TestNewsMLSyndicationFeedAdapter(NewsMLBaseSyndicationTest):
-
-    layer = INTEGRATION_TESTING
-
-    def afterSetUp(self):
-        super(TestNewsMLSyndicationFeedAdapter, self).afterSetUp()
-
-        self.feed = INewsMLFeed(self.folder)
-        self.feeddatnews1 = BaseNewsMLItem(self.news1, self.feed)
-        self.feeddatnews2 = BaseNewsMLItem(self.news2, self.feed)
-
-    def test_items(self):
-        self.assertEqual(len(self.feed._brains()), 5)
-        self.assertEqual(len([i for i in self.feed.items]), 2)
-
-    def test_filter_body(self):
-        output = '<p>Test text</p><p>Header</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
-        self.assertEqual(self.feeddatnews1.body, output)
-        output = '<p>Test text</p><p>Header</p><p>New Line</p><a href="http://www.google.com">Google</a><ul><li>one</li><li>two</li></ul><ul><li>one</li><li>two</li></ul>'
-        self.assertEqual(self.feeddatnews2.body, output)
-
-    def test_image_caption(self):
-        self.news1.image = "Image"
-
-        self.assertEqual(self.feeddatnews1.image_caption, "")
-
-        self.news1.setDescription("News description")
-        self.assertEqual(self.feeddatnews1.image_caption, "News description")
-
-        self.news1.imageCaption = "Image caption"
-        self.assertEqual(self.feeddatnews1.image_caption, "Image caption")
-
-    def test_created_date(self):
-        self.assertEqual(self.feeddatnews1.created, self.news1.created())
+        view = self.folder.restrictedTraverse('@@newsml.xml')
+        self.assertRaises(NotFound, view.newsml_enabled, True)
 
 
 class ITestSchema(Interface):
@@ -333,3 +290,75 @@ class TestDexterityItems(BaseSyndicationTest):
     def test_body(self):
         feed = getAdapter(self.folder, IFeed)
         self.assertTrue(u'<p>Lorem ipsum dolor sit amet.</p>' == tuple(feed.items)[-1].body)
+
+
+class TestRenderBody(BaseSyndicationTest):
+
+    layer = INTEGRATION_TESTING
+
+    def afterSetUp(self):
+        super(TestRenderBody, self).afterSetUp()
+        self.folder.invokeFactory('News Item', 'news1')
+        self.folder.invokeFactory('News Item', 'news2')
+        self.news1 = self.folder.news1
+        self.news1.setTitle('News 1')
+        self.news1.setDescription('The news item #1')
+        self.news1.setText(BODY_TEXT)
+        self.news2 = self.folder.news2
+        self.news2.setTitle('News 2')
+        self.news2.setText(ROOTED_BODY_TEXT)
+        #Enable syndication on folder
+        registry = getUtility(IRegistry)
+        self.site_settings = registry.forInterface(ISiteSyndicationSettings)
+        settings = IFeedSettings(self.folder)
+        settings.enabled = True
+        settings.render_body = True
+        self.folder_settings = settings
+
+    def test_atom(self):
+        xml = self.folder.restrictedTraverse("@@atom.xml")()
+        self.assertTrue(len(re.findall('<entry>', xml)) == 5)
+        news1_feed = '<entry>\s*<title>News 1</title>\s*' \
+                     '<link rel="alternate" type="text/html" href="{0}"/>\s*' \
+                     '<id>urn:syndication:{1}</id>\s*' \
+                     '<summary>The news item #1</summary>\s*' \
+                     '<content type="xhtml" xml:base="{2}" xml:lang="en" xml:space="preserve">'.format(self.news1.absolute_url(),
+                                                                                                       self.news1.UID(),
+                                                                                                       self.folder.absolute_url())
+        self.assertTrue(re.search(news1_feed, xml) is not None)
+        self.assertTrue(re.search(BODY_TEXT, xml) is not None)
+        news2_feed = '<entry>\s*<title>News 2</title>\s*' \
+                     '<link rel="alternate" type="text/html" href="{0}"/>\s*' \
+                     '<id>urn:syndication:{1}</id>\s*' \
+                     '<content type="xhtml" xml:base="{2}" xml:lang="en" xml:space="preserve">'.format(self.news2.absolute_url(),
+                                                                                                       self.news2.UID(),
+                                                                                                       self.folder.absolute_url())
+        self.assertTrue(re.search(news2_feed, xml) is not None)
+        self.assertFalse(re.search(ROOTED_BODY_TEXT, xml) is not None)
+        self.assertTrue(re.search('<h2>Header rooted</h2>', xml) is not None)
+
+    def test_rss1(self):
+        xml = self.folder.restrictedTraverse("@@RSS")()
+        self.assertTrue(len(re.findall('<item ', xml)) == 5)
+        news_feed = '<item rdf:about="{0}">\s*<title>News 1</title>\s*' \
+                    '<link>{0}</link>\s*' \
+                    '<description>The news item #1</description>\s*' \
+                    '<content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/"'.format(self.news1.absolute_url())
+        self.assertTrue(re.search(news_feed, xml) is not None)
+        news_feed = '<item rdf:about="{0}">\s*<title>News 2</title>\s*' \
+                    '<link>{0}</link>\s*' \
+                    '<description></description>\s*' \
+                    '<content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/"'.format(self.news2.absolute_url())
+        self.assertTrue(re.search(news_feed, xml) is not None)
+
+    def test_rss2(self):
+        xml = self.folder.restrictedTraverse("@@rss.xml")()
+        self.assertTrue(len(re.findall('<item>', xml)) == 5)
+        news_feed = '<item>\s*<title>News 1</title>\s*' \
+                    '<description>The news item #1</description>\s*' \
+                    '<content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/"'
+        self.assertTrue(re.search(news_feed, xml) is not None)
+        news_feed = '<item>\s*<title>News 2</title>\s*' \
+                    '<description></description>\s*' \
+                    '<content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/"'
+        self.assertTrue(re.search(news_feed, xml) is not None)

@@ -1,3 +1,6 @@
+[run]
+include = src/collective/syndication/*
+
 [report]
 omit =
     /home/*/.buildout/eggs/*
