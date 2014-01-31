@@ -317,6 +317,8 @@ class TestRenderBody(BaseSyndicationTest):
 
     def test_atom(self):
         xml = self.folder.restrictedTraverse("@@atom.xml")()
+        self.assertEqual(self.folder.REQUEST.response.getHeader("Content-Type"),
+                         "application/atom+xml")
         self.assertTrue(len(re.findall('<entry>', xml)) == 5)
         news1_feed = '<entry>\s*<title>News 1</title>\s*' \
                      '<link rel="alternate" type="text/html" href="{0}"/>\s*' \

@@ -4,7 +4,9 @@ There's a frood who really knows where his towel is
 1.0b3 (unreleased)
 ^^^^^^^^^^^^^^^^^^
 
-- Nothing changed yet.
+- Fix a problem with ViewPageTemplateFile overriding the Content-Type header,
+  now we set the header after rendering the body, this way third party products
+  can't break the feeds Content-Type. [jpgimenez]
 
 
 1.0b2 (2014-01-23)

@@ -34,8 +34,9 @@ class FeedView(BrowserView):
             settings = IFeedSettings(self.context)
             if self.__name__ not in settings.feed_types:
                 raise NotFound
+            index = self.index()
             self.set_response_header()
-            return self.index()
+            return index
 
 
 class AtomFeedView(FeedView):
