@@ -1,7 +1,7 @@
 There's a frood who really knows where his towel is
 ---------------------------------------------------
 
-1.0b3 (unreleased)
+1.0b3 (2014-02-04)
 ^^^^^^^^^^^^^^^^^^
 
 - Fix a problem with ViewPageTemplateFile overriding the Content-Type header,
