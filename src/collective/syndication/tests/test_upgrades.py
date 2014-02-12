@@ -14,14 +14,14 @@ class Upgradeto1001TestCase(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
+        self.registry = getUtility(IRegistry)
 
     def test_update_registry(self):
-        registry = getUtility(IRegistry)
         render_body_record = 'collective.syndication.interfaces.ISiteSyndicationSettings.render_body'
 
-        del registry.records[render_body_record]
-        self.assertNotIn(render_body_record, registry)
+        del self.registry.records[render_body_record]
+        self.assertNotIn(render_body_record, self.registry)
 
         # run the upgrade step and test registry record is installed
         upgrade_to_1001(self.portal)
-        self.assertIn(render_body_record, registry)
+        self.assertIn(render_body_record, self.registry)

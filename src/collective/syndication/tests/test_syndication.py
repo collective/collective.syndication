@@ -1,6 +1,5 @@
 import re
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.tests import PloneTestCase
 from collective.syndication.interfaces import IFeedSettings
 from collective.syndication.interfaces import ISiteSyndicationSettings
 from plone.registry.interfaces import IRegistry
@@ -13,14 +12,22 @@ from collective.syndication.testing import INTEGRATION_TESTING
 from plone.dexterity.fti import DexterityFTI
 from zope.interface import Interface
 from plone.app.textfield import RichText
+from plone import api
 
 
-class BaseSyndicationTest(PloneTestCase.PloneTestCase):
+import unittest2 as unittest
+
+
+class BaseSyndicationTest(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
+        self.portal = self.layer['portal']
         self.syndication = getToolByName(self.portal, 'portal_syndication')
+        with api.env.adopt_roles(['Manager']):
+            self.portal.invokeFactory('Folder', 'folder')
+        self.folder = self.portal.folder
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.invokeFactory('Document', 'doc2')
         self.folder.invokeFactory('File', 'file')
@@ -155,8 +162,8 @@ class TestSyndicationFeedAdapter(BaseSyndicationTest):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
-        super(TestSyndicationFeedAdapter, self).afterSetUp()
+    def setUp(self):
+        super(TestSyndicationFeedAdapter, self).setUp()
         self.feed = IFeed(self.folder)
         self.feeddatadoc = BaseItem(self.doc1, self.feed)
         self.feeddatafile = BaseItem(self.file, self.feed)
@@ -195,29 +202,18 @@ ROOTED_BODY_TEXT = """<body>
 """
 
 
-class NewsMLBaseSyndicationTest(PloneTestCase.PloneTestCase):
+class NewsMLBaseSyndicationTest(BaseSyndicationTest):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
-        self.syndication = getToolByName(self.portal, 'portal_syndication')
-        self.folder.invokeFactory('Document', 'doc')
-        self.folder.invokeFactory('Document', 'doc1')
+    def setUp(self):
+        super(NewsMLBaseSyndicationTest, self).setUp()
         self.folder.invokeFactory('News Item', 'news1')
         self.folder.invokeFactory('News Item', 'news2')
-        self.folder.invokeFactory('File', 'file')
-        self.doc1 = self.folder.doc1
         self.news1 = self.folder.news1
         self.news1.setText(BODY_TEXT)
         self.news2 = self.folder.news2
         self.news2.setText(ROOTED_BODY_TEXT)
-        self.file = self.folder.file
-        #Enable syndication on folder
-        registry = getUtility(IRegistry)
-        self.site_settings = registry.forInterface(ISiteSyndicationSettings)
-        settings = IFeedSettings(self.folder)
-        settings.enabled = True
-        self.folder_settings = settings
 
 
 class TestNewsMLView(NewsMLBaseSyndicationTest):
@@ -278,8 +274,8 @@ class TestDexterityItems(BaseSyndicationTest):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
-        super(TestDexterityItems, self).afterSetUp()
+    def setUp(self):
+        super(TestDexterityItems, self).setUp()
         portal = self.portal
         fti = DexterityFTI('dxtest_type')
         fti.schema = u'collective.syndication.tests.test_syndication.ITestSchema'
@@ -296,8 +292,8 @@ class TestRenderBody(BaseSyndicationTest):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
-        super(TestRenderBody, self).afterSetUp()
+    def setUp(self):
+        super(TestRenderBody, self).setUp()
         self.folder.invokeFactory('News Item', 'news1')
         self.folder.invokeFactory('News Item', 'news2')
         self.news1 = self.folder.news1

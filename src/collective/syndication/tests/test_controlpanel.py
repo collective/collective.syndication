@@ -46,7 +46,8 @@ class ControlPanelTestCase(unittest.TestCase):
             qi.uninstallProducts(products=[PROJECTNAME])
 
         actions = [a.getAction(self)['id']
-                   for a in self.controlpanel.listActions()]
+                   for a in self.controlpanel.listActions()
+                   if a.visible]
         self.assertNotIn('syndication', actions, 'control panel not removed')
 
 
