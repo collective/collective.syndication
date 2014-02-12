@@ -14,7 +14,7 @@
   <link rel="self"
         href=""
         type="application/atom+xml"
-        tal:attributes="href request/ACTUAL_URL" />
+        tal:attributes="href view/request_url" />
   <title type="html" tal:content="feed/title" />
   <subtitle tal:content="feed/description" 
             tal:condition="feed/description" />

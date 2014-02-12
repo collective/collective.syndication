@@ -7,7 +7,7 @@
   <channel>
     <atom:link rel="self" 
                type="application/rss+xml"
-               tal:attributes="href request/ACTUAL_URL" />
+               tal:attributes="href view/request_url" />
     <title tal:content="feed/title" />
     <link tal:content="feed/link" />
     <description tal:content="feed/description" />

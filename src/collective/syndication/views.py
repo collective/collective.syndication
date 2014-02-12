@@ -23,6 +23,13 @@ class FeedView(BrowserView):
     def feed(self):
         return getAdapter(self.context, IFeed)
 
+    def request_url(self):
+        try:
+            return self.request['ACTUAL_URL']
+        except KeyError:
+            # not a real request, could be a test. Let's not fail.
+            return self.context.absolute_url()
+
     def set_response_header(self):
         # implement in a sub class
         raise NotImplementedError
