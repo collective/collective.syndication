@@ -34,7 +34,7 @@ class BaseSyndicationTest(unittest.TestCase):
         self.doc1 = self.folder.doc1
         self.doc2 = self.folder.doc2
         self.file = self.folder.file
-        #Enable syndication on folder
+        # Enable syndication on folder
         registry = getUtility(IRegistry)
         self.site_settings = registry.forInterface(ISiteSyndicationSettings)
         settings = IFeedSettings(self.folder)
@@ -303,7 +303,7 @@ class TestRenderBody(BaseSyndicationTest):
         self.news2 = self.folder.news2
         self.news2.setTitle('News 2')
         self.news2.setText(ROOTED_BODY_TEXT)
-        #Enable syndication on folder
+        # Enable syndication on folder
         registry = getUtility(IRegistry)
         self.site_settings = registry.forInterface(ISiteSyndicationSettings)
         settings = IFeedSettings(self.folder)
