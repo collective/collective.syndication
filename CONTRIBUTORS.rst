@@ -9,6 +9,7 @@ contribution of the following people:
 - Franco Pellegrini
 - Héctor Velarde
 - Juan Pablo Giménez
+- Leonardo Caballero
 
 You can find an updated list of package contributors on `GitHub`_.
 
