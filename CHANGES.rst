@@ -1,5 +1,7 @@
-There's a frood who really knows where his towel is
----------------------------------------------------
+Changelog
+---------
+
+There's a frood who really knows where his towel is.
 
 1.0b4 (unreleased)
 ^^^^^^^^^^^^^^^^^^

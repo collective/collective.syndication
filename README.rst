@@ -18,10 +18,16 @@ Mostly Harmless
 ---------------
 
 .. image:: https://secure.travis-ci.org/collective/collective.syndication.png?branch=master
+    :alt: Travis CI badge
     :target: http://travis-ci.org/collective/collective.syndication
 
 .. image:: https://coveralls.io/repos/collective/collective.syndication/badge.png?branch=master
+    :alt: Coveralls badge
     :target: https://coveralls.io/r/collective/collective.syndication
+
+.. image:: https://pypip.in/d/collective.syndication/badge.png
+    :alt: Downloads
+    :target: https://pypi.python.org/pypi/collective.syndication
 
 Got an idea? Found a bug? Let us know by `opening a support ticket`_.
 
@@ -48,10 +54,6 @@ Go to the 'Site Setup' page in a Plone site and click on the 'Add-ons' link.
 
 Check the box next to ``collective.syndication`` and click the 'Activate'
 button.
-
-.. Note::
-    You may have to empty your browser cache and save your resource registries
-    in order to see the effects of the product installation.
 
 Feeds
 ^^^^^
