@@ -7,29 +7,42 @@ collective.syndication
 Life, the Universe, and Everything
 ----------------------------------
 
-``collective.syndication`` improves standard syndication on Plone sites by
-providing 5 feed types: `Atom`_, iTunes, `NewsML 1`_, `RSS 1.0`_ and `RSS
-2.0`_.
+``collective.syndication`` improves standard syndication on Plone sites by providing 5 feed types:
+`Atom <https://www.ietf.org/rfc/rfc4287.txt>`_, iTunes, `NewsML 1 <https://www.iptc.org/site/News_Exchange_Formats/NewsML_1/>`_, `RSS 1.0 <http://web.resource.org/rss/1.0/spec>`_ and `RSS 2.0 <https://cyber.law.harvard.edu/rss/rss.html>`_.
 
-This package is a backport for Plone 4.1 and 4.2 of `Nathan Van Gheem`_'s
-`Improved Syndication`_ PLIP implementation made for Plone 4.3.
+This package is a backport for Plone 4.1 and 4.2 of Nathan Van Gheem's `Improved Syndication <https://dev.plone.org/ticket/12908>`_ PLIP implementation made for Plone 4.3.
 
 Mostly Harmless
 ---------------
 
-.. image:: https://secure.travis-ci.org/collective/collective.syndication.png?branch=master
-    :alt: Travis CI badge
+.. image:: http://img.shields.io/pypi/v/collective.syndication.svg
+   :target: https://pypi.python.org/pypi/collective.syndication
+
+.. image:: https://img.shields.io/travis/collective/collective.syndication/master.svg
     :target: http://travis-ci.org/collective/collective.syndication
 
-.. image:: https://coveralls.io/repos/collective/collective.syndication/badge.png?branch=master
-    :alt: Coveralls badge
+.. image:: https://img.shields.io/coveralls/collective/collective.syndication/master.svg
     :target: https://coveralls.io/r/collective/collective.syndication
 
-.. image:: https://pypip.in/d/collective.syndication/badge.png
-    :alt: Downloads
-    :target: https://pypi.python.org/pypi/collective.syndication
+Got an idea? Found a bug? Let us know by `opening a support ticket <https://github.com/collective/collective.syndication/issues>`_.
 
-Got an idea? Found a bug? Let us know by `opening a support ticket`_.
+Known Issues
+^^^^^^^^^^^^
+
+If you migrated your site from Plone 4.2 to Plone 4.3, odds are you are facing the following error:
+
+.. code-block:: python
+
+    PicklingError: Can't pickle <class 'collective.syndication.interfaces.ISyndicatable'>: import of module collective.syndication.interfaces failed
+
+To fix this, you should add the following code to your policy package:
+
+.. code-block:: python
+
+    # BBB: avoid PicklingError in Plone 4.3
+    import sys
+    from Products.CMFPlone.interfaces import syndication
+    sys.modules['collective.syndication.interfaces'] = sys.modules[syndication.__name__]
 
 Don't Panic
 -----------
@@ -39,21 +52,21 @@ Installation
 
 To enable this product in a buildout-based installation:
 
-1. Edit your buildout.cfg and add ``collective.syndication`` to the list
-   of eggs to install::
+1. Edit your buildout.cfg and add ``collective.syndication`` to the list of eggs to install:
+
+.. code-block:: ini
 
     [buildout]
     ...
     eggs =
         collective.syndication
 
-After updating the configuration you need to run ''bin/buildout'', which will
-take care of updating your system.
+After updating the configuration you need to run ''bin/buildout'',
+which will take care of updating your system.
 
 Go to the 'Site Setup' page in a Plone site and click on the 'Add-ons' link.
 
-Check the box next to ``collective.syndication`` and click the 'Activate'
-button.
+Check the box next to ``collective.syndication`` and click the 'Activate' button.
 
 Feeds
 ^^^^^
@@ -70,7 +83,7 @@ The primary use case that Atom addresses is the syndication of Web content
 such as weblogs and news headlines to Web sites as well as directly to user
 agents.
 
-Atom feeds have multiple `advantages`_ over RSS feeds.
+Atom feeds have multiple `advantages <http://www.intertwingly.net/wiki/pie/Rss20AndAtom10Compared>`_ over RSS feeds.
 
 iTunes
 ++++++
@@ -100,11 +113,7 @@ RSS 2.0
 
 TBD.
 
-.. _`advantages`: http://www.intertwingly.net/wiki/pie/Rss20AndAtom10Compared
-.. _`Atom`: https://www.ietf.org/rfc/rfc4287.txt
-.. _`Improved Syndication`: https://dev.plone.org/ticket/12908
-.. _`Nathan Van Gheem`: https://github.com/vangheem
-.. _`NewsML 1`: https://www.iptc.org/site/News_Exchange_Formats/NewsML_1/
-.. _`opening a support ticket`: https://github.com/collective/collective.syndication/issues
-.. _`RSS 1.0`: http://web.resource.org/rss/1.0/spec
-.. _`RSS 2.0`: https://cyber.law.harvard.edu/rss/rss.html
+Migrating to Plone 4.3
+^^^^^^^^^^^^^^^^^^^^^^
+
+Before migrating a site to Plone 4.3 you should uninstall and remove this package from your buildout configuration.
