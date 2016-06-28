@@ -1,11 +1,7 @@
-[run]
-include = src/collective/syndication/*
-
 [report]
 omit =
-    /home/*/.buildout/eggs/*
-    /usr/*
-    bin/test
-    buildout-cache/eggs/*
-    eggs/*
-    parts/*
+    */bin/test
+    */eggs/*
+    */lib/python*
+    */parts/*
+    */usr/*
